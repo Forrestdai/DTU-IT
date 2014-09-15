@@ -1,0 +1,92 @@
+Selection Sorting Method:
+
+Scrambled arrays: Average Runtime of 0.008057ms, average over 5000000 runs with 100 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.006104ms, average over 5000000 runs with 100 elements in each array.
+Descending arrays: Average Runtime of 0.004703ms, average over 5000000 runs with 100 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 0.514951ms, average over 50000 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.481887ms, average over 50000 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 0.436293ms, average over 50000 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 44.210241ms, average over 500 runs with 10000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 40.110996ms, average over 500 runs with 10000 elements in each array.
+Descending arrays: Average Runtime of 43.739291ms, average over 500 runs with 10000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 4373.447154ms, average over 50 runs with 100000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 4002.991356ms, average over 50 runs with 100000 elements in each array.
+Descending arrays: Average Runtime of 4367.335671ms, average over 50 runs with 100000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 17660.702532ms, average over 20 runs with 200000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 16202.243892ms, average over 20 runs with 200000 elements in each array.
+Descending arrays: Average Runtime of 17591.862365ms, average over 20 runs with 200000 elements in each array.
+------------
+
+Insertion Sorting Method:
+
+Scrambled arrays: Average Runtime of 0.004927ms, average over 5000000 runs with 100 elements in each array.
+Nearly Sorted arrays: Average Runtime of 6.4E-4ms, average over 5000000 runs with 100 elements in each array.
+Descending arrays: Average Runtime of 0.007473ms, average over 5000000 runs with 100 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 0.400691ms, average over 50000 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.006528ms, average over 50000 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 0.78784ms, average over 50000 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 23.90094ms, average over 500 runs with 10000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.069019ms, average over 500 runs with 10000 elements in each array.
+Descending arrays: Average Runtime of 47.703076ms, average over 500 runs with 10000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 2394.451778ms, average over 50 runs with 100000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.673693ms, average over 50 runs with 100000 elements in each array.
+Descending arrays: Average Runtime of 4825.143139ms, average over 50 runs with 100000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 9666.05764ms, average over 20 runs with 200000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 1.322483ms, average over 20 runs with 200000 elements in each array.
+Descending arrays: Average Runtime of 19441.902252ms, average over 20 runs with 200000 elements in each array.
+------------
+
+Builtin Quicksort Sorting Method:
+
+Scrambled arrays: Average Runtime of 0.002622ms, average over 5000000 runs with 100 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.001036ms, average over 5000000 runs with 100 elements in each array.
+Descending arrays: Average Runtime of 5.31E-4ms, average over 5000000 runs with 100 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 0.03737ms, average over 50000 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.013369ms, average over 50000 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 0.001388ms, average over 50000 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 0.484777ms, average over 500 runs with 10000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.144618ms, average over 500 runs with 10000 elements in each array.
+Descending arrays: Average Runtime of 0.012681ms, average over 500 runs with 10000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 6.292861ms, average over 50 runs with 100000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 1.697911ms, average over 50 runs with 100000 elements in each array.
+Descending arrays: Average Runtime of 0.133304ms, average over 50 runs with 100000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 14.085196ms, average over 20 runs with 200000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 3.546875ms, average over 20 runs with 200000 elements in each array.
+Descending arrays: Average Runtime of 0.352807ms, average over 20 runs with 200000 elements in each array.
+------------
+
+Second Insertion Sorting Method:
+
+Scrambled arrays: Average Runtime of 0.003216ms, average over 5000000 runs with 100 elements in each array.
+Nearly Sorted arrays: Average Runtime of 6.99E-4ms, average over 5000000 runs with 100 elements in each array.
+Descending arrays: Average Runtime of 0.004732ms, average over 5000000 runs with 100 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 0.218496ms, average over 50000 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.006868ms, average over 50000 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 0.432596ms, average over 50000 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 20.441246ms, average over 500 runs with 10000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.065224ms, average over 500 runs with 10000 elements in each array.
+Descending arrays: Average Runtime of 40.733223ms, average over 500 runs with 10000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 2030.723171ms, average over 50 runs with 100000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.62428ms, average over 50 runs with 100000 elements in each array.
+Descending arrays: Average Runtime of 4055.207782ms, average over 50 runs with 100000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 7990.014806ms, average over 20 runs with 200000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 1.236801ms, average over 20 runs with 200000 elements in each array.
+Descending arrays: Average Runtime of 15998.765096ms, average over 20 runs with 200000 elements in each array.
+------------
+(total time: 66 minutes 58 seconds)
