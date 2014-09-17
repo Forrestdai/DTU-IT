@@ -22,7 +22,12 @@ public class TCPServer
 
     public static void main(String[] args) throws IOException
     {
-        listener = new Listener(new ServerSocket(PORT));
+        listener = InitializeServer();
         listener.start();
+    }
+    
+    public static Listener InitializeServer() throws IOException
+    {
+        return new Listener(new ServerSocket(PORT));
     }
 }

@@ -7,6 +7,7 @@ package server.connection;
 
 import java.io.*;
 import java.net.*;
+import java.util.Objects;
 
 /**
  *
@@ -46,5 +47,28 @@ class Listener
         } catch (IOException ex)
         {
         }
+    }
+
+    @Override
+    public boolean equals(Object compareTo)
+    {
+        if (this == compareTo)
+        {
+            return true;
+        }
+        if (!(compareTo instanceof Listener))
+        {
+            return false;
+        }
+        Listener toTest = (Listener) compareTo;
+        return this.hashCode() == toTest.hashCode();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        hash = 71 * hash + this.socketToListenTo.getLocalPort();
+        return hash;
     }
 }
