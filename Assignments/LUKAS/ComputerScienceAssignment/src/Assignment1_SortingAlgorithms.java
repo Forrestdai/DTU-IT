@@ -14,7 +14,8 @@ public class Assignment1_SortingAlgorithms {
     public static void main(String[] args) {
 
         Assignment1_SortingAlgorithms ass1 = new Assignment1_SortingAlgorithms();
-
+        
+        System.out.println("Selection sorting\n");
         ass1.createArray();
 
         System.out.println(Arrays.toString(ass1.arrayAsc));
@@ -28,6 +29,39 @@ public class Assignment1_SortingAlgorithms {
         System.out.println(Arrays.toString(ass1.arrayAsc));
         System.out.println(Arrays.toString(ass1.arrayDes));
         System.out.println(Arrays.toString(ass1.arrayRan));
+        
+        System.out.println("Insertion sorting\n");
+        
+        ass1.createArray();
+        
+        System.out.println(Arrays.toString(ass1.arrayAsc));
+        System.out.println(Arrays.toString(ass1.arrayDes));
+        System.out.println(Arrays.toString(ass1.arrayRan));
+        
+        ass1.insertionSort(ass1.arrayAsc);
+        ass1.insertionSort(ass1.arrayDes);
+        ass1.insertionSort(ass1.arrayRan);
+       
+        System.out.println(Arrays.toString(ass1.arrayAsc));
+        System.out.println(Arrays.toString(ass1.arrayDes));
+        System.out.println(Arrays.toString(ass1.arrayRan));
+        
+        System.out.println("System quick sorting\n");
+        ass1.createArray();
+        
+        System.out.println(Arrays.toString(ass1.arrayAsc));
+        System.out.println(Arrays.toString(ass1.arrayDes));
+        System.out.println(Arrays.toString(ass1.arrayRan));
+        
+        ass1.systemSort(ass1.arrayAsc);
+        ass1.systemSort(ass1.arrayDes);
+        ass1.systemSort(ass1.arrayRan);
+        
+        System.out.println(Arrays.toString(ass1.arrayAsc));
+        System.out.println(Arrays.toString(ass1.arrayDes));
+        System.out.println(Arrays.toString(ass1.arrayRan));
+        
+        
 
     }
 
@@ -64,6 +98,31 @@ public class Assignment1_SortingAlgorithms {
         stop = System.currentTimeMillis();
         waste = stop - start;
         System.out.println("Time wasted: " + waste / 1000f);
+    }
+
+    public void insertionSort(int[] array) {
+        start = System.currentTimeMillis();
+        for (int i = 1; i < array.length; i++) {
+            int sort = array[i];
+            int j;
+            for (j = i - 1; j >= 0 && sort < array[j]; j--) {
+                array[j + 1] = array[j];
+            }
+            array[j + 1] = sort;
+
+        }
+        stop = System.currentTimeMillis();
+        waste = stop - start;
+        System.out.println("Time wasted: " + waste / 1000f);
+    }
+    
+    public void systemSort(int[] array){
+        start = System.currentTimeMillis();
+        Arrays.sort(array);
+        stop = System.currentTimeMillis();
+        waste = stop - start;
+        System.out.println("Time wasted: " + waste / 1000f);
+        
     }
 
 }
