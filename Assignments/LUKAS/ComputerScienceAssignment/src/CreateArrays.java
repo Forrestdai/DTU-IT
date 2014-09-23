@@ -1,0 +1,41 @@
+import java.util.Arrays;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+/**
+ *
+ * @author Aimo
+ */
+public class CreateArrays {
+
+    int[] arrayAsc;
+    int[] arrayDes;
+    int[] arrayRan;
+    
+    public int[] createAscArray(int arrayLength) {
+        arrayAsc = new int[arrayLength];
+        for (int i = 0; i < arrayLength; i++) {
+            arrayAsc[i] = i;
+        }
+        return arrayAsc;
+    }
+    
+    public int[] createDesArray(int arrayLength){
+        arrayDes = new int[arrayLength];
+        for (int i = 0; i < arrayLength; i++) {
+            arrayDes[i] = arrayLength - i - 1;
+        }
+        return arrayDes;
+    }
+   
+    public int[] createRanArray(int arrayLength){
+        arrayRan = new int[arrayLength];
+        for (int i = 0; i < arrayLength; i++) {
+            arrayRan[i] = (int) (Math.random() * arrayLength);
+        }
+        return arrayRan;
+    }   
+}
