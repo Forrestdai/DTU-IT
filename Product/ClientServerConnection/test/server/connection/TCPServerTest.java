@@ -5,7 +5,13 @@
  */
 package server.connection;
 
+import TestMOCKs.MockClient;
+import TestMOCKs.MockObject;
+import interfaces.RecievablePacket;
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.PriorityQueue;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,13 +27,14 @@ public class TCPServerTest
 {
 
     private final int PORT = 2954;
+    private Listener server; 
 
     public TCPServerTest()
     {
     }
 
     @BeforeClass
-    public static void setUpClass()
+    public static void setUpClass() throws IOException
     {
     }
 
@@ -35,32 +42,42 @@ public class TCPServerTest
     public static void tearDownClass()
     {
     }
-
+/*
     @Before
-    public void setUp()
+    public void setUp() throws IOException
     {
+        TCPServer.incomingQueue = new PriorityQueue<>();
+        server = TCPServer.InitializeServer();
+        server.start();
     }
 
     @After
     public void tearDown()
     {
+        server.stop();
     }
-
+*/
     /**
      * Test of main method, of class TCPServer.
      */
-    @Test
+    //@Test
     public void testCreateListenerMainExecution() throws Exception
     {
         Listener toCompare = TCPServer.InitializeServer();
-        //toCompare.start();
-        int hash1 = toCompare.hashCode();
-        
         Listener expected = new Listener(new ServerSocket(PORT));
-        //expected.start();
-        int hash2 = expected.hashCode();
         
-        Assert.assertEquals(hash1, hash2);
+        Assert.assertTrue(toCompare.equals(expected));
     }
+    
+    @Test
+    public void testRecievePacket() throws Exception
+    {
+        MockObject objectToSend = new MockObject();
+        MockClient client = new MockClient(PORT, "localhost", objectToSend);
+        client.runMockclient();
+        
+        RecievablePacket result = TCPServer.incomingQueue.poll();
+        Assert.assertEquals(objectToSend, result);
+   }
 
 }
