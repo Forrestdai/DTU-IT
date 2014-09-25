@@ -7,7 +7,6 @@ package server.connection;
 
 import java.io.*;
 import java.net.*;
-import java.util.Objects;
 
 /**
  *
@@ -18,7 +17,7 @@ class Listener
 
     InputInterpreterWorker inputWorker;
     private final ServerSocket socketToListenTo;
-    private final boolean running;
+    private boolean running;
     ObjectInputStream readObject;
 
     public Listener(ServerSocket socketToListenOn)
@@ -28,7 +27,7 @@ class Listener
 
     }
 
-    void start()
+    public void start()
     {
         while (running)
         {
@@ -36,6 +35,11 @@ class Listener
             inputWorker = new InputInterpreterWorker(readObject);
             inputWorker.spawnWorker();
         }
+    }
+    
+    public void stop()
+    {
+        running = false;
     }
 
     private void acceptConnection()
@@ -47,28 +51,5 @@ class Listener
         } catch (IOException ex)
         {
         }
-    }
-
-    @Override
-    public boolean equals(Object compareTo)
-    {
-        if (this == compareTo)
-        {
-            return true;
-        }
-        if (!(compareTo instanceof Listener))
-        {
-            return false;
-        }
-        Listener toTest = (Listener) compareTo;
-        return this.hashCode() == toTest.hashCode();
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 3;
-        hash = 71 * hash + this.socketToListenTo.getLocalPort();
-        return hash;
     }
 }

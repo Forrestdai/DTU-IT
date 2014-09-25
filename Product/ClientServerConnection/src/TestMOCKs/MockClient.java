@@ -9,6 +9,8 @@ package TestMOCKs;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,22 +18,29 @@ import java.net.Socket;
  */
 public class MockClient
 {
-    private static ObjectOutputStream outStream;
-    private static int PORT;
-    private static String HOST;
-    private static Object objectToSend;
+    private ObjectOutputStream outStream;
+    private int PORT;
+    private String HOST;
+    private Object objectToSend;
 
     public MockClient(int port, String host, Object objectToSend)
     {
-        MockClient.PORT = port;
-        MockClient.HOST = host;
-        MockClient.objectToSend = objectToSend;
+        this.PORT = port;
+        this.HOST = host;
+        this.objectToSend = objectToSend;
     }
     
-    public static void main(String[] args) throws IOException
+    public void runMockclient()
     {
-        Socket clientSocket = new Socket(HOST, PORT);
-        outStream = new ObjectOutputStream(clientSocket.getOutputStream());
-        outStream.writeUnshared(objectToSend);
+        try
+        {
+            Socket clientSocket = new Socket(HOST, PORT);
+            outStream = new ObjectOutputStream(clientSocket.getOutputStream());
+            outStream.writeUnshared(objectToSend);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MockClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    
 }

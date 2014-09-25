@@ -5,6 +5,8 @@
  */
 package server.connection;
 
+import interfaces.RecievablePacket;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 
 /**
@@ -15,15 +17,50 @@ public class InputInterpreter extends Thread
 {
 
     ObjectInputStream inputStream;
+    Object recieveObject;
+    RecievePackage recievedPackage;
 
     InputInterpreter(ObjectInputStream inputStream)
     {
         this.inputStream = inputStream;
+        readObject();
     }
 
     @Override
     public void run()
     {
-        System.err.println("HELLO FROM THREAD");
+        castToPacketAndQueue();
+        System.out.println("HELLO FROM THREAD");
+        RecievablePacket packet = TCPServer.incomingQueue.poll();
+        if (packet != null)
+        {
+            System.out.println("SUCCESS!");
+        }
+    }
+
+    private void readObject()
+    {
+        try
+        {
+            recieveObject = inputStream.readObject();
+            System.out.println("ReadObject: OK");
+        } catch (IOException ex)
+        {
+            System.err.println("ReadObject Err: IO");
+        } catch (ClassNotFoundException ex)
+        {
+            System.err.println("ReadObject Err: ClassNotFound");
+        }
+    }
+
+    private void castToPacketAndQueue()
+    {
+        RecievablePacket packet = (RecievablePacket) recieveObject;
+        queuePacket(packet);
+    }
+
+    private void queuePacket(RecievablePacket packet)
+    {
+        TCPServer.incomingQueue.add(packet);
     }
 }
