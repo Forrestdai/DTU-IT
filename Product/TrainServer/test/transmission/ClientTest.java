@@ -7,7 +7,6 @@ package transmission;
  */
 
 
-import execute.Server;
 import java.io.IOException;
 import java.net.Socket;
 import org.junit.After;
@@ -33,7 +32,7 @@ public class ClientTest
     {
         try
         {
-            server = new IncomingUserConnection(PORT, TIMEOUT);
+            server = new IncomingUserConnection();
             serverThread = new Thread(server);
             serverThread.start();
         } catch (Exception e)
@@ -91,6 +90,22 @@ public class ClientTest
             threads[i].join();
         }
     }
+    
+    @Test(timeout = 100000)
+    public void runManyClients() throws Exception
+    {
+        Thread[] threads = new Thread[1000];
+        for (int i = 0; i < threads.length; ++i)
+        {
+            threads[i] = new Thread(new TrivialClient(i));
+            threads[i].start();
+        }
+
+        for (int i = 0; i < threads.length; ++i)
+        {
+            threads[i].join();
+        }
+    }
 
     private void connectSendRecieve(int i) throws IOException
     {
@@ -102,8 +117,8 @@ public class ClientTest
 
         System.out.printf("Client %2d: getting reply\n", i);
         MessageUtils.getMessage(socket);
-
-        System.out.printf("Client %2d: finished\n", i);
+        
+        System.out.printf("Client %2d: finished\n.", i);
         socket.close();
     }
 }

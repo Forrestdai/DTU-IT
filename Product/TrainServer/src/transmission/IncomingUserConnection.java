@@ -5,12 +5,14 @@
  */
 package transmission;
 
+import processing.ClientRequestProcessor;
+import transmission.common.connection.ConnectionManager;
+import transmission.common.connection.ClientConnection;
+import transmission.common.connection.Connection;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.SocketException;
-import transmission.common.MessageUtils;
-import transmission.common.ThreadQueue;
+import threading.ExecutorTCPPool;
 
 /**
  *
@@ -18,16 +20,15 @@ import transmission.common.ThreadQueue;
  */
 public class IncomingUserConnection implements Connection, Runnable
 {
-    ThreadQueue clientHandlers;
+    ConnectionManager connectionManager;
+    ExecutorTCPPool clientScheduler;
 
-    ServerSocket serverSocket;
     volatile boolean keepProcessing = true;
 
-    public IncomingUserConnection(int port, int millisecondsTimeout) throws IOException
+    public IncomingUserConnection() throws IOException
     {
-        clientHandlers = new ThreadQueue();
-        serverSocket = new ServerSocket(port);
-        serverSocket.setSoTimeout(millisecondsTimeout);
+        clientScheduler = new ExecutorTCPPool();
+        connectionManager = new ConnectionManager();
     }
 
     @Override
@@ -39,15 +40,18 @@ public class IncomingUserConnection implements Connection, Runnable
         {
             try
             {
-                System.out.println("accepting client");
-                Socket socket = serverSocket.accept();
-                System.out.println("Got client connection");
-                process(socket);
+                ClientConnection clientConnection = connectionManager.awaitClient();
+                ClientRequestProcessor requestProcessor = new ClientRequestProcessor(clientConnection);
+                clientScheduler.schedule(requestProcessor);
             } catch (Exception e)
             {
-
+                System.err.println("ERROR main loop");
+                e.printStackTrace();
+                break;
             }
         }
+        
+        stopProcessing();
     }
 
     private void handle(Exception e)
@@ -61,48 +65,7 @@ public class IncomingUserConnection implements Connection, Runnable
     public void stopProcessing()
     {
         keepProcessing = false;
-        closeIgnoringException(serverSocket);
-    }
-
-    private void process(Socket socket)
-    {
-        if (socket == null)
-        {
-            return;
-        }
-
-        Runnable clientHandler = new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    String message = MessageUtils.getMessage(socket);
-                    MessageUtils.sendMessage(socket, "Processed: " + message);
-                    closeIgnoringException(socket);
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Thread clientConnection = clientHandlers.getClientHandler(clientHandler);
-        clientConnection.start();
-    }
-
-    private void closeIgnoringException(Socket socket)
-    {
-        if (socket != null)
-        {
-            try
-            {
-                socket.close();
-            } catch (IOException ignore)
-            {
-
-            }
-        }
+        connectionManager.shutdown();
     }
 
     private void closeIgnoringException(ServerSocket serverSocket)

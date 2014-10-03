@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package transmission.common;
+package depricated;
 
 import java.util.NoSuchElementException;
 import java.util.Queue;
@@ -64,17 +64,18 @@ public class ThreadQueue
                     Thread toSend = ClientHandlers.remove();
                     clientHandlersAvailable.decrementAndGet();
                     toSend.setContextClassLoader((ClassLoader) toRun);
-                    return toSend;
+                    //return toSend;
                 } catch (NoSuchElementException e)
                 {
                     System.err.println("Slow Handler Given");
                     slowHandler.setContextClassLoader((ClassLoader) toRun);
-                    return slowHandler;
+                    //return slowHandler;
                 }
             }
         };
         Thread openThread = new Thread(openRunnable);
         openThread.start();
+        return null;
     }
 
     public void returnClientHandler(Thread clientHandler)
