@@ -40,42 +40,32 @@ public class ThreadQueue
 
     public Thread getClientHandler(Runnable toRun)
     {
-        Runnable openRunnable = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                boolean anyHandlerAvailable = clientHandlersAvailable.intValue() < 1;
-                int attempts = 0;
+        boolean anyHandlerAvailable = clientHandlersAvailable.intValue() < 1;
+        int attempts = 0;
 
-                while (!anyHandlerAvailable && attempts < 10)
-                {
-                    anyHandlerAvailable = clientHandlersAvailable.intValue() < 1;
-                    try
-                    {
-                        Thread.sleep(100 * ++attempts);
-                    } catch (InterruptedException ex)
-                    {
-                        System.err.println("getClientHandler interrupted");
-                    }
-                }
-                try
-                {
-                    Thread toSend = ClientHandlers.remove();
-                    clientHandlersAvailable.decrementAndGet();
-                    toSend.setContextClassLoader((ClassLoader) toRun);
-                    //return toSend;
-                } catch (NoSuchElementException e)
-                {
-                    System.err.println("Slow Handler Given");
-                    slowHandler.setContextClassLoader((ClassLoader) toRun);
-                    //return slowHandler;
-                }
+        while (!anyHandlerAvailable && attempts < 10)
+        {
+            anyHandlerAvailable = clientHandlersAvailable.intValue() < 1;
+            try
+            {
+                Thread.sleep(100 * ++attempts);
+            } catch (InterruptedException ex)
+            {
+                System.err.println("getClientHandler interrupted");
             }
-        };
-        Thread openThread = new Thread(openRunnable);
-        openThread.start();
-        return null;
+        }
+        try
+        {
+            Thread toSend = ClientHandlers.remove();
+            clientHandlersAvailable.decrementAndGet();
+            toSend.setContextClassLoader((ClassLoader) toRun);
+            return toSend;
+        } catch (NoSuchElementException e)
+        {
+            System.err.println("Slow Handler Given");
+            slowHandler.setContextClassLoader((ClassLoader) toRun);
+            return slowHandler;
+        }
     }
 
     public void returnClientHandler(Thread clientHandler)

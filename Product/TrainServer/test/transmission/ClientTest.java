@@ -5,14 +5,13 @@ package transmission;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
-import java.io.IOException;
-import java.net.Socket;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import transmission.common.MessageUtils;
+import processing.ServerProcessorRequest;
+import threading.ThreadPerRequestScheduler;
 
 /**
  *
@@ -24,80 +23,61 @@ public class ClientTest
     private static final int PORT = 2954;
     private static final int TIMEOUT = 2000;
 
-    IncomingUserConnection server;
-    Thread serverThread;
+    IncomingUserConnectionsHandler serverConnection;
+
+    private ThreadPerRequestScheduler serverThreadPool = new ThreadPerRequestScheduler();
 
     @Before
     public void createServer() throws Exception
     {
-        try
-        {
-            server = new IncomingUserConnection();
-            serverThread = new Thread(server);
-            serverThread.start();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            throw e;
-        }
+        serverConnection = new IncomingUserConnectionsHandler();
+        ServerProcessorRequest setupServer = new ServerProcessorRequest(serverConnection);
+        serverThreadPool.schedule(setupServer);
+        Thread.sleep(1000);
+
     }
 
     @After
     public void shutdownServer() throws InterruptedException
     {
-        if (server != null)
+        if (serverConnection != null)
         {
-            server.stopProcessing();
-            serverThread.join();
+            serverConnection.stopProcessing();
         }
     }
 
-    class TrivialClient implements Runnable
+    @Test(timeout = 5000)
+    public void shouldRunInUnder5Seconds() throws Exception
     {
+        int numberOfClients = 20;
+        AtomicInteger successfulConnectionAttempts = new AtomicInteger(0);
+        Thread[] threads = new Thread[numberOfClients];
 
-        int clientNumber;
-
-        TrivialClient(int clientNumber)
+        for (int i = 0; i < threads.length; ++i)
         {
-            this.clientNumber = clientNumber;
+            threads[i] = new Thread(new CountingClient(i, successfulConnectionAttempts, PORT));
+            threads[i].start();
         }
 
-        @Override
-        public void run()
+        for (int i = 0; i < threads.length; ++i)
         {
-            try
-            {
-                connectSendRecieve(clientNumber);
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            threads[i].join();
         }
+
+        System.out.println("Number of successes: " + successfulConnectionAttempts.get());
+        Assert.assertEquals(numberOfClients, successfulConnectionAttempts.get());
     }
 
     @Test(timeout = 10000)
-    public void shouldRunInUnder10Seconds() throws Exception
-    {
-        Thread[] threads = new Thread[20];
-        for (int i = 0; i < threads.length; ++i)
-        {
-            threads[i] = new Thread(new TrivialClient(i));
-            threads[i].start();
-        }
-
-        for (int i = 0; i < threads.length; ++i)
-        {
-            threads[i].join();
-        }
-    }
-    
-    @Test(timeout = 100000)
     public void runManyClients() throws Exception
     {
-        Thread[] threads = new Thread[1000];
+        int numberOfClients = 1000;
+        AtomicInteger successfulConnectionAttempts = new AtomicInteger(0);
+        Thread[] threads = new Thread[numberOfClients];
+
         for (int i = 0; i < threads.length; ++i)
         {
-            threads[i] = new Thread(new TrivialClient(i));
+            threads[i] = new Thread(new CountingClient(i, successfulConnectionAttempts, PORT));
             threads[i].start();
         }
 
@@ -105,20 +85,8 @@ public class ClientTest
         {
             threads[i].join();
         }
-    }
 
-    private void connectSendRecieve(int i) throws IOException
-    {
-        System.out.printf("Client %2d: connecting\n", i);
-        Socket socket = new Socket("localhost", PORT);
-
-        System.out.printf("Client %2d: sending message\n", i);
-        MessageUtils.sendMessage(socket, Integer.toString(i));
-
-        System.out.printf("Client %2d: getting reply\n", i);
-        MessageUtils.getMessage(socket);
-        
-        System.out.printf("Client %2d: finished\n.", i);
-        socket.close();
+        System.out.println("Number of successes: " + successfulConnectionAttempts.get());
+        Assert.assertEquals(numberOfClients, successfulConnectionAttempts.get());
     }
 }

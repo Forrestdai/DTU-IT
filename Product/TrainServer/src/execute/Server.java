@@ -7,9 +7,10 @@
 package execute;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import transmission.IncomingUserConnection;
+import processing.ServerProcessorRequest;
+import threading.PersistentExecutorPool;
+import threading.ThreadPerRequestScheduler;
+import transmission.IncomingUserConnectionsHandler;
 
 /**
  *
@@ -17,14 +18,20 @@ import transmission.IncomingUserConnection;
  */
 public class Server
 {
+    private static ThreadPerRequestScheduler serverThreadPool = new ThreadPerRequestScheduler();
+    public static PersistentExecutorPool threadPool = new PersistentExecutorPool();
+    
     public static void main(String[] args)
     {
         try
         {
-            new IncomingUserConnection();
+            IncomingUserConnectionsHandler incomingTCP = new IncomingUserConnectionsHandler();
+            ServerProcessorRequest incomingTCPProcess = new ServerProcessorRequest(incomingTCP);
+            Server.serverThreadPool.schedule(incomingTCPProcess);
         } catch (IOException ex)
         {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    
 }

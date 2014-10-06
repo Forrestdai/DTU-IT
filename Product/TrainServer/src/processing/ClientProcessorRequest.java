@@ -5,9 +5,12 @@
  */
 package processing;
 
+import common.interfaces.ProcessorRequest;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import transmission.common.connection.ClientConnection;
 import transmission.common.MessageUtils;
 
@@ -15,20 +18,20 @@ import transmission.common.MessageUtils;
  *
  * @author James
  */
-public class ClientRequestProcessor
+public class ClientProcessorRequest implements ProcessorRequest
 {
-    private Socket connection;
+    private final Socket connection;
 
-    public ClientRequestProcessor(ClientConnection clientConnection)
+    public ClientProcessorRequest(ClientConnection clientConnection)
     {
         connection = clientConnection.getClientConnection();
     }
 
+    @Override
     public void process()
     {
         try
         {
-            //Thread.sleep(1000);
             if (connection == null)
             {
                 Thread.currentThread().interrupt();
@@ -36,7 +39,7 @@ public class ClientRequestProcessor
             }
             
             String message = MessageUtils.getMessage(connection);
-            MessageUtils.sendMessage(connection, "Processed: ");
+            MessageUtils.sendMessage(connection, message);
         } catch (IOException e)
         {
             e.printStackTrace();

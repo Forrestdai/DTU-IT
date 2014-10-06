@@ -4,16 +4,14 @@
  * and open the template in the editor.
  */
 
-package threading;
-
-import processing.ClientRequestProcessor;
+package common.interfaces;
 
 /**
  *
- * @author James
+ * @author JamesFoxes
  */
-public interface ClientScheduler
+public interface Connection
 {
-    public void schedule(ClientRequestProcessor requestProcessor);
-    
+    public void startProcessing();
+    public void stopProcessing();
 }

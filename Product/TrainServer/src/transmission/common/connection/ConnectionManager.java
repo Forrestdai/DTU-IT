@@ -5,7 +5,6 @@
  */
 package transmission.common.connection;
 
-import exceptions.ServerSocketException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -24,7 +23,7 @@ public class ConnectionManager
     public ConnectionManager() throws IOException //make new exception type
     {
         this.serverSocket = new ServerSocket(port);
-        serverSocket.setSoTimeout(socketTimeout);
+        //serverSocket.setSoTimeout(socketTimeout);
     }
 
     public ClientConnection awaitClient() throws IOException
@@ -35,8 +34,7 @@ public class ConnectionManager
 
     public void shutdown()
     {
-        closeIgnoringException(serverSocket);
-
+        closeIgnoringException(serverSocket);   //will throw serverSocket.accept exception in incoming tcp loop
     }
 
     private void closeIgnoringException(ServerSocket serverSocket)
@@ -48,7 +46,6 @@ public class ConnectionManager
                 serverSocket.close();
             } catch (IOException ex)
             {
-                System.err.println("ERROR: Could not shut down server socket");
             }
         }
     }

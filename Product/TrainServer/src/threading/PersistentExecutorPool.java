@@ -6,27 +6,27 @@
 
 package threading;
 
+import common.interfaces.Scheduler;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import processing.ClientRequestProcessor;
+import common.interfaces.ProcessorRequest;
 
 /**
  *
  * @author James
  */
-public class ExecutorTCPPool implements ClientScheduler
+public class PersistentExecutorPool implements Scheduler
 {
+    private final Executor executor;
+    private final int availableThreads = 40;
 
-    private Executor executor;
-    private final int availableThreads = 20;
-
-    public ExecutorTCPPool()
+    public PersistentExecutorPool()
     {
         executor = Executors.newFixedThreadPool(availableThreads);
     }
     
     @Override
-    public void schedule(ClientRequestProcessor requestProcessor)
+    public void schedule(final ProcessorRequest requestProcessor)
     {
         Runnable runnable = new Runnable()
         {
@@ -38,5 +38,4 @@ public class ExecutorTCPPool implements ClientScheduler
         };
         executor.execute(runnable);
     }
-    
 }

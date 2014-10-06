@@ -5,7 +5,7 @@
  */
 package transmission;
 
-import transmission.common.connection.Connection;
+import common.interfaces.Connection;
 import java.io.IOException;
 import java.net.MulticastSocket;
 

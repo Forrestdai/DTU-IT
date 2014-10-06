@@ -6,17 +6,18 @@
 
 package threading;
 
-import processing.ClientRequestProcessor;
+import common.interfaces.ProcessorRequest;
+import common.interfaces.Scheduler;
 
 /**
  *
  * @author James
  */
-public class ThreadPerRequestScheduler implements ClientScheduler
+public class ThreadPerRequestScheduler implements Scheduler
 {
 
     @Override
-    public void schedule(final ClientRequestProcessor requestProcessor)
+    public void schedule(final ProcessorRequest requestProcessor)
     {
         Runnable toRun = new Runnable()
         {

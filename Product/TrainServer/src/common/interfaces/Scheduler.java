@@ -4,14 +4,16 @@
  * and open the template in the editor.
  */
 
-package transmission.common.connection;
+package common.interfaces;
+
+import processing.*;
 
 /**
  *
- * @author JamesFoxes
+ * @author James
  */
-public interface Connection
+public interface Scheduler
 {
-    public void send();
-    public void stopProcessing();
+    public void schedule(ProcessorRequest requestProcessor);
+    
 }
