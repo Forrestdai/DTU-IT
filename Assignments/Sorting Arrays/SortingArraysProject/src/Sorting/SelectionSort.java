@@ -1,30 +1,34 @@
 package Sorting;
 
+import collection.MyCollection;
+
 public class SelectionSort implements Sortable
 {
-    private int[] arrayToSearch;
+    private MyCollection listToSearch;
     private int currentSortedIndex;
     private int currentSmallestElementID;
 
     @Override
-    public int[] sort(int[] arrayToSort)
+    public MyCollection sort(MyCollection arrayToSort)
     {
-        this.arrayToSearch = arrayToSort;
         currentSortedIndex = 0;
-        for (; currentSortedIndex < arrayToSearch.length - 1; ++currentSortedIndex)
+        listToSearch = arrayToSort;
+
+        for (; currentSortedIndex < listToSearch.size() - 1; ++currentSortedIndex)
         {
             searchSmallestElementID();
             swapElements();
         }
-        return arrayToSearch;
+
+        return listToSearch;
     }
 
     private void searchSmallestElementID()
     {
         currentSmallestElementID = currentSortedIndex;
-        for (int i = currentSortedIndex; i < arrayToSearch.length; ++i)
+        for (int i = currentSortedIndex; i < listToSearch.size(); ++i)
         {
-            testIfSmallerAndStoreIndex(arrayToSearch[currentSmallestElementID], arrayToSearch[i], i);
+            testIfSmallerAndStoreIndex(listToSearch.get(currentSmallestElementID).getContents(), listToSearch.get(i).getContents(), i);
         }
     }
 
@@ -38,8 +42,10 @@ public class SelectionSort implements Sortable
 
     private void swapElements()
     {
-        int elementPlaceHolder = arrayToSearch[currentSmallestElementID];
-        arrayToSearch[currentSmallestElementID] = arrayToSearch[currentSortedIndex];
-        arrayToSearch[currentSortedIndex] = elementPlaceHolder;
+        int elementToInsert = listToSearch.get(currentSmallestElementID).getContents();
+        int elementAtCurrentRoot = listToSearch.get(currentSortedIndex).getContents();
+        
+        listToSearch.update(elementAtCurrentRoot, currentSmallestElementID);
+        listToSearch.update(elementToInsert, currentSortedIndex);
     }
 }

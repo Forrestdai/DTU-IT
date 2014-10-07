@@ -1,18 +1,20 @@
 package Sorting;
 
+import collection.MyCollection;
+
 public class InsertionSort implements Sortable
 {
 
-    private int[] arrayToSearch;
+    private MyCollection arrayToSearch;
     private int currentSortIndex;
     private int currentInsertElementID;
 
     @Override
-    public int[] sort(int[] array)
+    public MyCollection sort(MyCollection arrayToSort)
     {
-        arrayToSearch = array;
+        arrayToSearch = arrayToSort;
         currentSortIndex = 1;
-        for (; currentSortIndex < arrayToSearch.length; ++currentSortIndex)
+        for (; currentSortIndex < arrayToSearch.size(); ++currentSortIndex)
         {
             shiftElements();
         }
@@ -38,13 +40,17 @@ public class InsertionSort implements Sortable
 
     private boolean isCurrentElementSmallerThanPrevious()
     {
-        return arrayToSearch[currentInsertElementID] < arrayToSearch[currentInsertElementID - 1];
+        int previousElement = arrayToSearch.get(currentInsertElementID - 1).getContents();
+        int currentElement = arrayToSearch.get(currentInsertElementID).getContents();
+        return currentElement < previousElement;
     }
 
     private void shiftOneElementDown()
     {
-        int smallElementPlaceHolder = arrayToSearch[currentInsertElementID];
-        arrayToSearch[currentInsertElementID] = arrayToSearch[currentInsertElementID - 1];
-        arrayToSearch[currentInsertElementID - 1] = smallElementPlaceHolder;
+        int smallElementPlaceholder = arrayToSearch.get(currentInsertElementID).getContents();
+        int largeELementPlaceholder = arrayToSearch.get(currentInsertElementID - 1).getContents();
+        
+        arrayToSearch.update(largeELementPlaceholder, currentInsertElementID);
+        arrayToSearch.update(smallElementPlaceholder, currentInsertElementID - 1);
     }
 }

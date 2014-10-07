@@ -4,15 +4,23 @@
  * and open the template in the editor.
  */
 
-package Sorting;
-
-import collection.MyCollection;
+package collection.nodes;
 
 /**
  *
  * @author JamesFoxes
  */
-public interface Sortable
+public class SentinelNode extends Node
 {
-    public MyCollection sort(MyCollection arrayToSort);
+    
+    @Override
+    public int getContents()
+    {
+        return 0;
+    }
+
+    @Override
+    public void setContents(int dataToSet)
+    {
+    }
 }

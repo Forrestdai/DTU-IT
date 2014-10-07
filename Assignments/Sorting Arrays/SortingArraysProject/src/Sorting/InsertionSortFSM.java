@@ -5,6 +5,8 @@
  */
 package Sorting;
 
+import collection.MyCollection;
+
 /**
  *
  * @author James
@@ -12,17 +14,17 @@ package Sorting;
 public class InsertionSortFSM implements Sortable
 {
 
-    private int[] arrayToSearch;
+    private MyCollection arrayToSearch;
     private int currentSortIndex;
     private int currentExtractedElement;
     private int openSpaceIndex;
 
     @Override
-    public int[] sort(int[] array)
+    public MyCollection sort(MyCollection arrayToSort)
     {
-        arrayToSearch = array;
+        arrayToSearch = arrayToSort;
         currentSortIndex = 1;
-        for (; currentSortIndex < arrayToSearch.length; ++currentSortIndex)
+        for (; currentSortIndex < arrayToSearch.size(); ++currentSortIndex)
         {
             extractElement();
             if (!testElement())
@@ -36,7 +38,7 @@ public class InsertionSortFSM implements Sortable
 
     private void extractElement()
     {
-        currentExtractedElement = arrayToSearch[currentSortIndex];
+        currentExtractedElement = arrayToSearch.get(currentSortIndex).getContents();
         openSpaceIndex = currentSortIndex;
     }
 
@@ -44,7 +46,7 @@ public class InsertionSortFSM implements Sortable
     {
         if (openSpaceIndex > 0)
         {
-            return currentExtractedElement >= arrayToSearch[openSpaceIndex - 1];
+            return currentExtractedElement >= arrayToSearch.get(openSpaceIndex - 1).getContents();
         }
         return true;
     }
@@ -59,13 +61,14 @@ public class InsertionSortFSM implements Sortable
 
     private void shiftElement()
     {
-        arrayToSearch[openSpaceIndex] = arrayToSearch[openSpaceIndex - 1];
+        int elementToShift = arrayToSearch.get(openSpaceIndex - 1).getContents();
+        arrayToSearch.update(elementToShift, openSpaceIndex);
         --openSpaceIndex;
     }
 
     private void insertElementToOpen()
     {
-        arrayToSearch[openSpaceIndex] = currentExtractedElement;
+        arrayToSearch.update(currentExtractedElement, openSpaceIndex);
     }
 
 }

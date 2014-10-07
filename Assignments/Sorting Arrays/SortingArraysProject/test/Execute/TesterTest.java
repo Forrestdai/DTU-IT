@@ -1,9 +1,12 @@
 package Execute;
 
+import efficiency.SortingTester;
 import Helpers.arrayProperties;
 import Sorting.InsertionSort;
 import Sorting.InsertionSortFSM;
 import Sorting.SelectionSort;
+import collection.CollectionType;
+import collection.MyCollection;
 import java.util.ArrayList;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -14,51 +17,51 @@ public class TesterTest
     public void SelectionSortTest()
     {
         arrayProperties shortTest = new arrayProperties();
-        Tester instance = new Tester(shortTest);
+        SortingTester instance = new SortingTester(shortTest, CollectionType.MyLinkedList);
         shortTest.sizeOfSortArray = 1000;
         shortTest.numberOfTimesToRun = 1;
         shortTest.testFromZeroTo = 5000;
         
-        ArrayList<int[]> result = instance.returnSortedArraysForTesting(new SelectionSort());
-        ArrayList<int[]> expResult = instance.returnComparisonArraysForTesting(result);
+        ArrayList<MyCollection> result = instance.returnSortedArraysForTesting(new SelectionSort());
+        ArrayList<MyCollection> expResult = instance.returnComparisonArraysForTesting(result);
         
-        assertArrayEquals(expResult.get(0), result.get(0));
-        assertArrayEquals(expResult.get(1), result.get(1));
-        assertArrayEquals(expResult.get(2), result.get(2));
+        assertArrayEquals(expResult.get(0).toArray(), result.get(0).toArray());
+        assertArrayEquals(expResult.get(1).toArray(), result.get(1).toArray());
+        assertArrayEquals(expResult.get(2).toArray(), result.get(2).toArray());
     }
     
     @Test
     public void InsertionSortTest()
     {
         arrayProperties shortTest = new arrayProperties();
-        Tester instance = new Tester(shortTest);
+        SortingTester instance = new SortingTester(shortTest, CollectionType.MyLinkedList);
         shortTest.sizeOfSortArray = 1000;
         shortTest.numberOfTimesToRun = 1;
         shortTest.testFromZeroTo = 5000;
         
-        ArrayList<int[]> result = instance.returnSortedArraysForTesting(new InsertionSort());
-        ArrayList<int[]> expResult = instance.returnComparisonArraysForTesting(result);
+        ArrayList<MyCollection> result = instance.returnSortedArraysForTesting(new InsertionSort());
+        ArrayList<MyCollection> expResult = instance.returnComparisonArraysForTesting(result);
         
-        assertArrayEquals(expResult.get(0), result.get(0));
-        assertArrayEquals(expResult.get(1), result.get(1));
-        assertArrayEquals(expResult.get(2), result.get(2));
+        assertArrayEquals(expResult.get(0).toArray(), result.get(0).toArray());
+        assertArrayEquals(expResult.get(1).toArray(), result.get(1).toArray());
+        assertArrayEquals(expResult.get(2).toArray(), result.get(2).toArray());
     }
     
     @Test
     public void InsertionSortFSMTest()
     {
         arrayProperties shortTest = new arrayProperties();
-        Tester instance = new Tester(shortTest);
+        SortingTester instance = new SortingTester(shortTest, CollectionType.MyLinkedList);
         shortTest.sizeOfSortArray = 1000;
         shortTest.numberOfTimesToRun = 1;
         shortTest.testFromZeroTo = 5000;
         
-        ArrayList<int[]> result = instance.returnSortedArraysForTesting(new InsertionSortFSM());
-        ArrayList<int[]> expResult = instance.returnComparisonArraysForTesting(result);
+        ArrayList<MyCollection> result = instance.returnSortedArraysForTesting(new InsertionSortFSM());
+        ArrayList<MyCollection> expResult = instance.returnComparisonArraysForTesting(result);
         
-        assertArrayEquals(expResult.get(0), result.get(0));
-        assertArrayEquals(expResult.get(1), result.get(1));
-        assertArrayEquals(expResult.get(2), result.get(2));
+        assertArrayEquals(expResult.get(0).toArray(), result.get(0).toArray());
+        assertArrayEquals(expResult.get(1).toArray(), result.get(1).toArray());
+        assertArrayEquals(expResult.get(2).toArray(), result.get(2).toArray());
     }
     
 }

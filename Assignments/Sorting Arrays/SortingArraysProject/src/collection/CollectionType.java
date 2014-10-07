@@ -4,15 +4,13 @@
  * and open the template in the editor.
  */
 
-package Sorting;
-
-import collection.MyCollection;
+package collection;
 
 /**
  *
  * @author JamesFoxes
  */
-public interface Sortable
+public enum CollectionType
 {
-    public MyCollection sort(MyCollection arrayToSort);
+    MyLinkedList, JavaLinkedList, Array
 }

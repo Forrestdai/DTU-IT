@@ -1,4 +1,4 @@
-package Sorting;
+package suite;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -10,11 +10,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses(
 {
-    Sorting.InsertionSortTest.class, 
-    Sorting.SelectionSortTest.class, 
-    Sorting.BuiltInQuickSortTest.class,
-    Sorting.InsertionSortFSMTest.class,
-    Execute.TesterTest.class
+    Sorting.SortingTest.class, 
+    Execute.TesterTest.class,
+    mylinkedlist.MyLinkedListTest.class
 })
 public class SortingTestsSuite
 {
