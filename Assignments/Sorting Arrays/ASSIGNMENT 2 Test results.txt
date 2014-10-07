@@ -1,0 +1,200 @@
+run:
+SORTING
+Selection sorting --->
+
+My LinkedList
+Scrambled arrays: Average Runtime of 102.23674ms, average over 20 runs with 500 elements in each array.
+Nearly Sorted arrays: Average Runtime of 87.223097ms, average over 20 runs with 500 elements in each array.
+Descending arrays: Average Runtime of 109.459424ms, average over 20 runs with 500 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 818.094832ms, average over 10 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 696.766727ms, average over 10 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 876.795272ms, average over 10 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 6920.475631ms, average over 5 runs with 2000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 5904.711121ms, average over 5 runs with 2000 elements in each array.
+Descending arrays: Average Runtime of 7415.568885ms, average over 5 runs with 2000 elements in each array.
+------------
+
+Java LinkedList
+Scrambled arrays: Average Runtime of 45.589778ms, average over 20 runs with 500 elements in each array.
+Nearly Sorted arrays: Average Runtime of 40.175498ms, average over 20 runs with 500 elements in each array.
+Descending arrays: Average Runtime of 47.275148ms, average over 20 runs with 500 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 382.00242ms, average over 10 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 343.339276ms, average over 10 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 401.025487ms, average over 10 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 3643.139578ms, average over 5 runs with 2000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 3122.327125ms, average over 5 runs with 2000 elements in each array.
+Descending arrays: Average Runtime of 3482.322634ms, average over 5 runs with 2000 elements in each array.
+------------
+
+Java ArrayList
+Scrambled arrays: Average Runtime of 2.277886ms, average over 20 runs with 500 elements in each array.
+Nearly Sorted arrays: Average Runtime of 2.388698ms, average over 20 runs with 500 elements in each array.
+Descending arrays: Average Runtime of 2.115773ms, average over 20 runs with 500 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 8.280407ms, average over 10 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 8.834873ms, average over 10 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 8.856425ms, average over 10 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 37.591502ms, average over 5 runs with 2000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 32.815971ms, average over 5 runs with 2000 elements in each array.
+Descending arrays: Average Runtime of 32.674897ms, average over 5 runs with 2000 elements in each array.
+------------
+Insertion sorting --->
+
+My LinkedList
+Scrambled arrays: Average Runtime of 58.432101ms, average over 20 runs with 500 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.967204ms, average over 20 runs with 500 elements in each array.
+Descending arrays: Average Runtime of 85.000788ms, average over 20 runs with 500 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 460.821515ms, average over 10 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 3.788515ms, average over 10 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 694.151428ms, average over 10 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 3829.877316ms, average over 5 runs with 2000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 15.769423ms, average over 5 runs with 2000 elements in each array.
+Descending arrays: Average Runtime of 5745.889979ms, average over 5 runs with 2000 elements in each array.
+------------
+
+Java LinkedList
+Scrambled arrays: Average Runtime of 36.917345ms, average over 20 runs with 500 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.446265ms, average over 20 runs with 500 elements in each array.
+Descending arrays: Average Runtime of 59.828699ms, average over 20 runs with 500 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 307.736049ms, average over 10 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 1.783881ms, average over 10 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 502.282271ms, average over 10 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 2600.532446ms, average over 5 runs with 2000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 7.600046ms, average over 5 runs with 2000 elements in each array.
+Descending arrays: Average Runtime of 4497.81271ms, average over 5 runs with 2000 elements in each array.
+------------
+
+Java ArrayList
+Scrambled arrays: Average Runtime of 1.377548ms, average over 20 runs with 500 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.033682ms, average over 20 runs with 500 elements in each array.
+Descending arrays: Average Runtime of 2.612624ms, average over 20 runs with 500 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 5.302037ms, average over 10 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.060708ms, average over 10 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 10.260379ms, average over 10 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 20.370417ms, average over 5 runs with 2000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.111776ms, average over 5 runs with 2000 elements in each array.
+Descending arrays: Average Runtime of 41.846966ms, average over 5 runs with 2000 elements in each array.
+------------
+Quick sorting --->
+
+My LinkedList
+Scrambled arrays: Average Runtime of 0.292565ms, average over 20 runs with 500 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.247624ms, average over 20 runs with 500 elements in each array.
+Descending arrays: Average Runtime of 0.239989ms, average over 20 runs with 500 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 1.056775ms, average over 10 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.924098ms, average over 10 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 0.824482ms, average over 10 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 3.160341ms, average over 5 runs with 2000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 3.025114ms, average over 5 runs with 2000 elements in each array.
+Descending arrays: Average Runtime of 3.086134ms, average over 5 runs with 2000 elements in each array.
+------------
+
+Java LinkedList
+Scrambled arrays: Average Runtime of 0.314227ms, average over 20 runs with 500 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.303326ms, average over 20 runs with 500 elements in each array.
+Descending arrays: Average Runtime of 0.300138ms, average over 20 runs with 500 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 1.184847ms, average over 10 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 1.131012ms, average over 10 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 1.129768ms, average over 10 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 4.637568ms, average over 5 runs with 2000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 4.599687ms, average over 5 runs with 2000 elements in each array.
+Descending arrays: Average Runtime of 4.598754ms, average over 5 runs with 2000 elements in each array.
+------------
+
+Java ArrayList
+Scrambled arrays: Average Runtime of 0.252041ms, average over 20 runs with 500 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.222588ms, average over 20 runs with 500 elements in each array.
+Descending arrays: Average Runtime of 0.22024ms, average over 20 runs with 500 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 0.811202ms, average over 10 runs with 1000 elements in each array.
+Nearly Sorted arrays: Average Runtime of 0.795341ms, average over 10 runs with 1000 elements in each array.
+Descending arrays: Average Runtime of 0.771518ms, average over 10 runs with 1000 elements in each array.
+------------
+Scrambled arrays: Average Runtime of 3.128867ms, average over 5 runs with 2000 elements in each array.
+
+COLLECTION
+Nearly Sorted arrays: Average Runtime of 3.094656ms, average over 5 runs with 2000 elements in each array.
+Descending arrays: Average Runtime of 3.062187ms, average over 5 runs with 2000 elements in each array.
+------------
+
+---   My LinkedList efficiency test   ---
+-5000 elements-
+Time: 18.726429ms to add 5000 elements. With an average of: 0.003745ms per element.
+Time: 20.17075ms to get 5000 elements. With an average of: 0.004034ms per element.
+Time: 0.096725ms to add 5000 elements first. With an average of: 1.9E-5ms per element.
+Time: 0.107297ms to add 5000 elements last. With an average of: 2.1E-5ms per element.
+-10000 elements-
+Time: 74.625493ms to add 10000 elements. With an average of: 0.007462ms per element.
+Time: 79.777653ms to get 10000 elements. With an average of: 0.007977ms per element.
+Time: 0.133423ms to add 10000 elements first. With an average of: 1.3E-5ms per element.
+Time: 0.135599ms to add 10000 elements last. With an average of: 1.3E-5ms per element.
+-20000 elements-
+Time: 303.979757ms to add 20000 elements. With an average of: 0.015198ms per element.
+Time: 322.345416ms to get 20000 elements. With an average of: 0.016117ms per element.
+Time: 0.282085ms to add 20000 elements first. With an average of: 1.4E-5ms per element.
+Time: 0.273375ms to add 20000 elements last. With an average of: 1.3E-5ms per element.
+-40000 elements-
+Time: 1223.25073ms to add 40000 elements. With an average of: 0.030581ms per element.
+Time: 1299.378386ms to get 40000 elements. With an average of: 0.032484ms per element.
+Time: 0.632282ms to add 40000 elements first. With an average of: 1.5E-5ms per element.
+Time: 0.576926ms to add 40000 elements last. With an average of: 1.4E-5ms per element.
+
+---   Java LinkedList efficiency test   ---
+-5000 elements-
+Time: 0.108854ms to add 5000 elements. With an average of: 2.1E-5ms per element.
+Time: 10.499326ms to get 5000 elements. With an average of: 0.002099ms per element.
+Time: 0.110097ms to add 5000 elements first. With an average of: 2.2E-5ms per element.
+Time: 0.115073ms to add 5000 elements last. With an average of: 2.3E-5ms per element.
+-10000 elements-
+Time: 0.212109ms to add 10000 elements. With an average of: 2.1E-5ms per element.
+Time: 39.282517ms to get 10000 elements. With an average of: 0.003928ms per element.
+Time: 0.218327ms to add 10000 elements first. With an average of: 2.1E-5ms per element.
+Time: 0.21926ms to add 10000 elements last. With an average of: 2.1E-5ms per element.
+-20000 elements-
+Time: 0.409287ms to add 20000 elements. With an average of: 2.0E-5ms per element.
+Time: 166.896659ms to get 20000 elements. With an average of: 0.008344ms per element.
+Time: 0.420174ms to add 20000 elements first. With an average of: 2.1E-5ms per element.
+Time: 0.450342ms to add 20000 elements last. With an average of: 2.2E-5ms per element.
+-40000 elements-
+Time: 0.788718ms to add 40000 elements. With an average of: 1.9E-5ms per element.
+Time: 697.509347ms to get 40000 elements. With an average of: 0.017437ms per element.
+Time: 0.752951ms to add 40000 elements first. With an average of: 1.8E-5ms per element.
+Time: 0.816089ms to add 40000 elements last. With an average of: 2.0E-5ms per element.
+
+---   Java ArrayList efficiency test   ---
+-5000 elements-
+Time: 0.125959ms to add 5000 elements. With an average of: 2.5E-5ms per element.
+Time: 0.079927ms to get 5000 elements. With an average of: 1.5E-5ms per element.
+Time: 2.491796ms to add 5000 elements first. With an average of: 4.98E-4ms per element.
+Time: 0.130625ms to add 5000 elements last. With an average of: 2.6E-5ms per element.
+-10000 elements-
+Time: 0.232945ms to add 10000 elements. With an average of: 2.3E-5ms per element.
+Time: 0.168567ms to get 10000 elements. With an average of: 1.6E-5ms per element.
+Time: 9.839988ms to add 10000 elements first. With an average of: 9.83E-4ms per element.
+Time: 0.221749ms to add 10000 elements last. With an average of: 2.2E-5ms per element.
+-20000 elements-
+Time: 0.45003ms to add 20000 elements. With an average of: 2.2E-5ms per element.
+Time: 0.343974ms to get 20000 elements. With an average of: 1.7E-5ms per element.
+Time: 40.757627ms to add 20000 elements first. With an average of: 0.002037ms per element.
+Time: 0.463401ms to add 20000 elements last. With an average of: 2.3E-5ms per element.
+-40000 elements-
+Time: 2.153421ms to add 40000 elements. With an average of: 5.3E-5ms per element.
+Time: 0.757613ms to get 40000 elements. With an average of: 1.8E-5ms per element.
+Time: 165.527906ms to add 40000 elements first. With an average of: 0.004138ms per element.
+Time: 0.901611ms to add 40000 elements last. With an average of: 2.2E-5ms per element.
+(total time: 7 minutes 9 seconds)
