@@ -17,7 +17,7 @@ import threading.ThreadPerRequestScheduler;
  *
  * @author James
  */
-public class ClientTest
+public class TestClientConnection
 {
 
     private static final int PORT = 2954;
