@@ -35,14 +35,17 @@ public class SortingEfficiencyTest
         executeTestsAndPrintAverageTime(createTestEnvironment(500), sortingMethod, CollectionType.MyLinkedList);
         executeTestsAndPrintAverageTime(createTestEnvironment(1000), sortingMethod, CollectionType.MyLinkedList);
         executeTestsAndPrintAverageTime(createTestEnvironment(2000), sortingMethod, CollectionType.MyLinkedList);
+        executeTestsAndPrintAverageTime(createTestEnvironment(4000), sortingMethod, CollectionType.MyLinkedList);
         System.out.println("Java LinkedList");
         executeTestsAndPrintAverageTime(createTestEnvironment(500), sortingMethod, CollectionType.JavaLinkedList);
         executeTestsAndPrintAverageTime(createTestEnvironment(1000), sortingMethod, CollectionType.JavaLinkedList);
         executeTestsAndPrintAverageTime(createTestEnvironment(2000), sortingMethod, CollectionType.JavaLinkedList);
+        executeTestsAndPrintAverageTime(createTestEnvironment(4000), sortingMethod, CollectionType.JavaLinkedList);
         System.out.println("Java ArrayList");
         executeTestsAndPrintAverageTime(createTestEnvironment(500), sortingMethod, CollectionType.Array);
         executeTestsAndPrintAverageTime(createTestEnvironment(1000), sortingMethod, CollectionType.Array);
         executeTestsAndPrintAverageTime(createTestEnvironment(2000), sortingMethod, CollectionType.Array);
+        executeTestsAndPrintAverageTime(createTestEnvironment(4000), sortingMethod, CollectionType.Array);
     }
     
     private arrayProperties createTestEnvironment(int arraySize)

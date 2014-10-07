@@ -5,8 +5,9 @@
  */
 package efficiency;
 
-import collection.MyJavaLinkedList;
 import collection.*;
+import collection.MyJavaLinkedList;
+import collection.nodes.BetweenNode;
 
 /**
  *
@@ -17,7 +18,7 @@ public class CollectionEfficiencyTest
 
     CollectionTestResults testResults;
     int numberOfElements;
-    int timesToRun = 20;
+    int timesToRun = 50;
 
     private long startTime = 0;
 
@@ -79,9 +80,9 @@ public class CollectionEfficiencyTest
     private void runAll(int numberOfTimes, int numberOfElements, CollectionType type)
     {
         this.numberOfElements = numberOfElements;
+        testResults = new CollectionTestResults(numberOfElements);
         for (int i = 0; i < numberOfTimes; i++)
         {
-            testResults = new CollectionTestResults(numberOfElements);
             runAllOnce(type);
             testResults.incrementTimesRun();
         }
@@ -101,8 +102,9 @@ public class CollectionEfficiencyTest
 
         for (int i = 0; i < numberOfElements; ++i)
         {
+            int placeToAdd = ((int) (Math.random() * i));
             startTimer();
-            toTest.add(i, ((int) (Math.random() * i)));
+            toTest.add(i, placeToAdd);
             stopTimerAndSaveElapsedTime(Operation.add);
         }
     }
@@ -119,7 +121,7 @@ public class CollectionEfficiencyTest
         for (int i = 0; i < numberOfElements; ++i)
         {
             startTimer();
-            toTest.get(i);
+            BetweenNode ignore = toTest.get(i);
             stopTimerAndSaveElapsedTime(Operation.get);
         }
     }

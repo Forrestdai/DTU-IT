@@ -2,19 +2,19 @@ run:
 SORTING
 Selection sorting --->
 
-My LinkedList
-Scrambled arrays: Average Runtime of 102.23674ms, average over 20 runs with 500 elements in each array.
-Nearly Sorted arrays: Average Runtime of 87.223097ms, average over 20 runs with 500 elements in each array.
-Descending arrays: Average Runtime of 109.459424ms, average over 20 runs with 500 elements in each array.
-------------
-Scrambled arrays: Average Runtime of 818.094832ms, average over 10 runs with 1000 elements in each array.
-Nearly Sorted arrays: Average Runtime of 696.766727ms, average over 10 runs with 1000 elements in each array.
-Descending arrays: Average Runtime of 876.795272ms, average over 10 runs with 1000 elements in each array.
-------------
-Scrambled arrays: Average Runtime of 6920.475631ms, average over 5 runs with 2000 elements in each array.
-Nearly Sorted arrays: Average Runtime of 5904.711121ms, average over 5 runs with 2000 elements in each array.
-Descending arrays: Average Runtime of 7415.568885ms, average over 5 runs with 2000 elements in each array.
-------------
+	My LinkedList
+	Scrambled arrays: Average Runtime of 102.23674ms, average over 20 runs with 500 elements in each array.
+	Nearly Sorted arrays: Average Runtime of 87.223097ms, average over 20 runs with 500 elements in each array.
+	Descending arrays: Average Runtime of 109.459424ms, average over 20 runs with 500 elements in each array.
+	------------
+	Scrambled arrays: Average Runtime of 818.094832ms, average over 10 runs with 1000 elements in each array.
+	Nearly Sorted arrays: Average Runtime of 696.766727ms, average over 10 runs with 1000 elements in each array.
+	Descending arrays: Average Runtime of 876.795272ms, average over 10 runs with 1000 elements in each array.
+	------------
+	Scrambled arrays: Average Runtime of 6920.475631ms, average over 5 runs with 2000 elements in each array.
+	Nearly Sorted arrays: Average Runtime of 5904.711121ms, average over 5 runs with 2000 elements in each array.
+	Descending arrays: Average Runtime of 7415.568885ms, average over 5 runs with 2000 elements in each array.
+	------------
 
 Java LinkedList
 Scrambled arrays: Average Runtime of 45.589778ms, average over 20 runs with 500 elements in each array.
