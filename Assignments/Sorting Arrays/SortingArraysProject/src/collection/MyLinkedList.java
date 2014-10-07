@@ -129,7 +129,7 @@ public class MyLinkedList implements MyCollection
             }
             iterator = iterator.getNextNode();
         }
-        return (BetweenNode) iterator;
+        return tryToCastNode(iterator);
     }
 
     @Override
