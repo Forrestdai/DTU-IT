@@ -5,13 +5,14 @@
  */
 package transmission;
 
+import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import processing.ServerProcessorRequest;
 import threading.ThreadPerRequestScheduler;
 import static org.junit.Assert.*;
-import transmission.common.TransmissionPackage;
+import transmission.common.TransmissionPacket;
 
 /**
  *
@@ -38,7 +39,6 @@ public class TestProtocol
         serverConnection = new IncomingUserConnectionsHandler();
         ServerProcessorRequest setupServer = new ServerProcessorRequest(serverConnection);
         serverThreadPool.schedule(setupServer);
-        Thread.sleep(1000);
     }
 
     @After
@@ -53,60 +53,100 @@ public class TestProtocol
     @Test(timeout = TIMEOUT)
     public void clientGETINFO() throws Exception
     {
-        TransmissionPackage toSend = new TransmissionPackage();
-        TransmissionPackage toRecieve = new TransmissionPackage();
+        TransmissionPacket toSend = new TransmissionPacket();
+        TransmissionPacket toRecieve = new TransmissionPacket();
 
-        toSend.command = TransmissionPackage.Commands.GETINFO;
-        toRecieve.command = TransmissionPackage.Commands.INFO;
+        toSend.command = TransmissionPacket.Commands.GETINFO;
+        toRecieve.command = TransmissionPacket.Commands.INFO;
 
         testCommand(toSend, toRecieve);
+        
+        toSend.dataString = "This does nothing";
+        toRecieve.dataString = null;
+
+        testDataString(toSend, toRecieve);
     }
 
     @Test(timeout = TIMEOUT)
     public void clientGETJOURNEY() throws Exception
     {
-        TransmissionPackage toSend = new TransmissionPackage();
-        TransmissionPackage toRecieve = new TransmissionPackage();
+        TransmissionPacket toSend = new TransmissionPacket();
+        TransmissionPacket toRecieve = new TransmissionPacket();
 
-        toSend.command = TransmissionPackage.Commands.GETJOURNEY;
-        toRecieve.command = TransmissionPackage.Commands.JOURNEY;
+        toSend.command = TransmissionPacket.Commands.GETJOURNEY;
+        toRecieve.command = TransmissionPacket.Commands.JOURNEY;
 
         testCommand(toSend, toRecieve);
+        
+        toSend.dataString = "This does nothing";
+        toRecieve.dataString = null;
+
+        testDataString(toSend, toRecieve);
     }
 
     @Test(timeout = TIMEOUT)
     public void clientLOGOUT() throws Exception
     {
-        TransmissionPackage toSend = new TransmissionPackage();
-        TransmissionPackage toRecieve = new TransmissionPackage();
+        TransmissionPacket toSend = new TransmissionPacket();
+        TransmissionPacket toRecieve = new TransmissionPacket();
 
-        toSend.command = TransmissionPackage.Commands.LOGOUT;
-        toRecieve.command = TransmissionPackage.Commands.ACKLOGOUT;
+        toSend.command = TransmissionPacket.Commands.LOGOUT;
+        toRecieve.command = TransmissionPacket.Commands.ACKLOGOUT;
 
         testCommand(toSend, toRecieve);
+        
+        toSend.dataString = "This does nothing";
+        toRecieve.dataString = null;
+
+        testDataString(toSend, toRecieve);
     }
 
     @Test(timeout = TIMEOUT)
     public void clientOKUID() throws Exception
     {
-        TransmissionPackage toSend = new TransmissionPackage();
-        TransmissionPackage toRecieve = new TransmissionPackage();
+        TransmissionPacket toSend = new TransmissionPacket();
+        TransmissionPacket toRecieve = new TransmissionPacket();
 
-        toSend.command = TransmissionPackage.Commands.CONN;
-        toRecieve.command = TransmissionPackage.Commands.ACK;
+        toSend.command = TransmissionPacket.Commands.CONN;
+        toRecieve.command = TransmissionPacket.Commands.ACK;
 
         testCommand(toSend, toRecieve);
-    }
+        
+        toSend.dataString = "This does nothing";
+        toRecieve.dataString = null;
 
-    private void testCommand(TransmissionPackage sendMessage, TransmissionPackage expectedReturn) throws Exception
+        testDataString(toSend, toRecieve);
+    }
+    
+    private void testCommand(TransmissionPacket sendMessage, TransmissionPacket expectedReturn) throws Exception
     {
-        int numberOfClients = 5;
+        TransmissionPacket[] returnedMessage = getReturnPacket(sendMessage, expectedReturn);
+        
+        for (TransmissionPacket returned : returnedMessage)
+        {
+            assertEquals(expectedReturn.command, returned.command);
+        }
+    }
+    
+    private void testDataString(TransmissionPacket sendMessage, TransmissionPacket expectedReturn) throws Exception
+    {
+        TransmissionPacket[] returnedMessage = getReturnPacket(sendMessage, expectedReturn);
+        
+        for (TransmissionPacket returned : returnedMessage)
+        {
+            assertEquals(expectedReturn.dataString, returned.dataString);
+        }
+    }
+    
+    private TransmissionPacket[] getReturnPacket(TransmissionPacket sendMessage, TransmissionPacket expectedReturn) throws Exception
+    {
+        int numberOfClients = 20;
         Thread[] threads = new Thread[numberOfClients];
-        CommandClient[] clients = new CommandClient[numberOfClients];
+        TransmissionClient[] clients = new TransmissionClient[numberOfClients];
 
         for (int i = 0; i < threads.length; ++i)
         {
-            clients[i] = new CommandClient(PORT, sendMessage);
+            clients[i] = new TransmissionClient(PORT, sendMessage);
             threads[i] = new Thread(clients[i]);
             threads[i].start();
         }
@@ -116,16 +156,12 @@ public class TestProtocol
             threads[i].join();
         }
 
-        TransmissionPackage[] returnedMessage = new TransmissionPackage[numberOfClients];
+        TransmissionPacket[] returnedMessage = new TransmissionPacket[numberOfClients];
         for (int i = 0; i < threads.length; i++)
         {
-            returnedMessage[i] = new TransmissionPackage();
+            returnedMessage[i] = new TransmissionPacket();
             returnedMessage[i] = clients[i].getReturnedMessage();
         }
-
-        for (TransmissionPackage returned : returnedMessage)
-        {
-            assertEquals(expectedReturn.command, returned.command);
-        }
+        return returnedMessage;
     }
 }

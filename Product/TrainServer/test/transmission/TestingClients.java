@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import processing.TransmissionInterpreter;
 import transmission.common.MessageUtils;
-import transmission.common.TransmissionPackage;
+import transmission.common.TransmissionPacket;
 
 /**
  *
@@ -33,7 +33,7 @@ public abstract class TestingClients implements Runnable
         System.out.printf("Client %2d: connecting\n", i);
 
         System.out.printf("Client %2d: sending message\n", i);
-        TransmissionPackage tp = new TransmissionPackage();
+        TransmissionPacket tp = new TransmissionPacket();
         tp.dataString = Integer.toString(i);
         MessageUtils.sendTransmission(socket, tp);
 
@@ -47,17 +47,17 @@ public abstract class TestingClients implements Runnable
     }
 }
 
-class CommandClient extends TestingClients
+class TransmissionClient extends TestingClients
 {
 
-    private TransmissionPackage sendMessage;
-    private TransmissionPackage returnMessage;
+    private TransmissionPacket sendMessage;
+    private TransmissionPacket returnMessage;
 
-    public CommandClient(int portNumber, TransmissionPackage sendMessage) throws IOException
+    public TransmissionClient(int portNumber, TransmissionPacket sendMessage) throws IOException
     {
         super(portNumber);
         this.sendMessage = sendMessage;
-        this.returnMessage = new TransmissionPackage();
+        this.returnMessage = new TransmissionPacket();
     }
 
     @Override
@@ -85,7 +85,7 @@ class CommandClient extends TestingClients
         }
     }
 
-    public TransmissionPackage getReturnedMessage()
+    public TransmissionPacket getReturnedMessage()
     {
         return returnMessage;
     }

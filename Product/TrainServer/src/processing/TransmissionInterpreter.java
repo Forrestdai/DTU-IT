@@ -5,10 +5,15 @@
  */
 package processing;
 
+import commands.Command;
+import commands.ErrorCommand;
+import commands.GetConnCommand;
+import commands.GetInfoCommand;
+import commands.GetJourneyCommand;
+import commands.GetLogoutCommand;
 import java.io.IOException;
 import java.net.Socket;
-import transmission.common.MessageUtils;
-import transmission.common.TransmissionPackage;
+import transmission.common.TransmissionPacket;
 
 /**
  *
@@ -17,67 +22,42 @@ import transmission.common.TransmissionPackage;
 public class TransmissionInterpreter
 {
 
-    TransmissionPackage recievedTransmission;
-    private final Socket clientConnection;
+    TransmissionPacket recievedTransmission;
 
-    public TransmissionInterpreter(TransmissionPackage message, Socket clientConnection)
+    public TransmissionInterpreter(TransmissionPacket message, Socket clientConnection)
     {
-        this.clientConnection = clientConnection;
         recievedTransmission = message;
-        switchOnCommand();
+        try
+        {
+            switchExecutionOnCommand().execute(clientConnection, message);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
-    private void switchOnCommand()
+    private Command switchExecutionOnCommand()
     {
-        TransmissionPackage TEMP = recievedTransmission;
+        Command toExecute;
         switch (recievedTransmission.command)
         {
             case GETINFO:
-                TEMP.command = TransmissionPackage.Commands.INFO;
-                try
-                {
-                    MessageUtils.sendTransmission(clientConnection, TEMP);
-                } catch (IOException ex)
-                {
-                }
+                toExecute = new GetInfoCommand();
                 break;
             case GETJOURNEY:
-                TEMP.command = TransmissionPackage.Commands.JOURNEY;
-                try
-                {
-                    MessageUtils.sendTransmission(clientConnection, TEMP);
-                } catch (IOException ex)
-                {
-                }
+                toExecute = new GetJourneyCommand();
                 break;
             case LOGOUT:
-                TEMP.command = TransmissionPackage.Commands.ACKLOGOUT;
-                try
-                {
-                    MessageUtils.sendTransmission(clientConnection, TEMP);
-                } catch (IOException ex)
-                {
-                }
+                toExecute = new GetLogoutCommand();
                 break;
             case CONN:
-                TEMP.command = TransmissionPackage.Commands.ACK;
-                try
-                {
-                    MessageUtils.sendTransmission(clientConnection, TEMP);
-                } catch (IOException ex)
-                {
-                }
+                toExecute = new GetConnCommand();
                 break;
             default:
-                try
-                {
-                    MessageUtils.sendTransmission(clientConnection, TEMP);
-                } catch (IOException ex)
-                {
-                }
+                toExecute = new ErrorCommand();
                 break;
-
         }
+        return toExecute;
     }
 
 }

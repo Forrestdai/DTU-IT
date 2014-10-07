@@ -21,7 +21,7 @@ import java.net.Socket;
  */
 public class MessageUtils
 {
-    public static void sendTransmission(Socket socket, TransmissionPackage message) throws IOException
+    public static void sendTransmission(Socket socket, TransmissionPacket message) throws IOException
     {
         OutputStream stream = socket.getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(stream);
@@ -29,10 +29,10 @@ public class MessageUtils
         oos.flush();
     }
     
-    public static TransmissionPackage getTransmission(Socket socket) throws IOException, ClassNotFoundException
+    public static TransmissionPacket getTransmission(Socket socket) throws IOException, ClassNotFoundException
     {
         InputStream stream = socket.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(stream);
-        return (TransmissionPackage) ois.readObject();
+        return (TransmissionPacket) ois.readObject();
     }
 }

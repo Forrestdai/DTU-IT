@@ -33,8 +33,6 @@ public class TestClientConnection
         serverConnection = new IncomingUserConnectionsHandler();
         ServerProcessorRequest setupServer = new ServerProcessorRequest(serverConnection);
         serverThreadPool.schedule(setupServer);
-        Thread.sleep(1000);
-
     }
 
     @After
@@ -46,8 +44,8 @@ public class TestClientConnection
         }
     }
 
-    @Test(timeout = 5000)
-    public void shouldRunInUnder5Seconds() throws Exception
+    @Test(timeout = 500)
+    public void shouldRunInUnder500ms() throws Exception
     {
         int numberOfClients = 20;
         AtomicInteger successfulConnectionAttempts = new AtomicInteger(0);
@@ -68,7 +66,7 @@ public class TestClientConnection
         Assert.assertEquals(numberOfClients, successfulConnectionAttempts.get());
     }
 
-    @Test(timeout = 10000)
+    @Test(timeout = 5000)
     public void runManyClients() throws Exception
     {
         int numberOfClients = 1000;

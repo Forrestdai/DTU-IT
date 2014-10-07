@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import transmission.common.connection.ClientConnection;
 import transmission.common.MessageUtils;
-import transmission.common.TransmissionPackage;
+import transmission.common.TransmissionPacket;
 
 /**
  *
@@ -36,7 +36,7 @@ public class ClientProcessorRequest implements ProcessorRequest
                 Thread.currentThread().interrupt();
                 return;
             }
-            TransmissionPackage message = MessageUtils.getTransmission(connection);
+            TransmissionPacket message = MessageUtils.getTransmission(connection);
             TransmissionInterpreter tI = new TransmissionInterpreter(message, connection);
         } catch (IOException | ClassNotFoundException e)
         {

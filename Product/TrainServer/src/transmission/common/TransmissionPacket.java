@@ -6,19 +6,20 @@
 package transmission.common;
 
 import java.io.Serializable;
+import java.net.Socket;
 
 /**
  *
  * @author JamesFoxes
  */
-public class TransmissionPackage implements Serializable, Transmittable
+public class TransmissionPacket implements Serializable, Transmittable
 {
 
     public Commands command;
     public String dataString;
     public Object dataObject;
 
-    public TransmissionPackage()
+    public TransmissionPacket()
     {
         command = Commands.nil;
     }
