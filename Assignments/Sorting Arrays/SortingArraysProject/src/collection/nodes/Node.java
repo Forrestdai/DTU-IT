@@ -54,7 +54,7 @@ public abstract class Node
     
     public Node getNextNodeForced()
     {
-        if(nextNode == null)
+        if(nextNode instanceof SentinelNode)
         {
             addNodeAfter(0);
         }

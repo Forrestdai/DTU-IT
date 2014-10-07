@@ -17,7 +17,7 @@ public class CollectionEfficiencyTest
 
     CollectionTestResults testResults;
     int numberOfElements;
-    int timesToRun = 200;
+    int timesToRun = 20;
 
     private long startTime = 0;
 
@@ -102,7 +102,7 @@ public class CollectionEfficiencyTest
         for (int i = 0; i < numberOfElements; ++i)
         {
             startTimer();
-            toTest.add(i, i);
+            toTest.add(i, ((int) (Math.random() * i)));
             stopTimerAndSaveElapsedTime(Operation.add);
         }
     }

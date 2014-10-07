@@ -5,6 +5,7 @@ import Sorting.*;
 import collection.CollectionType;
 import collection.MyArrayList;
 import collection.MyCollection;
+import collection.MyJavaLinkedList;
 import collection.MyLinkedList;
 import java.util.ArrayList;
 
@@ -61,6 +62,9 @@ public class SortingTester
             case MyLinkedList:
                 scrambledArray = new MyLinkedList();
                 break;
+            case JavaLinkedList:
+                scrambledArray = new MyJavaLinkedList();
+                break;
             case Array:
                 scrambledArray = new MyArrayList();
                 break;
@@ -78,6 +82,9 @@ public class SortingTester
         {
             case MyLinkedList:
                 nearlySortedArray = new MyLinkedList();
+                break;
+            case JavaLinkedList:
+                nearlySortedArray = new MyJavaLinkedList();
                 break;
             case Array:
                 nearlySortedArray = new MyArrayList();
@@ -115,6 +122,9 @@ public class SortingTester
         {
             case MyLinkedList:
                 descendingArray = new MyLinkedList();
+                break;
+            case JavaLinkedList:
+                descendingArray = new MyJavaLinkedList();
                 break;
             case Array:
                 descendingArray = new MyArrayList();

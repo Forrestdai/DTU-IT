@@ -9,11 +9,13 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses(
-{
-    Sorting.SortingTest.class, 
-    Execute.TesterTest.class,
-    mylinkedlist.MyLinkedListTest.class
-})
+        {
+            Sorting.SortingTest.class,
+            Execute.TesterTest.class,
+            mylinkedlist.MyLinkedListTest.class,
+            mylinkedlist.MyJavaLinkedListTest.class,
+            mylinkedlist.MyJavaArrayListTest.class
+        })
 public class SortingTestsSuite
 {
 
@@ -36,5 +38,5 @@ public class SortingTestsSuite
     public void tearDown() throws Exception
     {
     }
-    
+
 }

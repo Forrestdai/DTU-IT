@@ -32,24 +32,24 @@ public class SortingEfficiencyTest
     private void runOneSortMethod(Sortable sortingMethod)
     {
         System.out.println("My LinkedList");
+        executeTestsAndPrintAverageTime(createTestEnvironment(500), sortingMethod, CollectionType.MyLinkedList);
         executeTestsAndPrintAverageTime(createTestEnvironment(1000), sortingMethod, CollectionType.MyLinkedList);
         executeTestsAndPrintAverageTime(createTestEnvironment(2000), sortingMethod, CollectionType.MyLinkedList);
-        executeTestsAndPrintAverageTime(createTestEnvironment(4000), sortingMethod, CollectionType.MyLinkedList);
         System.out.println("Java LinkedList");
+        executeTestsAndPrintAverageTime(createTestEnvironment(500), sortingMethod, CollectionType.JavaLinkedList);
         executeTestsAndPrintAverageTime(createTestEnvironment(1000), sortingMethod, CollectionType.JavaLinkedList);
         executeTestsAndPrintAverageTime(createTestEnvironment(2000), sortingMethod, CollectionType.JavaLinkedList);
-        executeTestsAndPrintAverageTime(createTestEnvironment(4000), sortingMethod, CollectionType.JavaLinkedList);
         System.out.println("Java ArrayList");
+        executeTestsAndPrintAverageTime(createTestEnvironment(500), sortingMethod, CollectionType.Array);
         executeTestsAndPrintAverageTime(createTestEnvironment(1000), sortingMethod, CollectionType.Array);
         executeTestsAndPrintAverageTime(createTestEnvironment(2000), sortingMethod, CollectionType.Array);
-        executeTestsAndPrintAverageTime(createTestEnvironment(4000), sortingMethod, CollectionType.Array);
     }
     
     private arrayProperties createTestEnvironment(int arraySize)
     {
         arrayProperties test = new arrayProperties();
         test.sizeOfSortArray = arraySize;
-        test.numberOfTimesToRun = (100000 / arraySize);
+        test.numberOfTimesToRun = (10000 / arraySize);
         test.testFromZeroTo = arraySize * 5;
         return test;
     }
