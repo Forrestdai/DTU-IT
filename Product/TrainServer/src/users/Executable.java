@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package common.interfaces;
+package users;
 
 /**
  *
  * @author JamesFoxes
  */
-public interface ServerMainExecutable
+public interface Executable
 {
-    public void startProcessing() throws Exception;
+    
 }

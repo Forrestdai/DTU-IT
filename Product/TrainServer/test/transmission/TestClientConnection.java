@@ -5,6 +5,7 @@ package transmission;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import helpers.LogPrinter;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.After;
 import org.junit.Assert;
@@ -19,8 +20,6 @@ import threading.ThreadPerRequestScheduler;
  */
 public class TestClientConnection
 {
-
-    private static final int PORT = 2954;
     private static final int TIMEOUT = 2000;
 
     IncomingUserConnectionsHandler serverConnection;
@@ -53,7 +52,7 @@ public class TestClientConnection
 
         for (int i = 0; i < threads.length; ++i)
         {
-            threads[i] = new Thread(new CountingClient(i, successfulConnectionAttempts, PORT));
+            threads[i] = new Thread(new CountingClient(i, successfulConnectionAttempts));
             threads[i].start();
         }
 
@@ -62,7 +61,7 @@ public class TestClientConnection
             threads[i].join();
         }
 
-        System.out.println("Number of successes: " + successfulConnectionAttempts.get());
+        LogPrinter.print("Number of successes: " + successfulConnectionAttempts.get());
         Assert.assertEquals(numberOfClients, successfulConnectionAttempts.get());
     }
 
@@ -75,7 +74,7 @@ public class TestClientConnection
 
         for (int i = 0; i < threads.length; ++i)
         {
-            threads[i] = new Thread(new CountingClient(i, successfulConnectionAttempts, PORT));
+            threads[i] = new Thread(new CountingClient(i, successfulConnectionAttempts));
             threads[i].start();
         }
 
@@ -84,7 +83,7 @@ public class TestClientConnection
             threads[i].join();
         }
 
-        System.out.println("Number of successes: " + successfulConnectionAttempts.get());
+        LogPrinter.print("Number of successes: " + successfulConnectionAttempts.get());
         Assert.assertEquals(numberOfClients, successfulConnectionAttempts.get());
     }
 }

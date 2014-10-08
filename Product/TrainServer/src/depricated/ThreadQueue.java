@@ -5,6 +5,7 @@
  */
 package depricated;
 
+import helpers.LogPrinter;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -51,7 +52,7 @@ public class ThreadQueue
                 Thread.sleep(100 * ++attempts);
             } catch (InterruptedException ex)
             {
-                System.err.println("getClientHandler interrupted");
+                LogPrinter.printError("getClientHandler interrupted");
             }
         }
         try
@@ -62,7 +63,7 @@ public class ThreadQueue
             return toSend;
         } catch (NoSuchElementException e)
         {
-            System.err.println("Slow Handler Given");
+            LogPrinter.printError("Slow Handler Given");
             slowHandler.setContextClassLoader((ClassLoader) toRun);
             return slowHandler;
         }

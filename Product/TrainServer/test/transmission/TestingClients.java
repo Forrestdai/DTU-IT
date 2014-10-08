@@ -5,12 +5,13 @@
  */
 package transmission;
 
+import static common.ServerData.TCP_PORT;
+import helpers.LogPrinter;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.MulticastSocket;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import processing.TransmissionInterpreter;
 import transmission.common.MessageUtils;
 import transmission.common.TransmissionPacket;
 
@@ -23,9 +24,9 @@ public abstract class TestingClients implements Runnable
 
     protected Socket socket;
 
-    public TestingClients(int portNumber) throws IOException
+    public TestingClients() throws IOException
     {
-        socket = new Socket("localhost", portNumber);
+        socket = new Socket("localhost", TCP_PORT);
     }
 
     public String connectSendRecieveTest(int i) throws IOException, ClassNotFoundException
@@ -53,9 +54,8 @@ class TransmissionClient extends TestingClients
     private TransmissionPacket sendMessage;
     private TransmissionPacket returnMessage;
 
-    public TransmissionClient(int portNumber, TransmissionPacket sendMessage) throws IOException
+    public TransmissionClient(TransmissionPacket sendMessage) throws IOException
     {
-        super(portNumber);
         this.sendMessage = sendMessage;
         this.returnMessage = new TransmissionPacket();
     }
@@ -70,10 +70,10 @@ class TransmissionClient extends TestingClients
 
         } catch (IOException ex)
         {
-            System.err.println("ERR: unable to send message from StringClient");
+            LogPrinter.printError("ERR: unable to send message from StringClient");
         } catch (ClassNotFoundException ex)
         {
-            System.err.println("ERR: unable to cast transmission object from StringClient");
+            LogPrinter.printError("ERR: unable to cast transmission object from StringClient");
         } finally
         {
             try
@@ -97,9 +97,8 @@ class CountingClient extends TestingClients
     int clientNumber;
     AtomicInteger toAdd;
 
-    CountingClient(int clientNumber, AtomicInteger toAdd, int portNumber) throws IOException
+    CountingClient(int clientNumber, AtomicInteger toAdd) throws IOException
     {
-        super(portNumber);
         this.toAdd = toAdd;
         this.clientNumber = clientNumber;
     }
@@ -116,7 +115,7 @@ class CountingClient extends TestingClients
             e.printStackTrace();
         } catch (ClassNotFoundException ex)
         {
-            System.err.println("ERR: unable to cast transmission object from CountingClient");
+            LogPrinter.printError("ERR: unable to cast transmission object from CountingClient");
         } finally
         {
             if (returnedMessage != null && Integer.parseInt(returnedMessage) == clientNumber)
@@ -132,9 +131,8 @@ class SimpleClient extends TestingClients
 
     int clientNumber;
 
-    SimpleClient(int clientNumber, int portNumber) throws IOException
+    SimpleClient(int clientNumber) throws IOException
     {
-        super(portNumber);
         this.clientNumber = clientNumber;
     }
 
@@ -150,7 +148,46 @@ class SimpleClient extends TestingClients
             e.printStackTrace();
         } catch (ClassNotFoundException ex)
         {
-            System.err.println("ERR: unable to cast transmission object from SimpleClient");
+            LogPrinter.printError("ERR: unable to cast transmission object from SimpleClient");
+        }
+    }
+}
+
+class UDPClient implements Runnable
+{
+
+    MulticastSocket socketUDP;
+    String message;
+
+    UDPClient(MulticastSocket socketUDP)
+    {
+        this.socketUDP = socketUDP;
+    }
+
+    @Override
+    public void run()
+    {
+        try
+        {
+            byte[] messageBuffer = new byte[256];
+            DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
+            socketUDP.receive(packet);
+            message = new String(packet.getData(), 0, packet.getLength());
+        } catch (IOException e)
+        {
+            LogPrinter.printError("ERR: testing UDP failed to join group.");
+            e.printStackTrace();
+        }
+    }
+
+    public String getReturnedMessage()
+    {
+        if (message != null)
+        {
+            return message;
+        } else
+        {
+            return new String();
         }
     }
 }

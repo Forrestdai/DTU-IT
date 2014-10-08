@@ -5,7 +5,6 @@
  */
 package transmission;
 
-import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +20,6 @@ import transmission.common.TransmissionPacket;
 public class TestProtocol
 {
 
-    private static final int PORT = 2954;
     private static final int TIMEOUT = 5000;
 
     IncomingUserConnectionsHandler serverConnection;
@@ -146,7 +144,7 @@ public class TestProtocol
 
         for (int i = 0; i < threads.length; ++i)
         {
-            clients[i] = new TransmissionClient(PORT, sendMessage);
+            clients[i] = new TransmissionClient(sendMessage);
             threads[i] = new Thread(clients[i]);
             threads[i].start();
         }

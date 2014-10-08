@@ -4,13 +4,15 @@
  * and open the template in the editor.
  */
 
-package common.interfaces;
+package users;
 
 /**
  *
- * @author JamesFoxes
+ * @author James
  */
-public interface ServerMainExecutable
+public interface ExecuteOnImpulse
 {
-    public void startProcessing() throws Exception;
+
+    public void execute();
+    
 }

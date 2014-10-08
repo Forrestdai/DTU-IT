@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package common.interfaces;
+package execute;
 
 /**
  *
  * @author JamesFoxes
  */
-public interface ServerMainExecutable
+public class Main
 {
-    public void startProcessing() throws Exception;
+    public static void main(String[] args)
+    {
+        new pushCollectionToArray();
+    }
 }

@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import transmission.TestClientConnection;
 import transmission.TestProtocol;
+import transmission.TestUDPBroadcast;
 
 /**
  *
@@ -18,7 +19,8 @@ import transmission.TestProtocol;
 @Suite.SuiteClasses(
         {
             TestClientConnection.class,
-            TestProtocol.class
+            TestProtocol.class,
+            TestUDPBroadcast.class
         })
 public class FullTestSuite
 {

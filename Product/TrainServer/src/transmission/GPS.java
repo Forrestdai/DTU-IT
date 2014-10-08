@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package transmission;
 
-package common.interfaces;
+import users.ExecuteOnImpulse;
 
 /**
  *
  * @author JamesFoxes
  */
-public interface ServerMainExecutable
+public interface GPS
 {
-    public void startProcessing() throws Exception;
+    public void transmit();
+    public void setInterface(ExecuteOnImpulse sendUDPSignalImpulse);
 }

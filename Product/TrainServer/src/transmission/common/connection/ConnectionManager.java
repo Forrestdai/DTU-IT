@@ -5,6 +5,7 @@
  */
 package transmission.common.connection;
 
+import static common.ServerData.TCP_PORT;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,12 +18,10 @@ public class ConnectionManager
 {
 
     private ServerSocket serverSocket;
-    private final int socketTimeout = 2000;
-    private final int port = 2954;
 
     public ConnectionManager() throws IOException //make new exception type
     {
-        this.serverSocket = new ServerSocket(port);
+        this.serverSocket = new ServerSocket(TCP_PORT);
         //serverSocket.setSoTimeout(socketTimeout);
     }
 

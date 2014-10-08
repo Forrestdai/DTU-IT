@@ -6,59 +6,37 @@
 
 package users;
 
-import common.interfaces.ServerMainExecutable;
-import execute.Server;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
-import processing.ServerProcessorRequest;
-import transmission.IncomingUserConnectionsHandler;
 
 /**
  *
  * @author James
  */
-public class PotentialUsersArray implements ExecutableCyclic
+public class PotentialUsersArray
 {
     //concurrent array is FAST to traverse but SLOW to add
     private CopyOnWriteArrayList<User> potentialUsers;
     private CopyOnWriteArrayList<Integer> potentialUserIDArray;
-    private ConcurrentLinkedQueue<User> toBePushed;
     
     public PotentialUsersArray()
     {
-        toBePushed = new ConcurrentLinkedQueue();
         potentialUsers = new CopyOnWriteArrayList<>();
         potentialUserIDArray = new CopyOnWriteArrayList<>();
-        
-        initializeCyclicalPushing();
     }
     
-    public boolean containsUser(User user)
+    public boolean testIfContainsUser(User user)
     {
         return potentialUserIDArray.contains(user.ID);
     }
     
     public void pushUser(User user)
     {
-        toBePushed.add(user);
+        potentialUsers.add(user);
+        potentialUserIDArray.add(user.ID);
     }
     
-    private void initializeCyclicalPushing()
+    public User pollUser(User user)
     {
-        ServerMainExecutable toExecute = new CyclicalExecutor(this);
-        ServerProcessorRequest process = new ServerProcessorRequest(toExecute);
-        Server.serverThreadPool.schedule(process);
-    }
-
-    @Override
-    public void execute()
-    {
-        push();
-    }
-
-    private void push()
-    {
-        
+        return potentialUsers.remove(potentialUsers.indexOf(user, 0));
     }
 }

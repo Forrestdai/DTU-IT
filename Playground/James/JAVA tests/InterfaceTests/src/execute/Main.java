@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package users;
+package execute;
 
 /**
  *
- * @author James
+ * @author JamesFoxes
  */
-public interface ExecutableCyclic
+public class Main
 {
-
-    public void execute();
-    
+    public static void main(String[] args)
+    {
+        new SetupUDP();
+    }
+   
 }
