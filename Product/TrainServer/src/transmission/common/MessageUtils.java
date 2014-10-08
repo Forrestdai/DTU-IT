@@ -21,18 +21,18 @@ import java.net.Socket;
  */
 public class MessageUtils
 {
-    public static void sendMessage(Socket socket, String message) throws IOException
+    public static void sendTransmission(Socket socket, TransmissionPacket message) throws IOException
     {
         OutputStream stream = socket.getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(stream);
-        oos.writeUTF(message);
+        oos.writeObject(message);
         oos.flush();
     }
     
-    public static String getMessage(Socket socket) throws IOException
+    public static TransmissionPacket getTransmission(Socket socket) throws IOException, ClassNotFoundException
     {
         InputStream stream = socket.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(stream);
-        return ois.readUTF();
+        return (TransmissionPacket) ois.readObject();
     }
 }

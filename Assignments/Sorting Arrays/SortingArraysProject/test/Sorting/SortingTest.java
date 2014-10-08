@@ -1,7 +1,7 @@
 package Sorting;
 
 import efficiency.SortingTester;
-import Helpers.arrayProperties;
+import Helpers.ArrayProperties;
 import collection.CollectionType;
 import collection.MyCollection;
 import collection.MyLinkedList;
@@ -39,7 +39,7 @@ public class SortingTest
         MyCollection result = new SelectionSort().sort(arrayToSort);
         ArrayList<MyCollection> toBeQuickSorted = new ArrayList<>();
         toBeQuickSorted.add(arrayToSort);
-        MyCollection expected = new SortingTester(new arrayProperties(), CollectionType.MyLinkedList).returnComparisonArraysForTesting(toBeQuickSorted).get(0);
+        MyCollection expected = new SortingTester(new ArrayProperties(), CollectionType.MyLinkedList).returnComparisonArraysForTesting(toBeQuickSorted).get(0);
         assertArrayEquals(expected.toArray(), result.toArray());
     }
     
@@ -49,7 +49,7 @@ public class SortingTest
         MyCollection result = new InsertionSort().sort(arrayToSort);
         ArrayList<MyCollection> toBeQuickSorted = new ArrayList<>();
         toBeQuickSorted.add(arrayToSort);
-        MyCollection expected = new SortingTester(new arrayProperties(), CollectionType.MyLinkedList).returnComparisonArraysForTesting(toBeQuickSorted).get(0);
+        MyCollection expected = new SortingTester(new ArrayProperties(), CollectionType.MyLinkedList).returnComparisonArraysForTesting(toBeQuickSorted).get(0);
         assertArrayEquals(expected.toArray(), result.toArray());
     }
     
@@ -59,7 +59,7 @@ public class SortingTest
         MyCollection result = new InsertionSortFSM().sort(arrayToSort);
         ArrayList<MyCollection> toBeQuickSorted = new ArrayList<>();
         toBeQuickSorted.add(arrayToSort);
-        MyCollection expected = new SortingTester(new arrayProperties(), CollectionType.MyLinkedList).returnComparisonArraysForTesting(toBeQuickSorted).get(0);
+        MyCollection expected = new SortingTester(new ArrayProperties(), CollectionType.MyLinkedList).returnComparisonArraysForTesting(toBeQuickSorted).get(0);
         assertArrayEquals(expected.toArray(), result.toArray());
     }
     
@@ -69,7 +69,7 @@ public class SortingTest
         MyCollection result = new BuiltInQuickSort().sort(arrayToSort);
         ArrayList<MyCollection> toBeQuickSorted = new ArrayList<>();
         toBeQuickSorted.add(arrayToSort);
-        MyCollection expected = new SortingTester(new arrayProperties(), CollectionType.MyLinkedList).returnComparisonArraysForTesting(toBeQuickSorted).get(0);
+        MyCollection expected = new SortingTester(new ArrayProperties(), CollectionType.MyLinkedList).returnComparisonArraysForTesting(toBeQuickSorted).get(0);
         assertArrayEquals(expected.toArray(), result.toArray());
     }
     

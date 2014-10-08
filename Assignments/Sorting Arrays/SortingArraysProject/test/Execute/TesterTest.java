@@ -1,7 +1,7 @@
 package Execute;
 
 import efficiency.SortingTester;
-import Helpers.arrayProperties;
+import Helpers.ArrayProperties;
 import Sorting.InsertionSort;
 import Sorting.InsertionSortFSM;
 import Sorting.SelectionSort;
@@ -16,7 +16,7 @@ public class TesterTest
     @Test
     public void SelectionSortTest()
     {
-        arrayProperties shortTest = new arrayProperties();
+        ArrayProperties shortTest = new ArrayProperties();
         SortingTester instance = new SortingTester(shortTest, CollectionType.MyLinkedList);
         shortTest.sizeOfSortArray = 1000;
         shortTest.numberOfTimesToRun = 1;
@@ -33,7 +33,7 @@ public class TesterTest
     @Test
     public void InsertionSortTest()
     {
-        arrayProperties shortTest = new arrayProperties();
+        ArrayProperties shortTest = new ArrayProperties();
         SortingTester instance = new SortingTester(shortTest, CollectionType.MyLinkedList);
         shortTest.sizeOfSortArray = 1000;
         shortTest.numberOfTimesToRun = 1;
@@ -50,7 +50,7 @@ public class TesterTest
     @Test
     public void InsertionSortFSMTest()
     {
-        arrayProperties shortTest = new arrayProperties();
+        ArrayProperties shortTest = new ArrayProperties();
         SortingTester instance = new SortingTester(shortTest, CollectionType.MyLinkedList);
         shortTest.sizeOfSortArray = 1000;
         shortTest.numberOfTimesToRun = 1;

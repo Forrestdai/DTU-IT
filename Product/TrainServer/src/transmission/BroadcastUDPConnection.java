@@ -13,9 +13,8 @@ import java.net.MulticastSocket;
  *
  * @author JamesFoxes
  */
-public class BroadcastUDPConnection implements Connection, Runnable
+public abstract class BroadcastUDPConnection implements Connection, Runnable
 {
-
     MulticastSocket socket;
 
     public BroadcastUDPConnection() throws IOException
@@ -23,7 +22,6 @@ public class BroadcastUDPConnection implements Connection, Runnable
         this.socket = new MulticastSocket();
     }
     
-    @Override
     public void send()
     {
     }
@@ -36,6 +34,12 @@ public class BroadcastUDPConnection implements Connection, Runnable
     @Override
     public void run()
     {
+    }
+
+    @Override
+    public void startProcessing()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

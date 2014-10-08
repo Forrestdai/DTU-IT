@@ -18,7 +18,7 @@ import transmission.IncomingUserConnectionsHandler;
  */
 public class Server
 {
-    private static ThreadPerRequestScheduler serverThreadPool = new ThreadPerRequestScheduler();
+    public static ThreadPerRequestScheduler serverThreadPool = new ThreadPerRequestScheduler();
     public static PersistentExecutorPool threadPool = new PersistentExecutorPool();
     
     public static void main(String[] args)

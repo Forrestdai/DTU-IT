@@ -9,10 +9,9 @@ import common.interfaces.ProcessorRequest;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import transmission.common.connection.ClientConnection;
 import transmission.common.MessageUtils;
+import transmission.common.TransmissionPacket;
 
 /**
  *
@@ -37,10 +36,9 @@ public class ClientProcessorRequest implements ProcessorRequest
                 Thread.currentThread().interrupt();
                 return;
             }
-            
-            String message = MessageUtils.getMessage(connection);
-            MessageUtils.sendMessage(connection, message);
-        } catch (IOException e)
+            TransmissionPacket message = MessageUtils.getTransmission(connection);
+            TransmissionInterpreter tI = new TransmissionInterpreter(message, connection);
+        } catch (IOException | ClassNotFoundException e)
         {
             e.printStackTrace();
         } 

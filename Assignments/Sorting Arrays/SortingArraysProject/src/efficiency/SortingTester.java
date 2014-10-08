@@ -27,7 +27,7 @@ public class SortingTester
 
     private CollectionType arrayType;
 
-    public SortingTester(arrayProperties arrayProperties, CollectionType arrayType)
+    public SortingTester(ArrayProp arrayProperties, CollectionType arrayType)
     {
         elapsedTimes = new long[3];
 
@@ -38,9 +38,23 @@ public class SortingTester
         testFromZeroTo = arrayProperties.testFromZeroTo;
     }
 
-    public long[] run(Sortable sortMethod)
+    public long[] run(SortingType sortMethod)
     {
-        this.sortMethod = sortMethod;
+        switch (sortMethod)
+        {
+            case SelectionSort:
+                this.sortMethod = new SelectionSort();
+                break;
+            case InsertionSort:
+                this.sortMethod = new SelectionSort();
+                break;
+            case InsertionSortFSM:
+                this.sortMethod = new InsertionSortFSM();
+                break;
+            case QuickSort:
+                this.sortMethod = new BuiltInQuickSort();
+                break;
+        }
 
         for (int i = 0; i < numberOfTimesToRun; ++i)
         {
@@ -130,7 +144,7 @@ public class SortingTester
                 descendingArray = new MyArrayList();
                 break;
         }
-        
+
         for (int i = 0; i < arraySize; ++i)
         {
             descendingArray.add(arraySize - i, i);
