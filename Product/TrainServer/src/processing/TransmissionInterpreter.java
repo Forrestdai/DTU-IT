@@ -41,7 +41,7 @@ public class TransmissionInterpreter
         Command toExecute;
         switch (recievedTransmission.command)
         {
-            case GETINFO:
+            case GETINFORMATION:
                 toExecute = new GetInfoCommand();
                 break;
             case GETJOURNEY:

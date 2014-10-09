@@ -5,7 +5,7 @@
  */
 package transmission;
 
-import static common.ServerData.TCP_PORT;
+import static common.ServerData.*;
 import helpers.LogPrinter;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -26,7 +26,7 @@ public abstract class TestingClients implements Runnable
 
     public TestingClients() throws IOException
     {
-        socket = new Socket("localhost", TCP_PORT);
+        socket = new Socket(TCP_LOCAL_ADDRESS, TCP_PORT);
     }
 
     public String connectSendRecieveTest(int i) throws IOException, ClassNotFoundException
@@ -70,10 +70,10 @@ class TransmissionClient extends TestingClients
 
         } catch (IOException ex)
         {
-            LogPrinter.printError("ERR: unable to send message from StringClient");
+            LogPrinter.printError("ERR: unable to send message from StringClient", ex);
         } catch (ClassNotFoundException ex)
         {
-            LogPrinter.printError("ERR: unable to cast transmission object from StringClient");
+            LogPrinter.printError("ERR: unable to cast transmission object from StringClient", ex);
         } finally
         {
             try
@@ -112,10 +112,10 @@ class CountingClient extends TestingClients
             returnedMessage = connectSendRecieveTest(clientNumber);
         } catch (IOException e)
         {
-            e.printStackTrace();
+            LogPrinter.printError("ERR: unable to transmit from CountingClient", e);
         } catch (ClassNotFoundException ex)
         {
-            LogPrinter.printError("ERR: unable to cast transmission object from CountingClient");
+            LogPrinter.printError("ERR: unable to cast transmission object from CountingClient", ex);
         } finally
         {
             if (returnedMessage != null && Integer.parseInt(returnedMessage) == clientNumber)
@@ -143,12 +143,9 @@ class SimpleClient extends TestingClients
         try
         {
             returnedMessage = connectSendRecieveTest(clientNumber);
-        } catch (IOException e)
+        } catch (IOException | ClassNotFoundException e)
         {
-            e.printStackTrace();
-        } catch (ClassNotFoundException ex)
-        {
-            LogPrinter.printError("ERR: unable to cast transmission object from SimpleClient");
+            LogPrinter.printError("ERR: unable to cast transmission object from SimpleClient", e);
         }
     }
 }
@@ -175,7 +172,7 @@ class UDPClient implements Runnable
             message = new String(packet.getData(), 0, packet.getLength());
         } catch (IOException e)
         {
-            LogPrinter.printError("ERR: testing UDP failed to join group.");
+            LogPrinter.printError("ERR: testing UDP failed to join group.", e);
             e.printStackTrace();
         }
     }

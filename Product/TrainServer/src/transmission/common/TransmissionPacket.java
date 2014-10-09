@@ -6,7 +6,6 @@
 package transmission.common;
 
 import java.io.Serializable;
-import java.net.Socket;
 
 /**
  *
@@ -27,8 +26,9 @@ public class TransmissionPacket implements Serializable, Transmittable
     public enum Commands
     {
 
-        GETINFO, GETJOURNEY, LOGOUT, CONN,
-        INFO, JOURNEY, ACKLOGOUT, ACK,
+        GETINFORMATION, GETJOURNEY, LOGOUT, CONN,
+        INFORMATION, JOURNEY, ACKLOGOUT, ACKNOWLEDGE,
+        GETUSERS,
         nil
     }
 }

@@ -8,6 +8,9 @@ package processing;
 
 import common.interfaces.ProcessorRequest;
 import common.interfaces.ServerMainExecutable;
+import helpers.LogPrinter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,7 +28,14 @@ public class ServerProcessorRequest implements ProcessorRequest
     @Override
     public void process()
     {
-        toStart.startProcessing();
+        try
+        {
+            toStart.startProcessing();
+        } catch (Exception ex)
+        {
+            LogPrinter.printError("ERR: SERVER processor request error: ", ex);
+            ex.printStackTrace();
+        }
     }
     
 }

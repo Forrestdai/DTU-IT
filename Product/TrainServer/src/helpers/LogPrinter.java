@@ -11,7 +11,7 @@ package helpers;
  */
 public class LogPrinter
 {
-    public static void printError(String errorMessage)
+    public static void printError(String errorMessage, Exception e)
     {
         System.err.println("Err: " + errorMessage);
     }

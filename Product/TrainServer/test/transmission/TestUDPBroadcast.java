@@ -60,7 +60,7 @@ public class TestUDPBroadcast
         }
     }
 
-    @Test(timeout = 1000000)
+    @Test(timeout = 10000)
     public void testUDPFullReception400Clients() throws Exception
     {
         ClientsUDPSetup clients = new ClientsUDPSetup(400, clientSocket);

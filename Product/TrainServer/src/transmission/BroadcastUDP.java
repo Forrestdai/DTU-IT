@@ -34,7 +34,7 @@ public class BroadcastUDP implements ExecuteOnImpulse
 
         } catch (IOException e)
         {
-            LogPrinter.printError("ERR: UDP host error");
+            LogPrinter.printError("ERR: UDP host error", e);
             e.printStackTrace();
         }
     }
@@ -56,7 +56,7 @@ public class BroadcastUDP implements ExecuteOnImpulse
             socket.close();
         } catch (Exception ex)
         {
-            LogPrinter.printError("ERR: UDP send error");
+            LogPrinter.printError("ERR: UDP send error", ex);
         }
     }
 }

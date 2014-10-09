@@ -54,8 +54,8 @@ public class TestProtocol
         TransmissionPacket toSend = new TransmissionPacket();
         TransmissionPacket toRecieve = new TransmissionPacket();
 
-        toSend.command = TransmissionPacket.Commands.GETINFO;
-        toRecieve.command = TransmissionPacket.Commands.INFO;
+        toSend.command = TransmissionPacket.Commands.GETINFORMATION;
+        toRecieve.command = TransmissionPacket.Commands.INFORMATION;
 
         testCommand(toSend, toRecieve);
         
@@ -106,7 +106,7 @@ public class TestProtocol
         TransmissionPacket toRecieve = new TransmissionPacket();
 
         toSend.command = TransmissionPacket.Commands.CONN;
-        toRecieve.command = TransmissionPacket.Commands.ACK;
+        toRecieve.command = TransmissionPacket.Commands.ACKNOWLEDGE;
 
         testCommand(toSend, toRecieve);
         

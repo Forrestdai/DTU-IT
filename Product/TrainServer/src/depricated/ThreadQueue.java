@@ -52,7 +52,7 @@ public class ThreadQueue
                 Thread.sleep(100 * ++attempts);
             } catch (InterruptedException ex)
             {
-                LogPrinter.printError("getClientHandler interrupted");
+                LogPrinter.printError("getClientHandler interrupted", ex);
             }
         }
         try
@@ -63,7 +63,7 @@ public class ThreadQueue
             return toSend;
         } catch (NoSuchElementException e)
         {
-            LogPrinter.printError("Slow Handler Given");
+            LogPrinter.printError("Slow Handler Given", e);
             slowHandler.setContextClassLoader((ClassLoader) toRun);
             return slowHandler;
         }

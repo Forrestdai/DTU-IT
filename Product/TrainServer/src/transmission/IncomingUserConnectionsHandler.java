@@ -37,7 +37,7 @@ public final class IncomingUserConnectionsHandler extends TCPConnection
                 Server.threadPool.schedule(requestProcessor);
             } catch (IOException e)
             {
-                LogPrinter.printError("ERROR main loop");
+                LogPrinter.printError("ERROR main loop", e);
                 e.printStackTrace();
                 break;
             }

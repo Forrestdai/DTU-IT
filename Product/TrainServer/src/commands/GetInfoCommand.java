@@ -29,7 +29,7 @@ public class GetInfoCommand implements Command
     public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException
     {
         //send information object and INFO command
-        reply.command = TransmissionPacket.Commands.INFO;
+        reply.command = TransmissionPacket.Commands.INFORMATION;
         
         MessageUtils.sendTransmission(clientConnection, reply);
     }

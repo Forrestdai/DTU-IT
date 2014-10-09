@@ -38,7 +38,7 @@ public class GetConnCommand implements Command
         //store user object to POTENTIAL users array
         
         //send ACK command
-        reply.command = TransmissionPacket.Commands.ACK;
+        reply.command = TransmissionPacket.Commands.ACKNOWLEDGE;
         
         MessageUtils.sendTransmission(clientConnection, reply);
     }
