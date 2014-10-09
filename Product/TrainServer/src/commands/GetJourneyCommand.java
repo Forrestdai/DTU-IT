@@ -18,7 +18,7 @@ import transmission.common.TransmissionPacket;
 public class GetJourneyCommand implements Command
 {
 
-    TransmissionPacket reply;
+    private TransmissionPacket reply;
 
     public GetJourneyCommand()
     {

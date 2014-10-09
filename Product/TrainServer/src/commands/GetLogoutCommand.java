@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package commands;
 
 import java.io.IOException;
@@ -18,13 +17,13 @@ import transmission.common.TransmissionPacket;
 public class GetLogoutCommand implements Command
 {
 
-    TransmissionPacket reply;
+    private TransmissionPacket reply;
 
     public GetLogoutCommand()
     {
         this.reply = new TransmissionPacket();
     }
-    
+
     @Override
     public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException
     {
@@ -32,8 +31,8 @@ public class GetLogoutCommand implements Command
         //Store chargeClient entry to array for later RMI access.
         //send ACKLOGOUT command and charge String
         reply.command = TransmissionPacket.Commands.ACKLOGOUT;
-        
+
         MessageUtils.sendTransmission(clientConnection, reply);
     }
-    
+
 }

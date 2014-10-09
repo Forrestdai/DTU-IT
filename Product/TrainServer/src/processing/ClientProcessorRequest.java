@@ -37,7 +37,7 @@ public class ClientProcessorRequest implements ProcessorRequest
                 return;
             }
             TransmissionPacket message = MessageUtils.getTransmission(connection);
-            TransmissionInterpreter tI = new TransmissionInterpreter(message, connection);
+            new TransmissionInterpreter(message, connection);
         } catch (IOException | ClassNotFoundException e)
         {
             e.printStackTrace();

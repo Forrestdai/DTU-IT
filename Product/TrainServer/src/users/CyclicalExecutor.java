@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package users;
 
 import common.interfaces.ServerMainExecutable;
@@ -14,7 +13,7 @@ import common.interfaces.ServerMainExecutable;
  */
 public class CyclicalExecutor implements ServerMainExecutable
 {
-    
+
     ExecutableCyclic toExecute;
     int interval;
 
@@ -27,8 +26,17 @@ public class CyclicalExecutor implements ServerMainExecutable
     @Override
     public void startProcessing() throws InterruptedException
     {
-        toExecute.execute();
-        Thread.sleep(interval);
+        while (true)
+        {
+            Thread.sleep(interval);
+            toExecute.execute();
+        }
     }
-    
+
+    @Override
+    public void stopProcessing() throws Exception
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

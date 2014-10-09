@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import processing.ServerProcessorRequest;
+import threading.ThreadPerRequestScheduler;
 import transmission.common.MessageUtils;
 import transmission.common.TransmissionPacket;
 import users.CyclicalExecutor;
@@ -29,7 +30,7 @@ public class TransmitToServer implements ExecutableCyclic
 
     private final ConcurrentLinkedQueue<User> usersToBePushed;
     private final int PUSH_INTERVAL = 2000;
-    Socket serverSocket;
+    private Socket serverSocket;
 
     public TransmitToServer()
     {
@@ -45,7 +46,8 @@ public class TransmitToServer implements ExecutableCyclic
             serverSocket = new Socket(TCP_SERVER_ADDRESS, TCP_SERVER_PORT);
         } catch (IOException ex)
         {
-            LogPrinter.printError("ERR: Initialize server sending socket.", ex);
+            LogPrinter.printError("Initialize server sending socket", ex);
+            ex.printStackTrace();
         }
     }
 
@@ -69,25 +71,36 @@ public class TransmitToServer implements ExecutableCyclic
 
     private void pushAll()
     {
-        TransmissionPacket getUsersPacket = new TransmissionPacket();
-        getUsersPacket.command = TransmissionPacket.Commands.GETUSERS;
-
         ArrayList<User> users = new ArrayList<>();
-        for (int i = 0; i < users.size(); ++i)
+        int usersToPush = usersToBePushed.size();
+        
+        for (int i = 0; i < usersToPush; ++i)
         {
             users.add(usersToBePushed.poll());
         }
-        getUsersPacket.dataObject = users.toArray();
+        
+        TransmissionPacket getUsersPacket = new TransmissionPacket();
+        getUsersPacket.command = TransmissionPacket.Commands.GETUSERS;
+        getUsersPacket.dataObject = users;
         getUsersPacket.dataString = Integer.toString(users.size());
-
         try
         {
-            MessageUtils.sendTransmission(serverSocket, null);
+            MessageUtils.sendTransmission(serverSocket, getUsersPacket);
         } catch (IOException ex)
         {
-            LogPrinter.printError("ERR: could not send to server.", ex);
+            LogPrinter.printError("could not send to server.", ex);
             usersToBePushed.addAll(users);
             LogPrinter.print("Users have been re-added to send queue.");
         }
+    }
+    
+    public Socket getTestingSocket()
+    {
+        return serverSocket;
+    }
+    
+    public int getUsersInArray()
+    {
+        return usersToBePushed.size();
     }
 }

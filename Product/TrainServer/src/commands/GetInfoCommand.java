@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package commands;
 
 import java.io.IOException;
@@ -17,8 +16,8 @@ import transmission.common.TransmissionPacket;
  */
 public class GetInfoCommand implements Command
 {
-    
-    TransmissionPacket reply;
+
+    private TransmissionPacket reply;
 
     public GetInfoCommand()
     {
@@ -30,8 +29,8 @@ public class GetInfoCommand implements Command
     {
         //send information object and INFO command
         reply.command = TransmissionPacket.Commands.INFORMATION;
-        
+
         MessageUtils.sendTransmission(clientConnection, reply);
     }
-    
+
 }

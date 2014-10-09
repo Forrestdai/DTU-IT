@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package commands;
 
 import java.io.IOException;
@@ -18,28 +17,26 @@ import transmission.common.TransmissionPacket;
 public class GetConnCommand implements Command
 {
 
-    TransmissionPacket reply;
+    private TransmissionPacket reply;
 
     public GetConnCommand()
     {
         this.reply = new TransmissionPacket();
     }
-    
+
     @Override
     public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException
     {
         //Check for user in POTENTIAL users array
         //IF the object exists, move it to ACTIVE users array
-        
+
         //ELSE Check for user in ACTIVE users array
         //IF the object exists, return.
-        
         //ELSE get user object from server
         //store user object to POTENTIAL users array
-        
         //send ACK command
         reply.command = TransmissionPacket.Commands.ACKNOWLEDGE;
-        
+
         MessageUtils.sendTransmission(clientConnection, reply);
     }
 

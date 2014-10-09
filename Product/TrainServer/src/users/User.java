@@ -6,11 +6,13 @@
 
 package users;
 
+import java.io.Serializable;
+
 /**
  *
  * @author James
  */
-public class User
+public class User implements Serializable
 {
     public Integer ID;
     

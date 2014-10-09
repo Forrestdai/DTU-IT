@@ -19,7 +19,7 @@ public class SetupUDP
     public SetupUDP()
     {
         sendUDPSignalImpulse = new BroadcastUDP();
-        gpsAPI = new temporaryGPSImplementation();
+        gpsAPI = new FauxGPSImplementation();
         gpsAPI.setInterface(sendUDPSignalImpulse);
         
         //gpsAPI.transmit();

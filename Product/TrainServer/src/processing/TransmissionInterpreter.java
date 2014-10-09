@@ -5,12 +5,7 @@
  */
 package processing;
 
-import commands.Command;
-import commands.ErrorCommand;
-import commands.GetConnCommand;
-import commands.GetInfoCommand;
-import commands.GetJourneyCommand;
-import commands.GetLogoutCommand;
+import commands.*;
 import java.io.IOException;
 import java.net.Socket;
 import transmission.common.TransmissionPacket;

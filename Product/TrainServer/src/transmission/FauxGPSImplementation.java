@@ -11,7 +11,7 @@ import users.ExecuteOnImpulse;
  *
  * @author JamesFoxes
  */
-class temporaryGPSImplementation implements GPS
+class FauxGPSImplementation implements GPS
 {
 
     private ExecuteOnImpulse executeUDPTransmission;

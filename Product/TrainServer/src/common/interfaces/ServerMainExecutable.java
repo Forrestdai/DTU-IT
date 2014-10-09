@@ -13,4 +13,5 @@ package common.interfaces;
 public interface ServerMainExecutable
 {
     public void startProcessing() throws Exception;
+    public void stopProcessing() throws Exception;
 }
