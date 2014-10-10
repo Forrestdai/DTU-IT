@@ -65,7 +65,7 @@ public class TestServer
         
         // user count test
         int usersSent = Integer.parseInt(returnMessage.dataString);
-        LogPrinter.print("Amount of users sent to server: " + usersSent);
+        LogPrinter.printTest("Amount of users sent to server: " + usersSent);
         assertEquals("ERR: less users recieved than was sent!", amountToSend, usersSent);
         assertEquals("ERR: users left in array - unsent!", 0, serverTransmission.getUsersInArray());
         
@@ -76,14 +76,14 @@ public class TestServer
             users = (ArrayList<User>) returnMessage.dataObject;
         } catch (Exception e)
         {
-            LogPrinter.printError("Unable to cast array of users", e);
+            LogPrinter.printTestError("Unable to cast array of users", e);
         }
         int userIDSum = 0;
         for (int i = 0; i < amountToSend; i++)
         {
             userIDSum += users.get(i).ID;
         }
-        LogPrinter.print("UserID recieved: " + Integer.toString(userIDSum));
+        LogPrinter.printTest("UserID recieved: " + Integer.toString(userIDSum));
         assertEquals(expectedUserIDSum, userIDSum);
     }
 }

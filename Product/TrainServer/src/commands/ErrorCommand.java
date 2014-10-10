@@ -32,7 +32,7 @@ public class ErrorCommand implements Command
         reply.dataString = incomingPacket.dataString;
         reply.command = TransmissionPacket.Commands.nil;
 
-        LogPrinter.printError("recieved packet with 'nil' command", new Exception());
+        //LogPrinter.printError("recieved packet with 'nil' command", new Exception());
         MessageUtils.sendTransmission(clientConnection, reply);
     }
 

@@ -64,7 +64,7 @@ class ClientsUDPSetup
             if (!threads[i].isAlive())
             {
                 returnMessages[i] = clients[i].getReturnedMessage();
-                LogPrinter.print(returnMessages[i] + " " + i);
+                LogPrinter.printTest(returnMessages[i] + " " + i);
             } else
             {
                 threads[i].interrupt();

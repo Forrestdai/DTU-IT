@@ -9,14 +9,13 @@ package transmission.common;
 import common.interfaces.ServerMainExecutable;
 import java.io.IOException;
 import java.net.SocketException;
-import common.interfaces.Connection;
 import transmission.common.connection.ConnectionManager;
 
 /**
  *
  * @author JamesFoxes
  */
-public abstract class TCPConnection implements Connection, ServerMainExecutable
+public abstract class TCPConnection implements ServerMainExecutable
 {
     
     public ConnectionManager connectionManager;

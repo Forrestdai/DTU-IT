@@ -61,7 +61,7 @@ public class TestClientConnection
             threads[i].join();
         }
 
-        LogPrinter.print("Number of successes: " + successfulConnectionAttempts.get());
+        LogPrinter.printTest("Number of successes: " + successfulConnectionAttempts.get());
         Assert.assertEquals(numberOfClients, successfulConnectionAttempts.get());
     }
 
@@ -83,7 +83,7 @@ public class TestClientConnection
             threads[i].join();
         }
 
-        LogPrinter.print("Number of successes: " + successfulConnectionAttempts.get());
+        LogPrinter.printTest("Number of successes: " + successfulConnectionAttempts.get());
         Assert.assertEquals(numberOfClients, successfulConnectionAttempts.get());
     }
 }

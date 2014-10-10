@@ -55,7 +55,7 @@ public class TestUDPBroadcast
         for (int i = 0; i < clients.clients.length; ++i)
         {
             clients.returnMessages[i] = clients.clients[i].getReturnedMessage();
-            LogPrinter.print("UDP Client " + i + " has recieved: " + clients.returnMessages[i]);
+            LogPrinter.printTest("UDP Client " + i + " has recieved: " + clients.returnMessages[i]);
             assertEquals(expectedReturnMessage, clients.returnMessages[i]);
         }
     }
@@ -82,7 +82,7 @@ public class TestUDPBroadcast
 
         for (int i = 0; i < clients.clients.length; ++i)
         {
-            LogPrinter.print("UDP Client " + i + " has recieved: " + clients.returnMessages[i]);
+            LogPrinter.printTest("UDP Client " + i + " has recieved: " + clients.returnMessages[i]);
             assertEquals(expectedReturnMessage, clients.returnMessages[i]);
         }
     }

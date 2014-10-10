@@ -5,6 +5,8 @@
  */
 package helpers;
 
+import java.io.IOException;
+
 /**
  *
  * @author JamesFoxes
@@ -19,5 +21,13 @@ public class LogPrinter
     public static void print(String message)
     {
         System.out.println(message);
+    }
+
+    public static void printTestError(String err_unable_to_transmit_from_CountingClien, Exception e)
+    {
+    }
+    
+    public static void printTest(String err_unable_to_transmit_from_CountingClien)
+    {
     }
 }

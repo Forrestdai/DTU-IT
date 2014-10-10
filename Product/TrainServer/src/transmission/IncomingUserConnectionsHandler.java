@@ -26,8 +26,6 @@ public final class IncomingUserConnectionsHandler extends TCPConnection
     @Override
     public void startProcessing()
     {
-        LogPrinter.print("Server Starting");
-
         while (keepProcessing)
         {
             try

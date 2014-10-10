@@ -43,7 +43,7 @@ public class ConnectionManager
             try
             {
                 serverSocket.close();
-            } catch (IOException ex)
+            } catch (Exception ex)
             {
             }
         }
