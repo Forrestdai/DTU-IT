@@ -7,7 +7,6 @@ package transmission;
 
 import transmission.common.TCPConnection;
 import execute.Server;
-import helpers.LogPrinter;
 import processing.ClientProcessorRequest;
 import transmission.common.connection.ClientConnection;
 import java.io.IOException;
@@ -16,11 +15,12 @@ import java.io.IOException;
  *
  * @author JamesFoxes
  */
-public final class IncomingUserConnectionsHandler extends TCPConnection
+public final class IncomingConnectionsHandler extends TCPConnection
 {
-    public IncomingUserConnectionsHandler() throws IOException
+    public IncomingConnectionsHandler() throws IOException
     {
         super();
+        Server.initialize();
     }
 
     @Override
@@ -35,9 +35,6 @@ public final class IncomingUserConnectionsHandler extends TCPConnection
                 Server.threadPool.schedule(requestProcessor);
             } catch (IOException e)
             {
-                LogPrinter.printError("ERROR main loop", e);
-                e.printStackTrace();
-                break;
             }
         }
         stopProcessing();

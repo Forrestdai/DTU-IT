@@ -5,8 +5,8 @@
  */
 package transmission;
 
+import execute.Server;
 import helpers.LogPrinter;
-import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import org.junit.Before;
@@ -25,24 +25,25 @@ import static org.junit.Assert.*;
 public class TestServer
 {
 
-    private IncomingUserConnectionsHandler serverConnection;
-    private TransmitToServer serverTransmission;
+    private IncomingConnectionsHandler serverConnection;
     private Socket socket;
 
     private final ThreadPerRequestScheduler serverThreadPool = new ThreadPerRequestScheduler();
 
-    public TestServer()
+    public TestServer() throws Exception
     {
+        serverConnection = new IncomingConnectionsHandler();
+        ServerProcessorRequest setupServer = new ServerProcessorRequest(serverConnection);
+        serverThreadPool.schedule(setupServer);
+        
+        Thread.sleep(10);
+        socket = Server.serverTransmitter.getTestingSocket();
     }
 
     @Before
-    public void initialize() throws IOException
+    public void initialize() throws Exception
     {
-        serverConnection = new IncomingUserConnectionsHandler();
-        ServerProcessorRequest setupServer = new ServerProcessorRequest(serverConnection);
-        serverThreadPool.schedule(setupServer);
-        serverTransmission = new TransmitToServer();
-        socket = serverTransmission.getTestingSocket();
+        
     }
 
     @Test
@@ -56,7 +57,7 @@ public class TestServer
             User user = new User();
             user.ID = 123 * i;
             expectedUserIDSum += user.ID;
-            serverTransmission.requestUser(user);
+            Server.serverTransmitter.requestUser(user);
         }
         TransmissionPacket returnMessage = MessageUtils.getTransmission(socket);
 
@@ -67,7 +68,7 @@ public class TestServer
         int usersSent = Integer.parseInt(returnMessage.dataString);
         LogPrinter.printTest("Amount of users sent to server: " + usersSent);
         assertEquals("ERR: less users recieved than was sent!", amountToSend, usersSent);
-        assertEquals("ERR: users left in array - unsent!", 0, serverTransmission.getUsersInArray());
+        assertEquals("ERR: users left in array - unsent!", 0, Server.serverTransmitter.getUsersInArray());
         
         // user array test
         ArrayList<User> users = new ArrayList<>();

@@ -3,75 +3,72 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package users;
 
-import helpers.LogPrinter;
-import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  *
  * @author James
  */
-public class PotentialUsersArray
+public class ActiveUsersArray
 {
-
     //concurrent array is FAST to traverse but SLOW to add
-    private CopyOnWriteArrayList<User> potentialUsers;
-    private CopyOnWriteArrayList<Integer> potentialUserIDArray;
+    private CopyOnWriteArrayList<User> activeUsers;
+    private CopyOnWriteArrayList<Integer> ActiveUserIDArray;
     private ListIterator<User> userList;
-
-    public PotentialUsersArray()
+    
+    public ActiveUsersArray()
     {
-        potentialUsers = new CopyOnWriteArrayList<>();
-        potentialUserIDArray = new CopyOnWriteArrayList<>();
+        activeUsers = new CopyOnWriteArrayList<>();
+        ActiveUserIDArray = new CopyOnWriteArrayList<>();
     }
-
+    
     public boolean testIfContainsUser(User user)
     {
         if (user.ID == -1)
         {
             return true;
         }
-        return potentialUserIDArray.contains(user.ID);
+        return ActiveUserIDArray.contains(user.ID);
     }
-
+    
     public void pushUser(User user)
     {
-        potentialUsers.add(user);
-        potentialUserIDArray.add(user.ID);
+        activeUsers.add(user);
+        ActiveUserIDArray.add(user.ID);
     }
-
+    
     public void removeUser(User user)
     {
-        userList = potentialUsers.listIterator();
+        userList = activeUsers.listIterator();
 
         for (; userList.hasNext();)
         {
             User nextUser = userList.next();
             if (nextUser.ID.equals(user.ID))
             {
-                potentialUsers.remove(nextUser);
+                activeUsers.remove(nextUser);
                 break;
             }
         }
     }
-
+    
     public ListIterator<User> getUserIterator()
     {
-        userList = potentialUsers.listIterator();
+        userList = activeUsers.listIterator();
         return userList;
     }
-
+    
     public User getUserByIndex(int index)
     {
-        return potentialUsers.get(index);
+        return activeUsers.get(index);
     }
-
+    
     public int getArraySize()
     {
-        return potentialUsers.size();
+        return activeUsers.size();
     }
 }

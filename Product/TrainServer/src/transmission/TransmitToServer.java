@@ -14,7 +14,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import processing.ServerProcessorRequest;
-import threading.ThreadPerRequestScheduler;
 import transmission.common.MessageUtils;
 import transmission.common.TransmissionPacket;
 import users.CyclicalExecutor;
@@ -43,7 +42,10 @@ public class TransmitToServer implements ExecutableCyclic
     {
         try
         {
-            serverSocket = new Socket(TCP_SERVER_ADDRESS, TCP_SERVER_PORT);
+            if (serverSocket == null || serverSocket.isClosed())
+            {
+                serverSocket = new Socket(TCP_SERVER_ADDRESS, TCP_SERVER_PORT);
+            }
         } catch (IOException ex)
         {
             LogPrinter.printError("Initialize server sending socket", ex);
@@ -66,19 +68,23 @@ public class TransmitToServer implements ExecutableCyclic
     @Override
     public void execute()
     {
-        pushAll();
+        if (usersToBePushed.size() > 0)
+        {
+            initializeServerSocket();
+            pushAll();
+        }
     }
 
     private void pushAll()
     {
         ArrayList<User> users = new ArrayList<>();
         int usersToPush = usersToBePushed.size();
-        
+
         for (int i = 0; i < usersToPush; ++i)
         {
             users.add(usersToBePushed.poll());
         }
-        
+
         TransmissionPacket getUsersPacket = new TransmissionPacket();
         getUsersPacket.command = TransmissionPacket.Commands.GETUSERS;
         getUsersPacket.dataObject = users;
@@ -93,12 +99,12 @@ public class TransmitToServer implements ExecutableCyclic
             LogPrinter.print("Users have been re-added to send queue.");
         }
     }
-    
+
     public Socket getTestingSocket()
     {
         return serverSocket;
     }
-    
+
     public int getUsersInArray()
     {
         return usersToBePushed.size();

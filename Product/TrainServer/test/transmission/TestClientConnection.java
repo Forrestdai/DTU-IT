@@ -6,6 +6,8 @@ package transmission;
  * and open the template in the editor.
  */
 import helpers.LogPrinter;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.After;
 import org.junit.Assert;
@@ -22,14 +24,16 @@ public class TestClientConnection
 {
     private static final int TIMEOUT = 2000;
 
-    IncomingUserConnectionsHandler serverConnection;
+    IncomingConnectionsHandler serverConnection;
 
     private ThreadPerRequestScheduler serverThreadPool = new ThreadPerRequestScheduler();
+    private ExecutorService scheduler;
 
     @Before
     public void createServer() throws Exception
     {
-        serverConnection = new IncomingUserConnectionsHandler();
+        scheduler = Executors.newCachedThreadPool();
+        serverConnection = new IncomingConnectionsHandler();
         ServerProcessorRequest setupServer = new ServerProcessorRequest(serverConnection);
         serverThreadPool.schedule(setupServer);
     }
@@ -37,6 +41,7 @@ public class TestClientConnection
     @After
     public void shutdownServer() throws InterruptedException
     {
+        scheduler.shutdownNow();
         if (serverConnection != null)
         {
             serverConnection.stopProcessing();

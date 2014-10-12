@@ -3,14 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package execute;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import processing.ServerProcessorRequest;
 import threading.PersistentExecutorPool;
 import threading.ThreadPerRequestScheduler;
-import transmission.IncomingUserConnectionsHandler;
+import transmission.IncomingConnectionsHandler;
+import transmission.TransmitToServer;
+import users.ActiveUsersArray;
+import users.PotentialUsersArray;
 
 /**
  *
@@ -18,20 +22,32 @@ import transmission.IncomingUserConnectionsHandler;
  */
 public class Server
 {
+
     public static ThreadPerRequestScheduler serverThreadPool = new ThreadPerRequestScheduler();
     public static PersistentExecutorPool threadPool = new PersistentExecutorPool();
-    
+
+    public static PotentialUsersArray potentialUsers;
+    public static ActiveUsersArray activeUsers;
+
+    public static TransmitToServer serverTransmitter;
+
     public static void main(String[] args)
     {
         try
         {
-            IncomingUserConnectionsHandler incomingTCP = new IncomingUserConnectionsHandler();
+            IncomingConnectionsHandler incomingTCP = new IncomingConnectionsHandler();
             ServerProcessorRequest incomingTCPProcess = new ServerProcessorRequest(incomingTCP);
             Server.serverThreadPool.schedule(incomingTCPProcess);
-        } catch (IOException ex)
+        } catch (Exception ex)
         {
         }
     }
 
-    
+    public static void initialize()
+    {
+        potentialUsers = new PotentialUsersArray();
+        activeUsers = new ActiveUsersArray();
+        serverTransmitter = new TransmitToServer();
+    }
+
 }

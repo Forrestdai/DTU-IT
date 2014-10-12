@@ -5,17 +5,6 @@
  */
 package suites;
 
-import com.sun.org.apache.bcel.internal.classfile.JavaClass;
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import transmission.TestClientConnection;
@@ -37,24 +26,25 @@ import transmission.TestUDPBroadcast;
         })
 public class FullTestSuite
 {
-
+/*
     @BeforeClass
     public static void Compile() throws FileNotFoundException
     {
+        String sep = java.io.File.separator;
         ArrayList<String> filesToCompile = new ArrayList<>();
-        filesToCompile.add("test" + java.io.File.separator + "transmission" + java.io.File.separator + "TestClientConnection.java");
-        filesToCompile.add("test" + java.io.File.separator + "transmission" + java.io.File.separator + "TestProtocol.java");
-        filesToCompile.add("test" + java.io.File.separator + "transmission" + java.io.File.separator + "TestUDPBroadcast.java");
-        filesToCompile.add("test" + java.io.File.separator + "transmission" + java.io.File.separator + "TestServer.java");
+        filesToCompile.add("test" + sep + "transmission" + sep + "TestClientConnection.java");
+        filesToCompile.add("test" + sep + "transmission" + sep + "TestProtocol.java");
+        filesToCompile.add("test" + sep + "transmission" + sep + "TestUDPBroadcast.java");
+        filesToCompile.add("test" + sep + "transmission" + sep + "TestServer.java");
         
-        filesToCompile.add("test" + java.io.File.separator + "transmission" + java.io.File.separator + "ClientsUDPSetup.java");
-        filesToCompile.add("test" + java.io.File.separator + "transmission" + java.io.File.separator + "TestingClients.java");
+        filesToCompile.add("test" + sep + "transmission" + sep + "ClientsUDPSetup.java");
+        filesToCompile.add("test" + sep + "transmission" + sep + "TestingClients.java");
 
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
         for (String file : filesToCompile)
         {
-            OutputStream outStream = new FileOutputStream("build" + java.io.File.separator + "test" + java.io.File.separator + "classes" + java.io.File.separator + file.substring(0, 4) + ".class");
+            OutputStream outStream = new FileOutputStream("build" + sep + "test" + sep + "classes" + sep + "transmission" + sep + file.substring(0, 5) + ".class");
             int compilationResult = compiler.run(null, outStream, null, file);
             if (compilationResult == 0)
             {
@@ -65,4 +55,5 @@ public class FullTestSuite
             }
         }
     }
+    */
 }

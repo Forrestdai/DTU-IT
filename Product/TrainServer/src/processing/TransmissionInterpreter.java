@@ -45,8 +45,11 @@ public class TransmissionInterpreter
             case LOGOUT:
                 toExecute = new GetLogoutCommand();
                 break;
-            case CONN:
-                toExecute = new GetConnCommand();
+            case USERCONNECTION:
+                toExecute = new GetUserConnectionCommand();
+                break;
+            case RETURNUSERS:
+                toExecute = new ReturnedUsersCommand();
                 break;
             default:
                 toExecute = new ErrorCommand();

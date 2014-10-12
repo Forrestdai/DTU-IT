@@ -6,7 +6,6 @@
 package transmission.common.connection;
 
 import java.net.Socket;
-import transmission.common.connection.AddressIdentity;
 
 /**
  *

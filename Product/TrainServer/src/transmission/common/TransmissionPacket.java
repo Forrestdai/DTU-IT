@@ -26,9 +26,9 @@ public class TransmissionPacket implements Serializable, Transmittable
     public enum Commands
     {
 
-        GETINFORMATION, GETJOURNEY, LOGOUT, CONN,
+        GETINFORMATION, GETJOURNEY, LOGOUT, USERCONNECTION,
         INFORMATION, JOURNEY, ACKLOGOUT, ACKNOWLEDGE,
-        GETUSERS,
+        GETUSERS, RETURNUSERS,
         nil
     }
 }

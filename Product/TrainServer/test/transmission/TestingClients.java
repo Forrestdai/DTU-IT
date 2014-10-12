@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.net.Socket;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import transmission.common.MessageUtils;
 import transmission.common.TransmissionPacket;
@@ -19,16 +22,17 @@ import transmission.common.TransmissionPacket;
  *
  * @author JamesFoxes
  */
-public abstract class TestingClients implements Runnable
+public abstract class TestingClients implements Callable
 {
 
-    protected Socket socket;
+    Socket socket;
+    Thread clientThread;
 
     public TestingClients() throws IOException
     {
         socket = new Socket(TCP_LOCAL_ADDRESS, TCP_PORT);
     }
-
+    
     public String connectSendRecieveTest(int i) throws IOException, ClassNotFoundException
     {
         LogPrinter.printTest("Client " + i + ": connecting");
@@ -48,20 +52,20 @@ public abstract class TestingClients implements Runnable
     }
 }
 
-class TransmissionClient extends TestingClients
+class SendAndReturnPacketClient extends TestingClients
 {
 
     private TransmissionPacket sendMessage;
     private TransmissionPacket returnMessage;
 
-    public TransmissionClient(TransmissionPacket sendMessage) throws IOException
+    SendAndReturnPacketClient(TransmissionPacket sendMessage) throws IOException
     {
         this.sendMessage = sendMessage;
         this.returnMessage = new TransmissionPacket();
     }
 
     @Override
-    public void run()
+    public Object call() throws Exception
     {
         try
         {
@@ -83,10 +87,6 @@ class TransmissionClient extends TestingClients
             {
             }
         }
-    }
-
-    public TransmissionPacket getReturnedMessage()
-    {
         return returnMessage;
     }
 }
@@ -104,7 +104,7 @@ class CountingClient extends TestingClients
     }
 
     @Override
-    public void run()
+    public Object call() throws Exception
     {
         String returnedMessage = null;
         try
@@ -123,6 +123,7 @@ class CountingClient extends TestingClients
                 toAdd.incrementAndGet();
             }
         }
+        return returnedMessage;
     }
 }
 
@@ -137,7 +138,7 @@ class SimpleClient extends TestingClients
     }
 
     @Override
-    public void run()
+    public Object call() throws Exception
     {
         String returnedMessage = null;
         try
@@ -147,6 +148,7 @@ class SimpleClient extends TestingClients
         {
             LogPrinter.printTestError("ERR: unable to cast transmission object from SimpleClient", e);
         }
+        return returnedMessage;
     }
 }
 
