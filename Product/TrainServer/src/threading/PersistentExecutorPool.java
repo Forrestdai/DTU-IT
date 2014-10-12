@@ -7,9 +7,9 @@
 package threading;
 
 import common.interfaces.Scheduler;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import common.interfaces.ProcessorRequest;
+import java.util.concurrent.ExecutorService;
 
 /**
  *
@@ -17,7 +17,7 @@ import common.interfaces.ProcessorRequest;
  */
 public class PersistentExecutorPool implements Scheduler
 {
-    private final Executor executor;
+    private final ExecutorService executor;
     private final int availableThreads = 40;
 
     public PersistentExecutorPool()

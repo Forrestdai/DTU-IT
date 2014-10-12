@@ -5,19 +5,14 @@
  */
 package transmission;
 
-import static common.ServerData.TCP_LOCAL_ADDRESS;
-import static common.ServerData.TCP_PORT;
 import execute.Server;
 import helpers.LogPrinter;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,6 +53,7 @@ public class TestProtocol
     @After
     public void shutdownServer() throws InterruptedException
     {
+        scheduler.shutdownNow();
         if (serverConnection != null)
         {
             serverConnection.stopProcessing();
@@ -196,43 +192,33 @@ public class TestProtocol
         }
         return returnPackets;
     }
-
+    
     @Test
     public void testGetUserConnectionWithArrayChecking() throws Exception
     {
-        ArrayList<TransmissionPacket> requests = new ArrayList<>();
-        ArrayList<SendAndReturnPacketClient> clients = new ArrayList<>();
+        ArrayList<TransmissionPacket> requests;
+        ArrayList<Future<TransmissionPacket>> returnValues;
+        int numberOfAttempts = 10;
 
-        int numberOfAttempts = 100;
-
-        ArrayList<Future<TransmissionPacket>> returnPackets = new ArrayList<>();
-        for (int i = 0; i < numberOfAttempts; ++i)
-        {
-            //Create request
-            TransmissionPacket request = new TransmissionPacket();
-            request.command = TransmissionPacket.Commands.USERCONNECTION;
-            request.dataString = Integer.toString(1234 * i);
-            requests.add(request);
-            
-            //Start client
-            clients.add(new SendAndReturnPacketClient(request));
-            returnPackets.add(scheduler.submit(clients.get(i)));
-        }
+        //Send requests
+        requests = createUniqueDataClientRequests(Commands.USERCONNECTION, numberOfAttempts);
+        returnValues = createClientFutureArray(requests);
         
         //Listen to Main server socket
         Socket serverSocket = Server.serverTransmitter.getTestingSocket();
         TransmissionPacket sentToMainServer = MessageUtils.getTransmission(serverSocket);
 
+        //Get and test replies
         for (int i = 0; i < numberOfAttempts; ++i)
         {
-            TransmissionPacket toCompare = returnPackets.get(i).get();
+            TransmissionPacket toCompare = returnValues.get(i).get();
             
             // Test return message to connecting client. ACKNOWLEDGE + user ID string.
             assertEquals("Err: client didn't get acknowledge reply" ,TransmissionPacket.Commands.ACKNOWLEDGE, toCompare.command);
             assertEquals("Err: client got incorrect datastring reply" ,requests.get(i).dataString, toCompare.dataString);
         }
         
-        //Get user request from main server socket.
+        //Get user requests from main server socket.
         ArrayList<User> users = (ArrayList<User>) sentToMainServer.dataObject;
         
         //FURTHER DEV: add get user functionality. For now, same objects are returned.
@@ -245,9 +231,7 @@ public class TestProtocol
         //send reply
         SendAndReturnPacketClient server = new SendAndReturnPacketClient(sendFromMainServer);
         Future<TransmissionPacket> serverReply = scheduler.submit(server);
-        
-        
-        
+
         //Wait for ACK
         assertEquals("Err: Server reply was not acknowledge" ,TransmissionPacket.Commands.ACKNOWLEDGE, serverReply.get().command);
         
@@ -260,23 +244,20 @@ public class TestProtocol
         printUserArrays();
         
         //Try to send the same users again. They should now be moved to Active users array.
-        clients = new ArrayList<>();
-        returnPackets = new ArrayList<>();
+        returnValues = createClientFutureArray(requests);
+        
+        //Get and test replies
         for (int i = 0; i < numberOfAttempts; ++i)
         {
-            //Create request
-            TransmissionPacket request = new TransmissionPacket();
-            request.command = TransmissionPacket.Commands.USERCONNECTION;
-            request.dataString = Integer.toString(1234 * i);
-            requests.add(request);
+            TransmissionPacket toCompare = returnValues.get(i).get();
             
-            //Start client
-            clients.add(new SendAndReturnPacketClient(request));
-            returnPackets.add(scheduler.submit((clients.get(i))));
+            // Test return message to connecting client. ACKNOWLEDGE + user ID string.
+            assertEquals("Err: client didn't get acknowledge reply" ,TransmissionPacket.Commands.ACKNOWLEDGE, toCompare.command);
+            assertEquals("Err: client got incorrect datastring reply" ,requests.get(i).dataString, toCompare.dataString);
         }
         
         //wait to complete send
-        for (Future<TransmissionPacket> packet : returnPackets)
+        for (Future<TransmissionPacket> packet : returnValues)
         {
             packet.get();
         }

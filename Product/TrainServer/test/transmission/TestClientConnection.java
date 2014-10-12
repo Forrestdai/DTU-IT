@@ -6,8 +6,10 @@ package transmission;
  * and open the template in the editor.
  */
 import helpers.LogPrinter;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.After;
 import org.junit.Assert;
@@ -15,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import processing.ServerProcessorRequest;
 import threading.ThreadPerRequestScheduler;
+import transmission.common.TransmissionPacket;
 
 /**
  *
@@ -22,8 +25,6 @@ import threading.ThreadPerRequestScheduler;
  */
 public class TestClientConnection
 {
-    private static final int TIMEOUT = 2000;
-
     IncomingConnectionsHandler serverConnection;
 
     private ThreadPerRequestScheduler serverThreadPool = new ThreadPerRequestScheduler();
@@ -52,20 +53,19 @@ public class TestClientConnection
     public void shouldRunInUnder500ms() throws Exception
     {
         int numberOfClients = 20;
+        ArrayList<Future<TransmissionPacket>> replies = new ArrayList<>();
         AtomicInteger successfulConnectionAttempts = new AtomicInteger(0);
-        Thread[] threads = new Thread[numberOfClients];
 
-        for (int i = 0; i < threads.length; ++i)
+        for (int i = 0; i < numberOfClients; ++i)
         {
-            threads[i] = new Thread(new CountingClient(i, successfulConnectionAttempts));
-            threads[i].start();
+            replies.add(scheduler.submit(new CountingClient(i, successfulConnectionAttempts)));
         }
 
-        for (int i = 0; i < threads.length; ++i)
+        for (Future<TransmissionPacket> reply : replies)
         {
-            threads[i].join();
+            reply.get();    //wait for threads.
         }
-
+        
         LogPrinter.printTest("Number of successes: " + successfulConnectionAttempts.get());
         Assert.assertEquals(numberOfClients, successfulConnectionAttempts.get());
     }
@@ -74,18 +74,17 @@ public class TestClientConnection
     public void runManyClients() throws Exception
     {
         int numberOfClients = 1000;
+        ArrayList<Future<TransmissionPacket>> replies = new ArrayList<>();
         AtomicInteger successfulConnectionAttempts = new AtomicInteger(0);
-        Thread[] threads = new Thread[numberOfClients];
 
-        for (int i = 0; i < threads.length; ++i)
+        for (int i = 0; i < numberOfClients; ++i)
         {
-            threads[i] = new Thread(new CountingClient(i, successfulConnectionAttempts));
-            threads[i].start();
+           replies.add(scheduler.submit(new CountingClient(i, successfulConnectionAttempts)));
         }
 
-        for (int i = 0; i < threads.length; ++i)
+        for (Future<TransmissionPacket> reply : replies)
         {
-            threads[i].join();
+            reply.get();    //wait for threads.
         }
 
         LogPrinter.printTest("Number of successes: " + successfulConnectionAttempts.get());

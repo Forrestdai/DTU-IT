@@ -12,8 +12,6 @@ import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.net.Socket;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import transmission.common.MessageUtils;
 import transmission.common.TransmissionPacket;
