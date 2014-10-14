@@ -5,16 +5,16 @@
  */
 package transmission;
 
-import helpers.State;
-import users.ExecuteOnImpulse;
-
 /**
  *
  * @author JamesFoxes
  */
-public interface GPS
+public class ClientConnectionCode
 {
-    public void transmit();
-    public void setState(State state);
-    public void setInterface(ExecuteOnImpulse sendUDPSignalImpulse);
+    public int code;
+
+    public ClientConnectionCode()
+    {
+        code = (int)(Math.random()*100000000);
+    }
 }

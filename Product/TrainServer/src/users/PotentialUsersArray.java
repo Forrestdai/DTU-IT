@@ -5,11 +5,8 @@
  */
 package users;
 
-import helpers.LogPrinter;
-import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  *

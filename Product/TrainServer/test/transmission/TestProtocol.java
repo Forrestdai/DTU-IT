@@ -7,6 +7,7 @@ package transmission;
 
 import execute.Server;
 import helpers.LogPrinter;
+import helpers.State;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -24,7 +25,8 @@ import transmission.common.TransmissionPacket;
 import transmission.common.TransmissionPacket.Commands;
 import users.User;
 
-/**sFoxes
+/**
+ * sFoxes
  */
 public class TestProtocol
 {
@@ -44,6 +46,8 @@ public class TestProtocol
     @Before
     public void createServer() throws Exception
     {
+        Server.UDPCode = new ClientConnectionCode();
+        Server.state = State.arrivedAtStation;
         scheduler = Executors.newCachedThreadPool();
         serverConnection = new IncomingConnectionsHandler();
         ServerProcessorRequest setupServer = new ServerProcessorRequest(serverConnection);
@@ -94,7 +98,7 @@ public class TestProtocol
         testDataString(toSend, toRecieve);
     }
 
-    @Test(timeout = TIMEOUT)
+    //@Test(timeout = TIMEOUT)
     public void clientLOGOUT() throws Exception
     {
         TransmissionPacket toSend = new TransmissionPacket();
@@ -119,8 +123,8 @@ public class TestProtocol
 
         toSend.command = TransmissionPacket.Commands.USERCONNECTION;
         toRecieve.command = TransmissionPacket.Commands.ACKNOWLEDGE;
-        toSend.dataString = Integer.toString(123456); //User ID
-        toRecieve.dataString = Integer.toString(123456);
+        toSend.dataString = Integer.toString(123456) + " " + Server.UDPCode.code; //User ID
+        toRecieve.dataString = Integer.toString(123456) + " " + Server.UDPCode.code;
 
         testCommand(toSend, toRecieve);
 
@@ -129,7 +133,7 @@ public class TestProtocol
 
     private void testCommand(TransmissionPacket sendMessage, TransmissionPacket expectedReturn) throws Exception
     {
-        TransmissionPacket[] returnedMessage = getReturnPacket(sendMessage, expectedReturn);
+        TransmissionPacket[] returnedMessage = getReturnPacket(sendMessage);
 
         for (TransmissionPacket returned : returnedMessage)
         {
@@ -139,7 +143,7 @@ public class TestProtocol
 
     private void testDataString(TransmissionPacket sendMessage, TransmissionPacket expectedReturn) throws Exception
     {
-        TransmissionPacket[] returnedMessage = getReturnPacket(sendMessage, expectedReturn);
+        TransmissionPacket[] returnedMessage = getReturnPacket(sendMessage);
 
         for (TransmissionPacket returned : returnedMessage)
         {
@@ -147,7 +151,7 @@ public class TestProtocol
         }
     }
 
-    private TransmissionPacket[] getReturnPacket(TransmissionPacket sendMessage, TransmissionPacket expectedReturn) throws Exception
+    private TransmissionPacket[] getReturnPacket(TransmissionPacket sendMessage) throws Exception
     {
         int numberOfClients = 20;
         SendAndReturnPacketClient[] clients = new SendAndReturnPacketClient[numberOfClients];
@@ -158,16 +162,16 @@ public class TestProtocol
             clients[i] = new SendAndReturnPacketClient(sendMessage);
             returnPackets.add(scheduler.submit(clients[i]));
         }
-        
+
         TransmissionPacket[] returnedMessage = new TransmissionPacket[numberOfClients];
-        for (int i = 0; i < clients.length; i++)
+        for (int i = 0; i < clients.length; ++i)
         {
             returnedMessage[i] = new TransmissionPacket();
             returnedMessage[i] = returnPackets.get(i).get();
         }
         return returnedMessage;
     }
-    
+
     private ArrayList<TransmissionPacket> createUniqueDataClientRequests(TransmissionPacket.Commands command, int amount)
     {
         ArrayList<TransmissionPacket> toSend = new ArrayList<>();
@@ -175,16 +179,20 @@ public class TestProtocol
         {
             TransmissionPacket packet = new TransmissionPacket();
             packet.command = command;
-            packet.dataString = Integer.toString(1234 * i);
+            if (command == Commands.RETURNUSERS)
+            {
+                packet.dataString = Integer.toString(1234 * i);
+            }
+            packet.dataString = Integer.toString(1234 * i) + " " + Server.UDPCode.code;
             toSend.add(packet);
         }
         return toSend;
     }
-    
+
     private ArrayList<Future<TransmissionPacket>> createClientFutureArray(ArrayList<TransmissionPacket> toSend) throws IOException
     {
         ArrayList<Future<TransmissionPacket>> returnPackets = new ArrayList<>();
-        
+
         for (TransmissionPacket packetToSend : toSend)
         {
             SendAndReturnPacketClient client = new SendAndReturnPacketClient(packetToSend);
@@ -192,70 +200,34 @@ public class TestProtocol
         }
         return returnPackets;
     }
-    
-    @Test
+
+    @Test(timeout = TIMEOUT)
     public void testGetUserConnectionWithArrayChecking() throws Exception
     {
         ArrayList<TransmissionPacket> requests;
         ArrayList<Future<TransmissionPacket>> returnValues;
-        int numberOfAttempts = 10;
+        int numberOfClients = 30;
 
         //Send requests
-        requests = createUniqueDataClientRequests(Commands.USERCONNECTION, numberOfAttempts);
+        requests = createUniqueDataClientRequests(Commands.USERCONNECTION, numberOfClients);
         returnValues = createClientFutureArray(requests);
-        
-        //Listen to Main server socket
-        Socket serverSocket = Server.serverTransmitter.getTestingSocket();
-        TransmissionPacket sentToMainServer = MessageUtils.getTransmission(serverSocket);
 
-        //Get and test replies
-        for (int i = 0; i < numberOfAttempts; ++i)
-        {
-            TransmissionPacket toCompare = returnValues.get(i).get();
-            
-            // Test return message to connecting client. ACKNOWLEDGE + user ID string.
-            assertEquals("Err: client didn't get acknowledge reply" ,TransmissionPacket.Commands.ACKNOWLEDGE, toCompare.command);
-            assertEquals("Err: client got incorrect datastring reply" ,requests.get(i).dataString, toCompare.dataString);
-        }
-        
-        //Get user requests from main server socket.
-        ArrayList<User> users = (ArrayList<User>) sentToMainServer.dataObject;
-        
-        //FURTHER DEV: add get user functionality. For now, same objects are returned.
-        
-        //Test add users from server.
-        TransmissionPacket sendFromMainServer = new TransmissionPacket();
-        sendFromMainServer.command = Commands.RETURNUSERS;
-        sendFromMainServer.dataObject = users;
-        
-        //send reply
-        SendAndReturnPacketClient server = new SendAndReturnPacketClient(sendFromMainServer);
-        Future<TransmissionPacket> serverReply = scheduler.submit(server);
+        ArrayList<User> users = listenToServerSocketAndReplyWithUsers();
 
-        //Wait for ACK
-        assertEquals("Err: Server reply was not acknowledge" ,TransmissionPacket.Commands.ACKNOWLEDGE, serverReply.get().command);
-        
         //Test that users have been added to potentialUsersArray
         for (User user : users)
         {
-            assertTrue("Err: Users were not added to potential users array" ,Server.potentialUsers.testIfContainsUser(user));
+            assertTrue("Err: Users were not added to potential users array", Server.potentialUsers.testIfContainsUser(user));
         }
-        
+
         printUserArrays();
-        
+
         //Try to send the same users again. They should now be moved to Active users array.
         returnValues = createClientFutureArray(requests);
-        
+
         //Get and test replies
-        for (int i = 0; i < numberOfAttempts; ++i)
-        {
-            TransmissionPacket toCompare = returnValues.get(i).get();
-            
-            // Test return message to connecting client. ACKNOWLEDGE + user ID string.
-            assertEquals("Err: client didn't get acknowledge reply" ,TransmissionPacket.Commands.ACKNOWLEDGE, toCompare.command);
-            assertEquals("Err: client got incorrect datastring reply" ,requests.get(i).dataString, toCompare.dataString);
-        }
-        
+        compareUserConnections(returnValues, requests, Commands.ACKNOWLEDGE);
+
         //wait to complete send
         for (Future<TransmissionPacket> packet : returnValues)
         {
@@ -264,12 +236,12 @@ public class TestProtocol
         
         for (User user : users)
         {
-            assertTrue("Err: Users were not added to active users array" ,Server.activeUsers.testIfContainsUser(user));
+            assertTrue("Err: Users were not added to active users array", Server.activeUsers.testIfContainsUser(user));
             assertEquals("Err: users were not removed from potential users array", 0, Server.potentialUsers.getArraySize());
         }
         printUserArrays();
     }
-    
+
     private void printUserArrays()
     {
         LogPrinter.print("----------- Potential Users -----------");
@@ -277,12 +249,88 @@ public class TestProtocol
         {
             LogPrinter.print("Potential User: " + Server.potentialUsers.getUserByIndex(i).ID);
         }
-        
+
         LogPrinter.print("----------- Active Users -----------");
         for (int i = 0; i < Server.activeUsers.getArraySize(); i++)
         {
             LogPrinter.print("Active User: " + Server.activeUsers.getUserByIndex(i).ID);
         }
         LogPrinter.print("----------------------");
+    }
+
+    //@Test
+    public void testUserLogout() throws Exception
+    {
+        int numberOfClients = 10;
+        ArrayList<TransmissionPacket> requests;
+        ArrayList<Future<TransmissionPacket>> returnValues;
+
+        // false logout message. No users exists. Should return nil.
+        requests = createUniqueDataClientRequests(Commands.LOGOUT, numberOfClients);
+        returnValues = createClientFutureArray(requests);
+        compareUserConnections(returnValues, requests, Commands.nil);
+
+        //Clients connect:
+        requests = createUniqueDataClientRequests(Commands.USERCONNECTION, numberOfClients);
+        returnValues = createClientFutureArray(requests);
+        compareUserConnections(returnValues, requests, Commands.ACKNOWLEDGE);
+
+        ArrayList<User> users = listenToServerSocketAndReplyWithUsers();
+
+        //Test that users are added
+        for (User user : users)
+        {
+            assertTrue("Err: Users were not added to potential users array", Server.potentialUsers.testIfContainsUser(user));
+        }
+
+        // logout message. users exists. Should return ACKLOGOUT.
+        requests = createUniqueDataClientRequests(Commands.LOGOUT, numberOfClients);
+        returnValues = createClientFutureArray(requests);
+        compareUserConnections(returnValues, requests, Commands.ACKLOGOUT);
+
+        //Test that users are removed
+        assertEquals("Err: Users were not removed from potential users array", 0, Server.potentialUsers.getArraySize());
+        
+        Socket serverSocket = Server.serverTransmitter.getTestingSocket();
+        TransmissionPacket sendRMIRequest = MessageUtils.getTransmission(serverSocket);
+        
+        assertEquals("Err: RMI Request wasn't sent", Commands.GETRMI, sendRMIRequest.command);
+    }
+
+    private void compareUserConnections(ArrayList<Future<TransmissionPacket>> returnValues, ArrayList<TransmissionPacket> requests, TransmissionPacket.Commands command) throws Exception
+    {
+        int i = 0;
+        for (Future<TransmissionPacket> returnValue : returnValues)
+        {
+            TransmissionPacket toCompare = returnValue.get();
+
+            // Test return message to connecting client. ACKNOWLEDGE + user ID string.
+            assertEquals("Err: client didn't get nil reply", command, toCompare.command);
+            assertEquals("Err: client got incorrect datastring reply", requests.get(i++).dataString, toCompare.dataString);
+        }
+    }
+
+    private ArrayList<User> listenToServerSocketAndReplyWithUsers() throws Exception
+    {
+        //Listen to Main server socket
+        Socket serverSocket = Server.serverTransmitter.getTestingSocket();
+        TransmissionPacket sentToMainServer = MessageUtils.getTransmission(serverSocket);
+
+        ArrayList<User> users = (ArrayList<User>) sentToMainServer.dataObject;
+
+        //FURTHER DEV: add get user functionality. For now, same objects are returned.
+        //Test add users from server.
+        TransmissionPacket sendFromMainServer = new TransmissionPacket();
+        sendFromMainServer.command = Commands.RETURNUSERS;
+        sendFromMainServer.dataObject = users;
+
+        //send reply
+        SendAndReturnPacketClient server = new SendAndReturnPacketClient(sendFromMainServer);
+        Future<TransmissionPacket> serverReply = scheduler.submit(server);
+
+        //Wait for ACK
+        assertEquals("Err: Server reply was not acknowledge", TransmissionPacket.Commands.ACKNOWLEDGE, serverReply.get().command);
+
+        return users;
     }
 }

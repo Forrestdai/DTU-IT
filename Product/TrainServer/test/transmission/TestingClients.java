@@ -30,7 +30,7 @@ public abstract class TestingClients implements Callable
     {
         socket = new Socket(TCP_LOCAL_ADDRESS, TCP_PORT);
     }
-    
+
     public String connectSendRecieveTest(int i) throws IOException, ClassNotFoundException
     {
         LogPrinter.printTest("Client " + i + ": connecting");
@@ -155,6 +155,7 @@ class UDPClient implements Runnable
 
     MulticastSocket socketUDP;
     String message;
+    String[] splitMessage;
 
     UDPClient(MulticastSocket socketUDP)
     {
@@ -170,6 +171,7 @@ class UDPClient implements Runnable
             DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
             socketUDP.receive(packet);
             message = new String(packet.getData(), 0, packet.getLength());
+            splitIncomingMessage();
         } catch (IOException e)
         {
             LogPrinter.printTestError("ERR: testing UDP failed to join group.", e);
@@ -177,14 +179,19 @@ class UDPClient implements Runnable
         }
     }
 
-    public String getReturnedMessage()
+    public String[] getReturnedMessage()
     {
         if (message != null)
         {
-            return message;
+            return splitMessage;
         } else
         {
-            return new String();
+            return new String[3];
         }
+    }
+
+    private void splitIncomingMessage()
+    {
+        splitMessage = message.split("\\s+"); //split on space
     }
 }

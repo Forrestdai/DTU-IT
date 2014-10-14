@@ -28,7 +28,7 @@ public class TransmissionPacket implements Serializable, Transmittable
 
         GETINFORMATION, GETJOURNEY, LOGOUT, USERCONNECTION,
         INFORMATION, JOURNEY, ACKLOGOUT, ACKNOWLEDGE,
-        GETUSERS, RETURNUSERS,
+        GETUSERS, RETURNUSERS, GETRMI,
         nil
     }
 }

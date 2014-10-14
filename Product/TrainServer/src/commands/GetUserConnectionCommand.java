@@ -7,6 +7,7 @@ package commands;
 
 import execute.Server;
 import helpers.LogPrinter;
+import helpers.State;
 import java.io.IOException;
 import java.net.Socket;
 import transmission.common.MessageUtils;
@@ -30,38 +31,50 @@ public class GetUserConnectionCommand implements Command
     @Override
     public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException
     {
-        User user = new User();
-        user.ID = getID(clientConnection, incomingPacket);
-
-        if (Server.potentialUsers.testIfContainsUser(user))
+        int userID = checkConnectionValidityReturnUserID(incomingPacket);
+        if (userID != -1)
         {
-            Server.potentialUsers.removeUser(user);
-            Server.activeUsers.pushUser(user);
+            User user = new User();
+            user.ID = userID;
+
+            if (Server.potentialUsers.testIfContainsUser(user))
+            {
+                Server.potentialUsers.removeUser(user);
+                Server.activeUsers.pushUser(user);
+            } else
+            {
+                if (!Server.activeUsers.testIfContainsUser(user))
+                {
+                    Server.serverTransmitter.requestUser(user);
+                }
+            }
+            reply.command = TransmissionPacket.Commands.ACKNOWLEDGE;
+            reply.dataString = incomingPacket.dataString;
         } else
         {
-            if (Server.activeUsers.testIfContainsUser(user))
-            {
-                return;
-            }
-            Server.serverTransmitter.requestUser(user);
+            reply.command = TransmissionPacket.Commands.nil;
+            reply.dataString = "illegal registration";
         }
-        //ACK
-        reply.dataString = incomingPacket.dataString;
-        reply.command = TransmissionPacket.Commands.ACKNOWLEDGE;
         MessageUtils.sendTransmission(clientConnection, reply);
     }
 
-    private int getID(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException
+    private int checkConnectionValidityReturnUserID(TransmissionPacket incomingPacket)
     {
         try
         {
-            return Integer.parseInt(incomingPacket.dataString);
-        } catch (NumberFormatException e)
+            if (Server.state == State.arrivedAtStation)
+            {
+                String[] message = incomingPacket.dataString.split("\\s+");
+                if (Integer.parseInt(message[1]) == Server.UDPCode.code)
+                {
+                    return Integer.parseInt(message[0]);
+                }
+            }
+            return -1;
+
+        } catch (Exception e)
         {
-            LogPrinter.printError("Couldn't parse userID from socket", e);
-            new ErrorCommand().execute(clientConnection, incomingPacket);
             return -1;
         }
     }
-
 }

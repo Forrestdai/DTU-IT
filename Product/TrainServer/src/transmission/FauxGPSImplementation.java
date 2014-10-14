@@ -5,6 +5,8 @@
  */
 package transmission;
 
+import execute.Server;
+import helpers.State;
 import users.ExecuteOnImpulse;
 
 /**
@@ -25,6 +27,12 @@ class FauxGPSImplementation implements GPS
     public void transmit()
     {
         executeUDPTransmission.execute();
+    }
+
+    @Override
+    public void setState(State state)
+    {
+        Server.state = state;
     }
 
 }

@@ -6,6 +6,7 @@
 package transmission;
 
 import common.ServerData;
+import execute.Server;
 import helpers.LogPrinter;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -19,7 +20,6 @@ import users.ExecuteOnImpulse;
  */
 public class BroadcastUDP implements ExecuteOnImpulse
 {
-
     private DatagramSocket socket;
     private DatagramPacket packet;
     private byte[] messageBuffer;
@@ -42,21 +42,27 @@ public class BroadcastUDP implements ExecuteOnImpulse
     @Override
     public void execute()
     {
+        Server.UDPCode = new ClientConnectionCode();
         try
         {
             socket = new DatagramSocket(ServerData.UDP_SERVER_PORT);
             socket.setBroadcast(true);
-            for (int i = 0; i < 500; i++)
-            {
-                messageBuffer = ("HELO" + ServerData.TCP_LOCAL_ADDRESS + ServerData.TCP_PORT).getBytes();
-                packet = new DatagramPacket(messageBuffer, messageBuffer.length, transmitUDPAddess, ServerData.UDP_SERVER_PORT + 1);
-                socket.send(packet);
-                Thread.sleep(10);
-            }
+            send500Packets();
             socket.close();
         } catch (Exception ex)
         {
             LogPrinter.printError("ERR: UDP send error", ex);
+        }
+    }
+
+    private void send500Packets() throws Exception
+    {
+        for (int i = 0; i < 500; i++)
+        {
+            messageBuffer = (ServerData.TCP_LOCAL_ADDRESS + " " + ServerData.TCP_PORT + " " + Server.UDPCode.code).getBytes();
+            packet = new DatagramPacket(messageBuffer, messageBuffer.length, transmitUDPAddess, ServerData.UDP_SERVER_PORT + 1);
+            socket.send(packet);
+            Thread.sleep(10);
         }
     }
 }

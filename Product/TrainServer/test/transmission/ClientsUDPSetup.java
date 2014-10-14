@@ -17,7 +17,7 @@ class ClientsUDPSetup
 
     public Thread[] threads;
     public UDPClient[] clients;
-    public String[] returnMessages;
+    public String[][] returnMessages;
     private MulticastSocket socket;
     private int numberOfClients;
 
@@ -28,7 +28,7 @@ class ClientsUDPSetup
 
         threads = new Thread[numberOfClients];
         clients = new UDPClient[numberOfClients];
-        returnMessages = new String[numberOfClients];
+        returnMessages = new String[numberOfClients][3];
 
         initializeClients();
     }
@@ -45,7 +45,7 @@ class ClientsUDPSetup
         }
         for (int i = 0; i < numberOfClients; i++)
         {
-            returnMessages[i] = new String();
+            returnMessages[i] = new String[3];
         }
     }
 
@@ -64,7 +64,7 @@ class ClientsUDPSetup
             if (!threads[i].isAlive())
             {
                 returnMessages[i] = clients[i].getReturnedMessage();
-                LogPrinter.printTest(returnMessages[i] + " " + i);
+                LogPrinter.print(returnMessages[i] + " " + i);
             } else
             {
                 threads[i].interrupt();

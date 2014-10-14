@@ -5,12 +5,14 @@
  */
 package execute;
 
+import helpers.State;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import processing.ServerProcessorRequest;
 import threading.PersistentExecutorPool;
 import threading.ThreadPerRequestScheduler;
+import transmission.ClientConnectionCode;
 import transmission.IncomingConnectionsHandler;
 import transmission.TransmitToServer;
 import users.ActiveUsersArray;
@@ -30,6 +32,10 @@ public class Server
     public static ActiveUsersArray activeUsers;
 
     public static TransmitToServer serverTransmitter;
+    
+    public static ClientConnectionCode UDPCode;
+    
+    public static State state;
 
     public static void main(String[] args)
     {

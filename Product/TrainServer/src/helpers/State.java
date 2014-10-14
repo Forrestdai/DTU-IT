@@ -3,17 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package users;
-
-import transmission.ClientConnectionCode;
+package helpers;
 
 /**
  *
- * @author James
+ * @author JamesFoxes
  */
-public interface ExecuteOnImpulse
+public enum State
 {
-    public void execute();
-    
+    arrivedAtStation, leftStation
 }
