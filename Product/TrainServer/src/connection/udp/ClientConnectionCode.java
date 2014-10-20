@@ -3,15 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package common.interfaces;
+package connection.udp;
 
 /**
  *
- * @author James
+ * @author JamesFoxes
  */
-public interface Scheduler
+public class ClientConnectionCode
 {
-    public void schedule(ProcessorRequest requestProcessor);
-    
+    public int code;
+
+    public ClientConnectionCode()
+    {
+        code = (int)(Math.random()*100000000);
+    }
 }

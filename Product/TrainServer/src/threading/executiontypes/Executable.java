@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package common.interfaces;
+package threading.executiontypes;
 
 /**
  *
- * @author James
+ * @author JamesFoxes
  */
-public interface Scheduler
+public interface Executable
 {
-    public void schedule(ProcessorRequest requestProcessor);
     
 }

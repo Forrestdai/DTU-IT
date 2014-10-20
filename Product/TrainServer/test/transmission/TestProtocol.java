@@ -5,9 +5,11 @@
  */
 package transmission;
 
+import connection.tcp.IncomingConnectionsHandler;
+import connection.udp.ClientConnectionCode;
 import execute.Server;
 import helpers.LogPrinter;
-import helpers.State;
+import helpers.ServerState;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -17,13 +19,13 @@ import java.util.concurrent.Future;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import processing.ServerProcessorRequest;
+import execute.SimpleProcessorRequest;
 import threading.ThreadPerRequestScheduler;
 import static org.junit.Assert.*;
-import transmission.common.MessageUtils;
-import transmission.common.TransmissionPacket;
-import transmission.common.TransmissionPacket.Commands;
-import users.User;
+import connection.tcp.common.MessageUtils;
+import connection.tcp.common.TransmissionPacket;
+import connection.tcp.common.TransmissionPacket.Commands;
+import helpers.User;
 
 /**
  * sFoxes
@@ -47,10 +49,10 @@ public class TestProtocol
     public void createServer() throws Exception
     {
         Server.UDPCode = new ClientConnectionCode();
-        Server.state = State.arrivedAtStation;
+        Server.state = ServerState.arrivedAtStation;
         scheduler = Executors.newCachedThreadPool();
         serverConnection = new IncomingConnectionsHandler();
-        ServerProcessorRequest setupServer = new ServerProcessorRequest(serverConnection);
+        SimpleProcessorRequest setupServer = new SimpleProcessorRequest(serverConnection);
         serverThreadPool.schedule(setupServer);
     }
 

@@ -5,7 +5,7 @@
  */
 package transmission;
 
-import static common.ServerData.*;
+import static helpers.ServerData.*;
 import helpers.LogPrinter;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -13,8 +13,8 @@ import java.net.MulticastSocket;
 import java.net.Socket;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
-import transmission.common.MessageUtils;
-import transmission.common.TransmissionPacket;
+import connection.tcp.common.MessageUtils;
+import connection.tcp.common.TransmissionPacket;
 
 /**
  *

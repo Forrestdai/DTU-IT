@@ -4,14 +4,16 @@
  * and open the template in the editor.
  */
 
-package common.interfaces;
+package helpers;
+
+import java.io.Serializable;
 
 /**
  *
  * @author James
  */
-public interface Scheduler
+public class User implements Serializable
 {
-    public void schedule(ProcessorRequest requestProcessor);
+    public Integer ID;
     
 }

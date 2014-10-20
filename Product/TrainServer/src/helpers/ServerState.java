@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package common.interfaces;
+package helpers;
 
 /**
  *
- * @author James
+ * @author JamesFoxes
  */
-public interface Scheduler
+public enum ServerState
 {
-    public void schedule(ProcessorRequest requestProcessor);
-    
+    arrivedAtStation, leftStation
 }

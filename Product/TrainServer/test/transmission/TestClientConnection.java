@@ -5,6 +5,7 @@ package transmission;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import connection.tcp.IncomingConnectionsHandler;
 import helpers.LogPrinter;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -15,9 +16,9 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import processing.ServerProcessorRequest;
+import execute.SimpleProcessorRequest;
 import threading.ThreadPerRequestScheduler;
-import transmission.common.TransmissionPacket;
+import connection.tcp.common.TransmissionPacket;
 
 /**
  *
@@ -35,7 +36,7 @@ public class TestClientConnection
     {
         scheduler = Executors.newCachedThreadPool();
         serverConnection = new IncomingConnectionsHandler();
-        ServerProcessorRequest setupServer = new ServerProcessorRequest(serverConnection);
+        SimpleProcessorRequest setupServer = new SimpleProcessorRequest(serverConnection);
         serverThreadPool.schedule(setupServer);
     }
 

@@ -5,7 +5,8 @@
  */
 package transmission;
 
-import common.ServerData;
+import connection.udp.SetupUDP;
+import helpers.ServerData;
 import execute.Server;
 import helpers.LogPrinter;
 import java.net.InetAddress;

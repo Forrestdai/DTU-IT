@@ -5,17 +5,18 @@
  */
 package transmission;
 
+import connection.tcp.IncomingConnectionsHandler;
 import execute.Server;
 import helpers.LogPrinter;
 import java.net.Socket;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
-import processing.ServerProcessorRequest;
+import execute.SimpleProcessorRequest;
 import threading.ThreadPerRequestScheduler;
-import transmission.common.MessageUtils;
-import transmission.common.TransmissionPacket;
-import users.User;
+import connection.tcp.common.MessageUtils;
+import connection.tcp.common.TransmissionPacket;
+import helpers.User;
 import static org.junit.Assert.*;
 
 /**
@@ -33,7 +34,7 @@ public class TestServer
     public TestServer() throws Exception
     {
         serverConnection = new IncomingConnectionsHandler();
-        ServerProcessorRequest setupServer = new ServerProcessorRequest(serverConnection);
+        SimpleProcessorRequest setupServer = new SimpleProcessorRequest(serverConnection);
         serverThreadPool.schedule(setupServer);
         
         Thread.sleep(10);

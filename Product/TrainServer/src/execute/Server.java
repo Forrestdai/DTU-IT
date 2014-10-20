@@ -5,18 +5,17 @@
  */
 package execute;
 
-import helpers.State;
+import helpers.ServerState;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import processing.ServerProcessorRequest;
 import threading.PersistentExecutorPool;
 import threading.ThreadPerRequestScheduler;
-import transmission.ClientConnectionCode;
-import transmission.IncomingConnectionsHandler;
-import transmission.TransmitToServer;
-import users.ActiveUsersArray;
-import users.PotentialUsersArray;
+import connection.udp.ClientConnectionCode;
+import connection.tcp.IncomingConnectionsHandler;
+import connection.tcp.common.TransmitToServer;
+import helpers.ActiveUsersArray;
+import helpers.PotentialUsersArray;
 
 /**
  *
@@ -35,14 +34,14 @@ public class Server
     
     public static ClientConnectionCode UDPCode;
     
-    public static State state;
+    public static ServerState state;
 
     public static void main(String[] args)
     {
         try
         {
             IncomingConnectionsHandler incomingTCP = new IncomingConnectionsHandler();
-            ServerProcessorRequest incomingTCPProcess = new ServerProcessorRequest(incomingTCP);
+            SimpleProcessorRequest incomingTCPProcess = new SimpleProcessorRequest(incomingTCP);
             Server.serverThreadPool.schedule(incomingTCPProcess);
         } catch (Exception ex)
         {

@@ -4,14 +4,13 @@
  * and open the template in the editor.
  */
 
-package common.interfaces;
+package threading.executiontypes;
 
 /**
  *
  * @author James
  */
-public interface Scheduler
+public interface ExecutableCyclic
 {
-    public void schedule(ProcessorRequest requestProcessor);
-    
+    public void execute();
 }

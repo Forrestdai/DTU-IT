@@ -8,10 +8,10 @@ package common.interfaces;
 
 /**
  *
- * @author James
+ * @author JamesFoxes
  */
-public interface Scheduler
+public interface ServerExecutable
 {
-    public void schedule(ProcessorRequest requestProcessor);
-    
+    public void startProcessing() throws Exception;
+    public void stopProcessing() throws Exception;
 }

@@ -4,14 +4,16 @@
  * and open the template in the editor.
  */
 
-package common.interfaces;
+package threading.executiontypes;
+
+import connection.udp.ClientConnectionCode;
 
 /**
  *
  * @author James
  */
-public interface Scheduler
+public interface ExecuteOnImpulse
 {
-    public void schedule(ProcessorRequest requestProcessor);
+    public void execute();
     
 }
