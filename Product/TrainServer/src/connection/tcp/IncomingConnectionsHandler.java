@@ -7,7 +7,7 @@ package connection.tcp;
 
 import connection.tcp.common.TCPConnection;
 import execute.Server;
-import connection.tcp.processing.ConnectionProcessorRequest;
+import connection.tcp.processing.ProcessConnection;
 import connection.tcp.common.ClientConnection;
 import java.io.IOException;
 
@@ -31,7 +31,7 @@ public final class IncomingConnectionsHandler extends TCPConnection
             try
             {
                 ClientConnection clientConnection = connectionManager.awaitClient();
-                ConnectionProcessorRequest requestProcessor = new ConnectionProcessorRequest(clientConnection);
+                ProcessConnection requestProcessor = new ProcessConnection(clientConnection);
                 Server.threadPool.schedule(requestProcessor);
             } catch (IOException e)
             {

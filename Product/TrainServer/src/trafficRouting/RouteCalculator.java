@@ -6,11 +6,19 @@
 
 package trafficRouting;
 
+import threading.executiontypes.ExecuteOnImpulse;
+
 /**
  *
  * @author James
  */
-public class RouteCalculator
+public class RouteCalculator implements ExecuteOnImpulse
 {
     
+    @Override
+    public void execute()
+    {
+        
+    }
+   
 }

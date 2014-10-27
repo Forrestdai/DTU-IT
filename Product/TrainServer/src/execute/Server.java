@@ -6,14 +6,11 @@
 package execute;
 
 import helpers.ServerState;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import threading.PersistentExecutorPool;
 import threading.ThreadPerRequestScheduler;
 import connection.udp.ClientConnectionCode;
 import connection.tcp.IncomingConnectionsHandler;
-import connection.tcp.common.TransmitToServer;
+import connection.tcp.common.ServerTransmitter;
 import helpers.ActiveUsersArray;
 import helpers.PotentialUsersArray;
 
@@ -30,7 +27,7 @@ public class Server
     public static PotentialUsersArray potentialUsers;
     public static ActiveUsersArray activeUsers;
 
-    public static TransmitToServer serverTransmitter;
+    public static ServerTransmitter serverTransmitter;
     
     public static ClientConnectionCode UDPCode;
     
@@ -52,7 +49,7 @@ public class Server
     {
         potentialUsers = new PotentialUsersArray();
         activeUsers = new ActiveUsersArray();
-        serverTransmitter = new TransmitToServer();
+        serverTransmitter = new ServerTransmitter();
     }
 
 }
