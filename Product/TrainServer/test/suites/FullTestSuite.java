@@ -7,6 +7,8 @@ package suites;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import trafficRouting.DijkstraTraversalTest;
+import trafficRouting.FibonacciHeapTest;
 import transmission.TestClientConnection;
 import transmission.TestProtocol;
 import transmission.TestServer;
@@ -22,7 +24,9 @@ import transmission.TestUDPBroadcast;
             TestClientConnection.class,
             TestProtocol.class,
             TestUDPBroadcast.class,
-            TestServer.class
+            TestServer.class,
+            DijkstraTraversalTest.class,
+            FibonacciHeapTest.class
         })
 public class FullTestSuite
 {

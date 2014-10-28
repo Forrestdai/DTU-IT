@@ -14,7 +14,7 @@ import java.util.*;
 class DirectedGraph<E> implements Iterable<E>
 {
 
-    private final Map<E, Map<E, Double>> graph = new HashMap<E, Map<E, Double>>();
+    private final Map<E, Map<E, Double>> graph = new HashMap<>();
 
     public boolean addNode(E node)
     {
@@ -37,14 +37,14 @@ class DirectedGraph<E> implements Iterable<E>
         graph.get(start).put(destination, length);
     }
 
-    public void removeEdge(E start, E dest)
+    public void removeEdge(E start, E destination)
     {
-        if (!graph.containsKey(start) || !graph.containsKey(dest))
+        if (!graph.containsKey(start) || !graph.containsKey(destination))
         {
             throw new NoSuchElementException("Both nodes must be in the graph.");
         }
 
-        graph.get(start).remove(dest);
+        graph.get(start).remove(destination);
     }
 
     public Map<E, Double> getEdgesFromNode(E node)
@@ -58,6 +58,7 @@ class DirectedGraph<E> implements Iterable<E>
         return Collections.unmodifiableMap(arcs);
     }
 
+    @Override
     public Iterator<E> iterator()
     {
         return graph.keySet().iterator();
