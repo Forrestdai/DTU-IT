@@ -1,0 +1,25 @@
+TrainServer:
+[done] 			Send UDP multicast signal to clients with server address/port/ticket# when at a station/stop.
+[done] 			Receive and handle TCP requests.
+[done] 			Add users to potential and active arrays dynamically.
+[in progress] 	Create weighted and directed graph from traffic dataset.
+[in progress] 	Calculate best route from A to B.
+[in progress]	Charge users when absent from train/bus.
+[in progress]	Update user objects on main server with RMI.
+				Get traffic dataset from server.
+
+				
+Client:
+[in progress]	Receive UDP multicast signal and translate to server address/port/ticket#.
+[in progress]	Connect to train server using received credentials + UserID.
+				Show current journey information OR AT LEAST: logged in status.
+				
+				
+MainServer:
+[done] 			Receive and handle TCP requests.
+				Create and Send traffic dataset.
+[in progress]	Create/update/delete users from userDatabase.
+[in progress]	Create/Update/delete in the traffic database.
+				Open RMI access to user transaction objects.
+				Use a website to update and manage the user database.
+				
