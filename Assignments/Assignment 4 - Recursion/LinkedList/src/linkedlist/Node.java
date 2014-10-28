@@ -9,10 +9,23 @@ package linkedlist;
  *
  * @author JamesFoxes
  */
-public interface Node
+public interface Node<E>
 {
-    public int findElementLocation(int value);
-    public void insertElement(int value, int index);
-    public void insertBefore(int value);
-    public void insertAfter(int value);
+
+    public void setElementValue(E value);
+    
+    public void setPreviousNode(Node node);
+
+    public void setNextNode(Node node);
+    
+    //Recursive
+    public int findElementLocationRecursive(E value, int index);
+
+    public void insertElementRecursive(E value, int index);
+
+    public E getElementRecursive(int index);
+
+    public int countElementsRecursive(int counter);
+    
+    //Iterative
 }
