@@ -26,7 +26,7 @@ public class AStarTraversal
         this.myHeap = new FibonacciHeap<>();
     }
 
-    public Map<TransportNode, Double> findShortestPaths(DirectedGraph<TransportNode> graphToSearch, TransportNode startPoint, TransportNode targetPoint)
+    public Map<TransportNode, Double> findShortestPaths(DirectedGraph<TransportNode> graphToSearch, TransportNode startPoint, TransportNode goalNode)
     {
         //initialize the entries
         for (TransportNode node : graphToSearch)
@@ -34,7 +34,7 @@ public class AStarTraversal
             heapGraphNodes.put(node, myHeap.enqueueElement(node, Double.POSITIVE_INFINITY));
         }
 
-        if (startPoint.equals(targetPoint))
+        if (startPoint.equals(goalNode))
         {
             visitedNodes.put(startPoint, 0.0);
             return visitedNodes;
@@ -51,7 +51,7 @@ public class AStarTraversal
 
             for (Edge edge : currentlyVisitedNode.getNodeContents())
             {
-                Double newCost = currentlyVisitedNode.getNodePriority() + (edge.toNode.cost / 100) + edge.cost;
+                Double newCost = currentlyVisitedNode.getNodePriority() + (edge.toNode.cost / 130) + edge.cost;
 
                 FibonacciHeap.HeapElement<TransportNode> destination = heapGraphNodes.get(edge.toNode);
 
@@ -61,7 +61,7 @@ public class AStarTraversal
                     destination.getNodeContents().returnNode = edge.fromNode;
                 }
             }
-        } while (!myHeap.isEmpty() && !currentlyVisitedNode.equals(heapGraphNodes.get(targetPoint)));
+        } while (!myHeap.isEmpty() && !currentlyVisitedNode.equals(heapGraphNodes.get(goalNode)));
         return visitedNodes;
     }
 }

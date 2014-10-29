@@ -5,6 +5,8 @@
  */
 package trafficRouting;
 
+import java.util.Map;
+
 /**
  *
  * @author JamesFoxes
@@ -13,24 +15,25 @@ public class Graph
 {
 
     private DirectedGraph<TransportNode> graph;
-    private TransportNode goalNode;
+    private String goalIdentity;
 
-    public Graph(TransportNode goalNode)
+    public Graph(String goalIdentity)
     {
         graph = new DirectedGraph<>();
-        this.goalNode = goalNode;
+        this.goalIdentity = goalIdentity;
     }
 
-    public void addNodes(Iterable<TransportNode> nodes)
+    public void addNodes(Map<String, TransportNode> nodes)
     {
-        for (TransportNode node : nodes)
+        for (Map.Entry<String, TransportNode> entry : nodes.entrySet())
         {
-            if (node == goalNode)
+            TransportNode node = entry.getValue();
+            if (node.equals(nodes.get(goalIdentity)))
             {
                 node.distanceFromGoal = 0.0;
             }
 
-            node.distanceFromGoal = node.getDistanceTo(goalNode);
+            node.distanceFromGoal = node.getDistanceTo(nodes.get(goalIdentity));
             node.cost = node.distanceFromGoal;
             graph.addNode(node);
         }

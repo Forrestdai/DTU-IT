@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 public class TransportNode implements Iterable<Edge>
 {
-    private final ArrayList<Edge> edges;
+    private ArrayList<Edge> edges;
     public Position position;
     public Double distanceFromGoal;
     public String identity;
@@ -34,6 +34,11 @@ public class TransportNode implements Iterable<Edge>
         }
 
         edges.add(edge);
+    }
+    
+    public void setEdges(ArrayList<Edge> edges)
+    {
+        this.edges = edges;
     }
     
     @Override
