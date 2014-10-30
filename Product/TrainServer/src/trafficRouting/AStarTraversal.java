@@ -6,6 +6,7 @@
 package trafficRouting;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -26,7 +27,7 @@ public class AStarTraversal
         this.myHeap = new FibonacciHeap<>();
     }
 
-    public Map<TransportNode, Double> findShortestPaths(DirectedGraph<TransportNode> graphToSearch, TransportNode startPoint, TransportNode goalNode)
+    public Map<TransportNode, Double> findShortestPath(DirectedGraph<TransportNode> graphToSearch, TransportNode startPoint, TransportNode goalNode)
     {
         //initialize the entries
         for (TransportNode node : graphToSearch)
@@ -43,14 +44,16 @@ public class AStarTraversal
         myHeap.decreaseKey(heapGraphNodes.get(startPoint), 0.0);
 
         FibonacciHeap.HeapElement<TransportNode> currentlyVisitedNode;
-        
+
         do
         {
             currentlyVisitedNode = myHeap.dequeueMinElement();
             visitedNodes.put(currentlyVisitedNode.getNodeContents(), currentlyVisitedNode.getNodePriority());
 
-            for (Edge edge : currentlyVisitedNode.getNodeContents())
+            for (Iterator<Edge> iterator = currentlyVisitedNode.getNodeContents().iterator(); iterator.hasNext();)
             {
+                Edge edge = iterator.next();
+
                 Double newCost = currentlyVisitedNode.getNodePriority() + (edge.toNode.cost / 130) + edge.cost;
 
                 FibonacciHeap.HeapElement<TransportNode> destination = heapGraphNodes.get(edge.toNode);

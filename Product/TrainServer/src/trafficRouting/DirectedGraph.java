@@ -27,14 +27,14 @@ class DirectedGraph<E> implements Iterable<E>
         return true;
     }
 
-    public void addEdge(E start, E destination, double length)
+    public void addEdge(E start, E destination, double cost)
     {
         if (!graph.containsKey(start) || !graph.containsKey(destination))
         {
             throw new NoSuchElementException("A node is missing from the graph.");
         }
 
-        graph.get(start).put(destination, length);
+        graph.get(start).put(destination, cost);
     }
 
     public void removeEdge(E start, E destination)

@@ -6,14 +6,13 @@
 package trafficRouting;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -46,43 +45,32 @@ public class DatabaseHandlerTest
     {
     }
     
-    @Test
-    public void testStuff()
+    //@Test
+    public void testGetEdges() throws Exception
     {
-        DirectedGraph<TransportNode> graph = new SetupGraph().process("G");
-        
+        Map<Integer, TransportNode> nothing = new HashMap<>();
+        DatabaseHandler db = new DatabaseHandler();
+        db.getEdgesFromStop(8084956, nothing);
     }
 
-    //@Test
-    public void testGetAllNodes() throws SQLException
+    @Test //(timeout = 1000)
+    public void testStuff()
     {
-        DatabaseHandler dbHandler = new DatabaseHandler();
-        Map<String, TransportNode> nodes = dbHandler.getAllNodes();
-        for (Map.Entry<String, TransportNode> node : nodes.entrySet())
-        {
-            String nodeName = node.getKey();
-            TransportNode element = node.getValue();
-            ArrayList<Edge> edges = dbHandler.getEdgesForNode(element, nodes);
-            element.setEdges(edges);
-        }
-        
-        Graph graph = new Graph(nodes.get("G")); //G = goal
-        graph.addNodes(nodes.values());
-        DirectedGraph<TransportNode> graphToSearch = graph.getGraph();
-        
+        SetupGraph graph = new SetupGraph();
+        DirectedGraph<TransportNode> directedGraph = graph.buildAndGetGraph(5);
+
         AStarTraversal graphTraverser = new AStarTraversal();
-        Map<TransportNode, Double> result = graphTraverser.findShortestPaths(graphToSearch, nodes.get("S"), nodes.get("G"));
-        
+        Map<TransportNode, Double> result = graphTraverser.findShortestPath(directedGraph, graph.getNode(0), graph.getNode(5));
+
         for (Map.Entry<TransportNode, Double> entrySet : result.entrySet())
         {
             TransportNode key = entrySet.getKey();
             Double value = entrySet.getValue();
-            
+
             System.out.println("key: " + key.identity);
             System.out.println("value: " + value);
             System.out.println("PATH:" + key.returnNode.identity);
             System.out.println("");
         }
     }
-
 }

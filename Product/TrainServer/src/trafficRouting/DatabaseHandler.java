@@ -31,44 +31,69 @@ public class DatabaseHandler
         }
     }
 
-    public Map<String, TransportNode> getAllNodes() throws SQLException
+    public Map<Integer, TransportNode> getAllNodes() throws SQLException
     {
-        Map<String, TransportNode> nodes = new HashMap<>();
-        //ArrayList<TransportNode> result = new ArrayList<>();
+        Map<Integer, TransportNode> nodes = new HashMap<>();
 
-        String SQL = "SELECT * FROM Nodes";
-        ResultSet rs = db.pushStatement(SQL);
+        String SQL = "SELECT * FROM STOPS_STATIONS";
+        ResultSet stops = db.pushStatement(SQL);
 
-        while (rs.next())
+        while (stops.next())
         {
-            String id = rs.getString("ID");
-            double positionX = rs.getDouble("PositionX");
-            double positionY = rs.getDouble("PositionY");
+            String name = stops.getString("STOP_NAME");
+            int ref = stops.getInt("REF");
+            double latitude = stops.getDouble("LAT");
+            double longetude = stops.getDouble("LON");
 
-            Position position = new Position(positionX, positionY);
-            TransportNode nodeToAdd = new TransportNode(position, id);
-            nodes.put(id, nodeToAdd);
+            Position position = new Position(latitude, longetude);
+            TransportNode nodeToAdd = new TransportNode(position, name, ref);
+            nodes.put(ref, nodeToAdd);
         }
         return nodes;
     }
 
-    public ArrayList<Edge> getEdgesForNode(TransportNode fromNode, Map<String, TransportNode> nodes) throws SQLException
+    public ArrayList<Edge> getEdgesFromStop(Integer fromStopReference, Map<Integer, TransportNode> nodes) throws SQLException
     {
-        ArrayList<Edge> result = new ArrayList<>();
+        ArrayList<Edge> edges = new ArrayList<>();
 
-        String SQL = "SELECT * FROM Edges WHERE FromNode = '" + fromNode.identity + "'";
-        ResultSet rs = db.pushStatement(SQL);
+        String getEdges = "SELECT *"
+                + " FROM line_identity"
+                + " INNER JOIN"
+                + " paths lines ON (lines.line_ref = line_identity.line_ref)"
+                + " AND from_stop_ref = ?";
 
-        while (rs.next())
+        int[] properties =
         {
-            Edge.EdgeType type = Edge.EdgeType.valueOf(rs.getString("TransportType"));
-            String toNode = rs.getString("ToNode");
+            fromStopReference
+        };
+        ResultSet stops = db.pushPreparedIntegerStatement(getEdges, properties);
 
-            Edge edge = new Edge(type, fromNode, nodes.get(toNode));
-            result.add(edge);
+        while (stops.next())
+        {
+            String type = stops.getString("TYPE");
+            int fromStopRef = stops.getInt("FROM_STOP_REF");
+            int toStopRef = stops.getInt("TO_STOP_REF");
+            int transportID = stops.getInt("LINE_REF");
+            String transportName = stops.getString("LINE_NAME");
+
+            Edge.EdgeType edgeType = Edge.EdgeType.valueOf(type);
+            Edge edge = new Edge(edgeType, nodes.get(fromStopRef), nodes.get(toStopRef), transportID, transportName);
+
+            boolean addEdge = true;
+            for (Edge existing : edges)
+            {
+                if (existing.toNode.referenceID == edge.toNode.referenceID && existing.transportLineReference == edge.transportLineReference)
+                {
+                    addEdge = false;
+                    break;
+                }
+            }
+            if (addEdge)
+            {
+                edges.add(edge);
+            }
         }
-
-        return result;
+        return edges;
     }
 
 }

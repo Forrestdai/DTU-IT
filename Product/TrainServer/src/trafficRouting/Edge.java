@@ -15,17 +15,21 @@ public class Edge
     public EdgeType edgeType;
     public TransportNode fromNode, toNode;
     public Double cost;
+    public int transportLineReference;
+    public String transportLineName;
 
-    public Edge(EdgeType edgeType, TransportNode fromNode, TransportNode toNode)
+    public Edge(EdgeType edgeType, TransportNode fromNode, TransportNode toNode, int transportLineReference, String transportLineName)
     {
         this.edgeType = edgeType;
         this.fromNode = fromNode;
         this.toNode = toNode;
+        this.transportLineReference = transportLineReference;
+        this.transportLineName = transportLineName;
     }
 
     enum EdgeType
     {
 
-        TRAIN, BUS, METRO, WALKING, BOAT
+        TRAIN, BUS_A, BUS_E, BUS_N, BUS_S, BUS, METRO, WALKING, BOAT
     }
 }

@@ -276,13 +276,30 @@ public class FibonacciHeapTest
     @Test
     public void testIsEmpty()
     {
-
+        FibonacciHeap<Integer> myHeap = new FibonacciHeap();
+        assertTrue(myHeap.isEmpty());
+        
+        myHeap.enqueueElement(10, 1.1);
+        assertTrue(!myHeap.isEmpty());
     }
 
     @Test
     public void testGetHeapSize()
     {
-
+        FibonacciHeap<Integer> myHeap = new FibonacciHeap();
+        assertEquals("Had initial element", 0, myHeap.getHeapSize());
+        
+        myHeap.enqueueElement(10, 1.1);
+        assertEquals("Did not increment", 1, myHeap.getHeapSize());
+        
+        FibonacciHeap.HeapElement<Integer> heapEntry = new FibonacciHeap.HeapElement<>(10, 1.1);
+        myHeap.enqueueElement(heapEntry.getNodeContents(), heapEntry.getNodePriority());
+        assertEquals("Did not increment", 2, myHeap.getHeapSize());
+        
+        myHeap.decreaseKey(heapEntry, 0.2);
+        assertEquals("fault when decreasing key", 2, myHeap.getHeapSize());
+        assertEquals("never decremented", heapEntry, myHeap.dequeueMinElement());
+        assertEquals("Did not decrement", 1, myHeap.getHeapSize());
     }
 
 }

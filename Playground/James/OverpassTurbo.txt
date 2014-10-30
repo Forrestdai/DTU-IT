@@ -1,0 +1,6 @@
+area["name"="Københavns Kommune"];
+(
+  rel(area)[route=bus];
+  >;
+);
+out meta;/*fixed by auto repair*/

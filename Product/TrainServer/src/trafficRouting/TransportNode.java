@@ -16,14 +16,16 @@ public class TransportNode implements Iterable<Edge>
     public String identity;
     public Double cost;
     public TransportNode returnNode;
+    public int referenceID;
 
-    public TransportNode(Position position, String identity)
+    public TransportNode(Position position, String identity, int ref)
     {
         edges = new ArrayList<>();
         this.position = position;
         this.identity = identity;
         cost = Double.POSITIVE_INFINITY;
         returnNode = this;
+        referenceID = ref;
     }
     
     public void addEdge(Edge edge)
@@ -32,7 +34,6 @@ public class TransportNode implements Iterable<Edge>
         {
             throw new IllegalArgumentException("The edge already exists.");
         }
-
         edges.add(edge);
     }
     
@@ -53,69 +54,18 @@ public class TransportNode implements Iterable<Edge>
         {
             return Double.POSITIVE_INFINITY;
         }
-        double xDifference = Math.abs(node.position.x - position.x);
-        double yDifference = Math.abs(node.position.y - position.y);
-        return Math.sqrt(xDifference * xDifference + yDifference * yDifference);
+        
+        //Distance calculated with Equirectangular approximation to reduce calculation time.
+        //Formula:
+        //x = Δλ ⋅ cos φm
+        //d = R ⋅ √x² + Δφ²
+        
+        double EARTH_RAD = 6367447;
+        
+        double latDiff = Math.toRadians(node.position.lat - position.lat);
+        double lonDiff = Math.toRadians(node.position.lon - position.lon);
+        
+        double x = lonDiff * Math.cos(Math.toRadians((position.lat + node.position.lat) / 2));
+        return Math.sqrt(x*x + latDiff*latDiff) * EARTH_RAD;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /*private Double priority;
-    private String description;
-    private NodeType type;
-    private Double distanceToTarget;
-    private ArrayList<RouteIdentifier> identifiers;
-
-    public TransportNode(NodeType type)
-    {
-        this.type = type;
-    }
-
-    public Double getCost()
-    {
-        switch(type)
-        {
-            case BUSSTOP:
-                
-                break;
-            case TRAINSTATION:
-                
-                break;
-                
-            default:
-                
-                break;
-        }
-        return priority;
-    }
-    
-    public void addTransportIdentifier(RouteIdentifier id)
-    {
-        identifiers.add(id);
-    }
-    
-    public boolean findTransportIdentifier(RouteIdentifier id)
-    {
-        return identifiers.contains(id);
-    }*/
 }

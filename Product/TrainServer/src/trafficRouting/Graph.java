@@ -5,6 +5,7 @@
  */
 package trafficRouting;
 
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -15,17 +16,17 @@ public class Graph
 {
 
     private DirectedGraph<TransportNode> graph;
-    private String goalIdentity;
+    private Integer goalIdentity;
 
-    public Graph(String goalIdentity)
+    public Graph(int goalIdentity)
     {
         graph = new DirectedGraph<>();
         this.goalIdentity = goalIdentity;
     }
 
-    public void addNodes(Map<String, TransportNode> nodes)
+    public void addNodes(Map<Integer, TransportNode> nodes)
     {
-        for (Map.Entry<String, TransportNode> entry : nodes.entrySet())
+        for (Map.Entry<Integer, TransportNode> entry : nodes.entrySet())
         {
             TransportNode node = entry.getValue();
             if (node.equals(nodes.get(goalIdentity)))
@@ -44,8 +45,9 @@ public class Graph
     {
         for (TransportNode node : graph)
         {
-            for (Edge edge : node)
+            for (Iterator<Edge> iterator = node.iterator(); iterator.hasNext();)
             {
+                Edge edge = iterator.next();
                 edge.cost = calculateEdgeCost(edge);
                 graph.addEdge(edge.fromNode, edge.toNode, edge.cost);
             }
@@ -58,10 +60,22 @@ public class Graph
         switch (edge.edgeType)
         {
             case WALKING:
-                cost = (edge.fromNode.getDistanceTo(edge.toNode)) / TransportSettings.SPEED_WALKING; //((distance in meters/100) / speed)
+                cost = (edge.fromNode.getDistanceTo(edge.toNode)) / TransportSettings.SPEED_WALKING; //((distance in meters) / speed)
                 break;
             case BUS:
                 cost = (edge.fromNode.getDistanceTo(edge.toNode)) / TransportSettings.SPEED_BUS;
+                break;
+            case BUS_A:
+                cost = (edge.fromNode.getDistanceTo(edge.toNode)) / TransportSettings.SPEED_BUS_A;
+                break;
+            case BUS_E:
+                cost = (edge.fromNode.getDistanceTo(edge.toNode)) / TransportSettings.SPEED_BUS_E;
+                break;
+            case BUS_N:
+                cost = (edge.fromNode.getDistanceTo(edge.toNode)) / TransportSettings.SPEED_BUS_N;
+                break;
+            case BUS_S:
+                cost = (edge.fromNode.getDistanceTo(edge.toNode)) / TransportSettings.SPEED_BUS_S;
                 break;
             case METRO:
                 cost = (edge.fromNode.getDistanceTo(edge.toNode)) / TransportSettings.SPEED_METRO;
@@ -77,7 +91,7 @@ public class Graph
         return cost;
     }
 
-    public DirectedGraph<TransportNode> getGraph()
+    public DirectedGraph<TransportNode> getDirectedGraph()
     {
         return graph;
     }

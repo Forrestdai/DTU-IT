@@ -8,9 +8,8 @@ package trafficRouting;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,46 +19,65 @@ public class SetupGraph
 {
 
     DatabaseHandler dbHandler;
-    private Map<String, TransportNode> nodes;
+    private Map<Integer, TransportNode> nodes;
 
     public SetupGraph()
     {
         this.dbHandler = new DatabaseHandler();
     }
 
-    public DirectedGraph<TransportNode> process(String goalIdentity)
+    public DirectedGraph<TransportNode> buildAndGetGraph(int goalIdentity)
     {
         getNodesFromDatabase();
         assignNodeEdges();
+        
+        for (Map.Entry<Integer, TransportNode> entrySet : nodes.entrySet())
+        {
+            Integer key = entrySet.getKey();
+            TransportNode value = entrySet.getValue();
+            
+            for (Iterator<Edge> iterator = value.iterator(); iterator.hasNext();)
+            {
+                Edge edge = iterator.next();
+            }
+        }
 
         Graph graph = new Graph(goalIdentity);
         graph.addNodes(nodes);
-        return graph.getGraph();
+        return graph.getDirectedGraph();
+    }
+    
+    public TransportNode getNode(int identity)
+    {
+        TransportNode returnNode = nodes.get(identity);
+        if (returnNode == null)
+        {
+            throw new IllegalArgumentException("Node: " + identity + " doesn't exist.");
+        }
+        return nodes.get(identity);
     }
 
-    private Map<String, TransportNode> getNodesFromDatabase()
+    private void getNodesFromDatabase()
     {
         nodes = new HashMap<>();
         try
         {
-            DatabaseHandler dbHandler = new DatabaseHandler();              //MOVE TO EXTERNAL REF
             nodes = dbHandler.getAllNodes();
         } catch (SQLException ex)
         {
             ex.printStackTrace();
         }
-        return nodes;
     }
 
     private void assignNodeEdges()
     {
-        for (Map.Entry<String, TransportNode> node : nodes.entrySet())
+        for (Map.Entry<Integer, TransportNode> node : nodes.entrySet())
         {
             try
             {
-                String nodeName = node.getKey();
+                Integer nodeReference = node.getKey();
                 TransportNode element = node.getValue();
-                ArrayList<Edge> edges = dbHandler.getEdgesForNode(element, nodes);
+                ArrayList<Edge> edges = dbHandler.getEdgesFromStop(nodeReference, nodes);
                 element.setEdges(edges);
             } catch (SQLException ex)
             {

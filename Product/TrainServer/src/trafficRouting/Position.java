@@ -11,13 +11,13 @@ package trafficRouting;
  */
 class Position
 {
-    double x;
-    double y;
+    double lat;
+    double lon;
 
-    public Position(double x, double y)
+    public Position(double lat, double lon)
     {
-        this.x = x;
-        this.y = y;
+        this.lat = lat;
+        this.lon = lon;
     }
     
 }
