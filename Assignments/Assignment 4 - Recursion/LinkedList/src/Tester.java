@@ -1,7 +1,5 @@
-import Sort.SelectionSort;
 import java.util.ArrayList;
 import java.util.Comparator;
-import linkedlist.MyLinkedList;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,23 +16,19 @@ public class Tester
     ArrayList<Integer> arrayToSearch;
     ArrayList<Long> timeArray;
     long startTime;
-    int arraySize = 7000000;
-    private MyLinkedList<Integer> linkedList;
+    int arraySize = 50000000;
 
     public static void main(String[] args)
     {
         new Tester();
     }
-    
 
     public Tester()
     {
         timeArray = new ArrayList<>();
-        linkedList = new MyLinkedList<>();
-;
 
         setUpArray();
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 1000000; i++)
         {
             test();
         }
@@ -44,38 +38,30 @@ public class Tester
 
     private void setUpArray()
     {
+        arrayToSearch = new ArrayList<>();
+        for (int i = 0; i < arraySize; ++i)
+        {
+            arrayToSearch.add(i);
+        }
+        
         /*
-         arrayToSearch = new ArrayList<>();
-         for (int i = 0; i < arraySize; ++i)
-         {
-         arrayToSearch.add(i);
-         }
-         */
-
+        arrayToSearch = new ArrayList<>();
         for (int i = 0; i < arraySize; i++)
         {
-            linkedList.insertElementIterative((int) (Math.random() * arraySize), 0);
+            arrayToSearch.add((int) (Math.random() * arraySize * 5));
         }
 
-        //arrayToSearch.sort(Comparator.naturalOrder());
-
+        arrayToSearch.sort(Comparator.naturalOrder());
+                */
     }
 
     public void test()
     {
-        
-        startTimer();
-        linkedList.findElementIndexIterative((int) (Math.random() * arraySize));
-        stopTimer();
-        
-        /*
         BinarySearch search = new BinarySearch(arrayToSearch);
 
         startTimer();
-        int index = search.getIndexIterative((int) (Math.random() * arraySize));
+        int index = search.getIndexRecursive((int) (Math.random() * arraySize));
         stopTimer();
-                
-                */
     }
 
     private void startTimer()

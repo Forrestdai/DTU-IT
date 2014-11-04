@@ -1,0 +1,202 @@
+
+------------------  Important Linked List Recursive/Iterative Functions ------------------
+
+--Recursive:
+
+	public int findElementLocationRecursive(E value, int index)
+    {
+        if (value == null && currentValue == null)
+        {
+            return index;
+        }
+        
+        if (value.equals(currentValue))
+        {
+            return index;
+        }
+        
+        return nextNode.findElementLocationRecursive(value, ++index);
+    }
+
+    @Override
+    public void insertElementRecursive(E value, int index)
+    {
+        if (index == 0)
+        {
+            this.insertAfter(value);
+        } else
+        {
+            nextNode.insertElementRecursive(value, index - 1);
+        }
+    }
+
+    public void insertAfter(E value)
+    {
+        Node newNode = initializeNewNode(value);
+        nextNode.setPreviousNode(newNode);
+        nextNode = newNode;
+    }
+    
+    private Node initializeNewNode(E value)
+    {
+        Node newNode = new ValueNode();
+        newNode.setElementValue(value);
+        
+        newNode.setNextNode(nextNode);
+        newNode.setPreviousNode(this);
+        
+        return newNode;
+    }
+
+    @Override
+    public E getElementRecursive(int index)
+    {
+        if (index == 0)
+        {
+            return currentValue;
+        }
+        return nextNode.getElementRecursive(--index);
+    }
+
+    @Override
+    public int countElementsRecursive(int counter)
+    {
+        return nextNode.countElementsRecursive(++counter);
+    }
+	
+--Iterative:
+
+	public void insertElementIterative(E value, int index)
+    {
+        if (index < 0)
+        {
+            firstSentinel.insertElementIterative(value);
+        } else
+        {
+            Node<E> currentElement = firstSentinel;
+            for (; index > 0; --index)
+            {
+                if (currentElement instanceof SentinelLastNode)
+                {
+                    currentElement.insertElementIterative(value);
+                } else
+                {
+                    currentElement = currentElement.getNextNode();
+                }
+            }
+
+            currentElement.insertElementIterative(value);
+        }
+    }
+	
+	public int findElementIndexIterative(E value)
+    {
+        Node<E> currentElement = firstSentinel.getNextNode();
+        int index = 0;
+        while (currentElement instanceof ValueNode && !((ValueNode) currentElement).getElementValue().equals(value))
+        {
+            currentElement = currentElement.getNextNode();
+            ++index;
+        }
+        if (currentElement instanceof SentinelLastNode)
+        {
+            return -1;
+        }
+        return index;
+    }
+
+------------------  Important Sorting Recursive/Iterative Functions ------------------
+	
+	public void sortRecursive(ArrayList<Integer> array, int startIndex)
+    {
+        if (startIndex >= array.size() - 1)
+        {
+            return;
+        }
+        int smallestElementIndex = startIndex;
+        for (int index = startIndex + 1; index < array.size(); index++)
+        {
+            if (array.get(index) < array.get(smallestElementIndex))
+            {
+                smallestElementIndex = index;
+            }
+        }
+        int temp = array.get(startIndex);
+        array.set(startIndex,array.get(smallestElementIndex));
+        array.set(smallestElementIndex, temp);
+        sortRecursive(array, startIndex + 1);
+    }
+	
+	
+	public void sortIterative(ArrayList<Integer> array)
+    {
+        int smallestElementIndex;
+        int size = array.size();
+
+        for (int i = 0; i < size - 1; ++i)
+        {
+            smallestElementIndex = i;
+            for (int j = i + 1; j < size; j++)
+            {
+                if (array.get(j) < array.get(smallestElementIndex))
+                {
+                    smallestElementIndex = j;
+                }
+            }
+            if (smallestElementIndex != i)
+            {
+                int temporaryElement = array.get(i);
+                array.set(i, array.get(smallestElementIndex));
+                array.set(smallestElementIndex, temporaryElement);
+            }
+        }
+    }
+	
+------------------  Important Binary Search Recursive/Iterative Functions ------------------
+	
+	public int getIndexIterative(int searchFor)
+    {
+        int i = size / 2;
+        while (i > lowerBoundIndex && i < upperBoundIndex)
+        {
+            int element = array.get(i);
+            if (element == searchFor)
+            {
+                return i;
+            }
+            if (element > searchFor)
+            {
+                upperBoundIndex = i;
+                i -= (upperBoundIndex - lowerBoundIndex) / 2;
+            }
+            lowerBoundIndex = i;
+            i += (upperBoundIndex - lowerBoundIndex) / 2;
+        }
+        return -1;
+    }
+
+    public int getIndexRecursive(int searchFor)
+    {
+        this.searchFor = searchFor;
+        return search(size / 2);
+    }
+
+    private int search(int i)
+    {
+        if (i > lowerBoundIndex && i < upperBoundIndex)
+        {
+            int element = array.get(i);
+            if (element == searchFor)
+            {
+                return i;
+            }
+            if (element > searchFor)
+            {
+                upperBoundIndex = i;
+                return search(i - ((upperBoundIndex - lowerBoundIndex) / 2));
+            }
+            lowerBoundIndex = i;
+            return search(i + ((upperBoundIndex - lowerBoundIndex) / 2));
+        }
+        return -1;
+    }
