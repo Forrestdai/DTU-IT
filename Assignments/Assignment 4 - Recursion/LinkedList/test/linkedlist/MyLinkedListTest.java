@@ -27,10 +27,15 @@ public class MyLinkedListTest
     @Test
     public void testSimpleInsertElement()
     {
-        myList.insertElement(12348, 0);
+        myList.insertElementRecursive(12348, 0);
 
-        assertEquals(0, myList.findElementIndex(12348));
-        assertEquals(-1, myList.findElementIndex(123));
+        assertEquals(0, myList.findElementIndexRecursive(12348));
+        assertEquals(-1, myList.findElementIndexRecursive(123));
+        
+        myList.insertElementIterative(516, 0);
+        assertEquals(0, myList.findElementIndexIterative(516));
+        assertEquals(1, myList.findElementIndexIterative(12348));
+        assertEquals(-1, myList.findElementIndexIterative(123));
     }
 
     @Test
@@ -42,21 +47,42 @@ public class MyLinkedListTest
         for (int i = 0; i < numberOfElements; ++i)
         {
             int index = (int) ((Math.random() * numberOfElements) - (numberOfElements / 10));
-            myList.insertElement(i, index);
+            myList.insertElementRecursive(i, index);
 
             if (index < 0)
             {
                 index = 0;
             }
 
-            int size = myList.size();
+            int size = myList.sizeRecursive();
 
             if (index > size - 1)
             {
                 index = size - 1;
             }
 
-            assertEquals(index, myList.findElementIndex(i));
+            assertEquals(index, myList.findElementIndexRecursive(i));
+        }
+        
+        myList = new MyLinkedList<>();
+        for (int i = 0; i < numberOfElements; ++i)
+        {
+            int index = (int) ((Math.random() * numberOfElements) - (numberOfElements / 10));
+            myList.insertElementIterative(i, index);
+
+            if (index < 0)
+            {
+                index = 0;
+            }
+
+            int size = myList.sizeRecursive();
+
+            if (index > size - 1)
+            {
+                index = size - 1;
+            }
+
+            assertEquals(index, myList.findElementIndexIterative(i));
         }
     }
 
@@ -69,23 +95,39 @@ public class MyLinkedListTest
         {
             int index = i;
             int value = i;
-            myList.insertElement(value, index);
-            assertEquals(index, myList.findElementIndex(value));
+            myList.insertElementRecursive(value, index);
+            assertEquals(index, myList.findElementIndexRecursive(value));
+        }
+        
+        myList = new MyLinkedList<>();
+        
+        for (int i = 0; i < numberOfElements; ++i)
+        {
+            int index = i;
+            int value = i;
+            myList.insertElementIterative(value, index);
+            assertEquals(index, myList.findElementIndexIterative(value));
         }
     }
 
     @Test
     public void testInsertLowIndexElement()
     {
-        myList.insertElement(6, -5);    //insert LOW index
-        assertEquals(0, myList.findElementIndex(6));
+        myList.insertElementRecursive(6, -5);    //insert LOW index
+        assertEquals(0, myList.findElementIndexRecursive(6));
+        myList = new MyLinkedList<>();
+        myList.insertElementIterative(6, -5);    //insert HIGH index
+        assertEquals(0, myList.findElementIndexIterative(6));
     }
 
     @Test
     public void testInsertHighIndexElement()
     {
-        myList.insertElement(12, 5);    //insert HIGH index
-        assertEquals(0, myList.findElementIndex(12));
+        myList.insertElementRecursive(12, 5);    //insert HIGH index
+        assertEquals(0, myList.findElementIndexRecursive(12));
+        myList = new MyLinkedList<>();
+        myList.insertElementIterative(12, 5);    //insert HIGH index
+        assertEquals(0, myList.findElementIndexIterative(12));
     }
 
     @Test
@@ -94,15 +136,20 @@ public class MyLinkedListTest
         for (int i = 0; i < 10; ++i)
         {
             int index = (int) ((Math.random() * 10) - 1);
-            myList.insertElement(i, index);
+            myList.insertElementRecursive(i, index);
         }
         
-        myList.insertElement(12, 6);
-        assertEquals((int) 12, (int) myList.getElement(6));
-        myList.insertElement(20, 50);
-        assertEquals((int) 20, (int) myList.getElement(myList.size()-1));
-        myList.insertElement(28, -2);
-        assertEquals((int) 28, (int) myList.getElement(0));
+        myList.insertElementRecursive(12, 6);
+        assertEquals((int) 12, (int) myList.getElementRecursive(6));
+        assertEquals((int) 12, (int) myList.getElementIterative(6));
+        myList.insertElementRecursive(20, 50);
+        assertEquals((int) 20, (int) myList.getElementRecursive(myList.sizeRecursive()-1));
+        assertEquals((int) 20, (int) myList.getElementIterative(myList.sizeRecursive()-1));
+        myList.insertElementRecursive(28, -2);
+        assertEquals((int) 28, (int) myList.getElementRecursive(0));
+        assertEquals((int) 28, (int) myList.getElementIterative(0));
     }
+    
+    
 
 }

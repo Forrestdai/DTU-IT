@@ -77,4 +77,22 @@ public class SentinelFirstNode<E> implements Node<E>
     {
         return nextNode.countElementsRecursive(counter);
     }
+
+    @Override
+    public Node<E> getNextNode()
+    {
+        return nextNode;
+    }
+
+    @Override
+    public Node<E> getPreviousNode()
+    {
+        return null;
+    }
+
+    @Override
+    public void insertElementIterative(E value)
+    {
+        insertAfter(value);
+    }
 }

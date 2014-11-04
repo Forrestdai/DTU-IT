@@ -72,4 +72,22 @@ public class SentinelLastNode<E> implements Node<E>
     {
         return counter;
     }
+
+    @Override
+    public Node<E> getNextNode()
+    {
+        throw new NullPointerException("reached end of list");
+    }
+
+    @Override
+    public Node<E> getPreviousNode()
+    {
+        return prevNode;
+    }
+
+    @Override
+    public void insertElementIterative(E value)
+    {
+        insertBefore(value);
+    }
 }

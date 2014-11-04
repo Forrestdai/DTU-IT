@@ -96,4 +96,27 @@ public class ValueNode<E> implements Node<E>
         return nextNode.countElementsRecursive(++counter);
     }
 
+    @Override
+    public Node<E> getNextNode()
+    {
+        return nextNode;
+    }
+
+    @Override
+    public Node<E> getPreviousNode()
+    {
+        return prevNode;
+    }
+
+    @Override
+    public void insertElementIterative(E value)
+    {
+        insertAfter(value);
+    }
+    
+    public E getElementValue()
+    {
+        return currentValue;
+    }
+
 }

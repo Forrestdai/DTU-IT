@@ -15,9 +15,10 @@ import java.util.NoSuchElementException;
  */
 public class FibonacciHeap<E>
 {
+
     private HeapElement<E> minimumHeapElement = null;
     private int heapSize = 0;
-    
+
     public HeapElement<E> enqueueElement(HeapElement<E> element)
     {
         return enqueueElement(element.getNodeContents(), element.getNodePriority());
@@ -308,11 +309,6 @@ public class FibonacciHeap<E>
         }
 
         node.parentNode = null;
-    }
-    
-    public static HeapElement<Integer> getIntegerElement(int elementValue, double priority)
-    {
-        return new HeapElement<>(elementValue,priority);
     }
 
     public static final class HeapElement<E>

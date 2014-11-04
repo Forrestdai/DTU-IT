@@ -28,4 +28,10 @@ public interface Node<E>
     public int countElementsRecursive(int counter);
     
     //Iterative
+    
+    public void insertElementIterative(E value);
+    
+    public Node<E> getNextNode();
+    
+    public Node<E> getPreviousNode();
 }

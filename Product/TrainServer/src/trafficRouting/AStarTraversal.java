@@ -54,14 +54,17 @@ public class AStarTraversal
             {
                 Edge edge = iterator.next();
 
-                Double newCost = currentlyVisitedNode.getNodePriority() + (edge.toNode.cost / 130) + edge.cost;
-
-                FibonacciHeap.HeapElement<TransportNode> destination = heapGraphNodes.get(edge.toNode);
-
-                if (newCost < destination.getNodePriority())
+                if (!visitedNodes.containsKey(edge.toNode))
                 {
-                    myHeap.decreaseKey(destination, newCost);
-                    destination.getNodeContents().returnNode = edge.fromNode;
+                    Double newCost = currentlyVisitedNode.getNodePriority() + (edge.toNode.cost / 130) + edge.cost;
+
+                    FibonacciHeap.HeapElement<TransportNode> destination = heapGraphNodes.get(edge.toNode);
+
+                    if (newCost < destination.getNodePriority())
+                    {
+                        myHeap.decreaseKey(destination, newCost);
+                        destination.getNodeContents().returnNode = edge.fromNode;
+                    }
                 }
             }
         } while (!myHeap.isEmpty() && !currentlyVisitedNode.equals(heapGraphNodes.get(goalNode)));
