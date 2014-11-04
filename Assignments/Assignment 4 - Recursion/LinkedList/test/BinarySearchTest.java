@@ -63,7 +63,7 @@ public class BinarySearchTest
         arrayToSearch.sort(Comparator.naturalOrder());
         BinarySearch search = new BinarySearch(arrayToSearch);
 
-        int index = search.getIndex(454);
+        int index = search.getIndexRecursive(454);
         assertEquals(200, index);
     }
 
