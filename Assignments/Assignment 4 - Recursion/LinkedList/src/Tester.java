@@ -16,7 +16,7 @@ public class Tester
     ArrayList<Integer> arrayToSearch;
     ArrayList<Long> timeArray;
     long startTime;
-    int arraySize = 100000000;
+    int arraySize = 50000000;
 
     public static void main(String[] args)
     {
@@ -60,7 +60,7 @@ public class Tester
         BinarySearch search = new BinarySearch(arrayToSearch);
 
         startTimer();
-        int index = search.getIndex((int) (Math.random() * arraySize));
+        int index = search.getIndexRecursive((int) (Math.random() * arraySize));
         stopTimer();
     }
 

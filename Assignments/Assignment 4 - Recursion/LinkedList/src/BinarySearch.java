@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 
 /*
@@ -26,7 +27,28 @@ public class BinarySearch
         lowerBoundIndex = 0;
     }
 
-    public int getIndex(int searchFor)
+    public int getIndexIterative(int searchFor)
+    {
+        int i = size / 2;
+        while (i > lowerBoundIndex && i < upperBoundIndex)
+        {
+            int element = array.get(i);
+            if (element == searchFor)
+            {
+                return i;
+            }
+            if (element > searchFor)
+            {
+                upperBoundIndex = i;
+                i -= (upperBoundIndex - lowerBoundIndex) / 2;
+            }
+            lowerBoundIndex = i;
+            i += (upperBoundIndex - lowerBoundIndex) / 2;
+        }
+        return -1;
+    }
+
+    public int getIndexRecursive(int searchFor)
     {
         this.searchFor = searchFor;
         return search(size / 2);
@@ -44,10 +66,10 @@ public class BinarySearch
             if (element > searchFor)
             {
                 upperBoundIndex = i;
-                return search(i - ((upperBoundIndex-lowerBoundIndex) / 2));
+                return search(i - ((upperBoundIndex - lowerBoundIndex) / 2));
             }
             lowerBoundIndex = i;
-            return search(i + ((upperBoundIndex-lowerBoundIndex) / 2));
+            return search(i + ((upperBoundIndex - lowerBoundIndex) / 2));
         }
         return -1;
     }
