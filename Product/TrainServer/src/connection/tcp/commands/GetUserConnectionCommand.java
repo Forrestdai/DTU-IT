@@ -6,12 +6,12 @@
 package connection.tcp.commands;
 
 import execute.Server;
-import helpers.LogPrinter;
 import helpers.ServerState;
 import java.io.IOException;
 import java.net.Socket;
 import connection.tcp.common.MessageUtils;
 import connection.tcp.common.TransmissionPacket;
+import helpers.ServerData;
 import helpers.User;
 
 /**
@@ -29,25 +29,16 @@ public class GetUserConnectionCommand implements Command
     }
 
     @Override
-    public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException
+    public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException, ClassNotFoundException
     {
-        int userID = checkConnectionValidityReturnUserID(incomingPacket);
+        int userID = Integer.parseInt(incomingPacket.dataString); //checkConnectionValidityReturnUserID(incomingPacket);
         if (userID != -1)
         {
             User user = new User();
             user.ID = userID;
 
-            if (Server.potentialUsers.testIfContainsUser(user))
-            {
-                Server.potentialUsers.removeUser(user);
-                Server.activeUsers.pushUser(user);
-            } else
-            {
-                if (!Server.activeUsers.testIfContainsUser(user))
-                {
-                    Server.serverTransmitter.requestUser(user);
-                }
-            }
+            compareWithArrays(user);
+
             reply.command = TransmissionPacket.Commands.ACKNOWLEDGE;
             reply.dataString = incomingPacket.dataString;
         } else
@@ -56,6 +47,25 @@ public class GetUserConnectionCommand implements Command
             reply.dataString = "illegal registration";
         }
         MessageUtils.sendTransmission(clientConnection, reply);
+    }
+
+    private void compareWithArrays(User user) throws IOException, ClassNotFoundException
+    {
+        if (Server.potentialUsers.userExists(user))
+        {
+            Server.potentialUsers.removeUser(user);
+            Server.activeUsers.pushUser(user);
+        } else
+        {
+            if (!Server.activeUsers.userExists(user))
+            {
+                Socket serverTransmission = new Socket(ServerData.TCP_SERVER_ADDRESS, ServerData.TCP_SERVER_PORT);
+                TransmissionPacket requestUser = new TransmissionPacket();
+                requestUser.command = TransmissionPacket.Commands.GETUSERS;
+                requestUser.dataString = Integer.toString(user.ID);
+                Server.serverTransmitter.requestUser(user);
+            }
+        }
     }
 
     private int checkConnectionValidityReturnUserID(TransmissionPacket incomingPacket)

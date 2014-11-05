@@ -33,7 +33,7 @@ public class GetLogoutCommand implements Command
         User user = new User();
         user.ID = getID(clientConnection, incomingPacket);
 
-        if (Server.potentialUsers.testIfContainsUser(user))
+        if (Server.potentialUsers.userExists(user))
         {
             //The user has travelled
         }

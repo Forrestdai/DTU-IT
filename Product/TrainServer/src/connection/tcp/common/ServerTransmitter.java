@@ -14,8 +14,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import execute.SimpleProcessorRequest;
-import connection.tcp.common.MessageUtils;
-import connection.tcp.common.TransmissionPacket;
 import threading.executiontypes.CyclicalExecutor;
 import threading.executiontypes.ExecutableCyclic;
 import helpers.User;
@@ -66,7 +64,7 @@ public class ServerTransmitter implements ExecutableCyclic
     }
 
     @Override
-    public void execute()
+    public void execute()   //executes cyclically
     {
         if (usersToBePushed.size() > 0)
         {
@@ -92,11 +90,32 @@ public class ServerTransmitter implements ExecutableCyclic
         try
         {
             MessageUtils.sendTransmission(serverSocket, getUsersPacket);
-        } catch (IOException ex)
+            TransmissionPacket returnUsers = MessageUtils.getTransmission(serverSocket);
+            if (!addRecievedUsers(returnUsers))
+            {
+                throw new Exception("Could not understand recieved user array from Main Server");
+            }
+
+        } catch (Exception ex)
         {
-            LogPrinter.printError("could not send to server.", ex);
-            usersToBePushed.addAll(users);
+            usersToBePushed.addAll(users); //rollback
             LogPrinter.print("Users have been re-added to send queue.");
+        }
+    }
+
+    private boolean addRecievedUsers(TransmissionPacket userArray)
+    {
+        try
+        {
+            ArrayList<User> potentialArray = (ArrayList<User>) userArray.dataObject;
+            for (User user : potentialArray)
+            {
+                Server.potentialUsers.pushUser(user);
+            }
+            return true;
+        } catch (ClassCastException e)
+        {
+            return false;
         }
     }
 

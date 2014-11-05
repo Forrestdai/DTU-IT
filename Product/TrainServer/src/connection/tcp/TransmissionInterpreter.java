@@ -31,7 +31,7 @@ public class TransmissionInterpreter
         try
         {
             switchExecutionOnCommand().execute(clientConnection, message);
-        } catch (IOException e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }

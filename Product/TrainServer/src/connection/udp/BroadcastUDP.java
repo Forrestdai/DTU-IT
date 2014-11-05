@@ -45,10 +45,12 @@ public class BroadcastUDP implements ExecuteOnImpulse
         Server.UDPCode = new ClientConnectionCode();
         try
         {
+            System.out.println("1");
             socket = new DatagramSocket(ServerData.UDP_SERVER_PORT);
             socket.setBroadcast(true);
             send500Packets();
             socket.close();
+            System.out.println("SENT");
         } catch (Exception ex)
         {
             LogPrinter.printError("ERR: UDP send error", ex);

@@ -219,7 +219,7 @@ public class TestProtocol
         //Test that users have been added to potentialUsersArray
         for (User user : users)
         {
-            assertTrue("Err: Users were not added to potential users array", Server.potentialUsers.testIfContainsUser(user));
+            assertTrue("Err: Users were not added to potential users array", Server.potentialUsers.userExists(user));
         }
 
         printUserArrays();
@@ -249,7 +249,7 @@ public class TestProtocol
         LogPrinter.print("----------- Potential Users -----------");
         for (int i = 0; i < Server.potentialUsers.getArraySize(); i++)
         {
-            LogPrinter.print("Potential User: " + Server.potentialUsers.getUserByIndex(i).ID);
+            LogPrinter.print("Potential User: " + Server.potentialUsers.getUserByID(i).ID);
         }
 
         LogPrinter.print("----------- Active Users -----------");
@@ -282,7 +282,7 @@ public class TestProtocol
         //Test that users are added
         for (User user : users)
         {
-            assertTrue("Err: Users were not added to potential users array", Server.potentialUsers.testIfContainsUser(user));
+            assertTrue("Err: Users were not added to potential users array", Server.potentialUsers.userExists(user));
         }
 
         // logout message. users exists. Should return ACKLOGOUT.
