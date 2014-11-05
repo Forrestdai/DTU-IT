@@ -5,17 +5,11 @@
  */
 package execute;
 
-import connection.udp.UDPListener;
-
 /**
  *
  * @author JamesFoxes
  */
-
-public class StartClient
+public enum States
 {
-    public static void main(String[] args)
-    {
-        new Client();
-    }
+    IDLE, LOGGEDIN
 }

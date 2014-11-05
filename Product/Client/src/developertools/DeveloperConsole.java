@@ -1,0 +1,261 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package developertools;
+
+import execute.Client;
+import execute.StartClient;
+import execute.States;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+
+/**
+ *
+ * @author JamesFoxes
+ */
+public class DeveloperConsole extends javax.swing.JFrame
+{
+
+    private ConcurrentMap<Client, States> clients = new ConcurrentHashMap<>();
+    DefaultMutableTreeNode listeningClients = new DefaultMutableTreeNode("Listening");
+    DefaultMutableTreeNode sendingClients = new DefaultMutableTreeNode("Sending");
+    DefaultMutableTreeNode loggedClients = new DefaultMutableTreeNode("LoggedIn");
+    DefaultMutableTreeNode clientTreeTop = new DefaultMutableTreeNode("Clients");
+
+    public DeveloperConsole()
+    {
+        initComponents();
+        startUpdaterThread();
+    }
+
+    public void redrawTree()
+    {
+        revalidate();
+        repaint();
+    }
+
+    public static void main(String args[])
+    {
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex)
+        {
+            java.util.logging.Logger.getLogger(DeveloperConsole.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex)
+        {
+            java.util.logging.Logger.getLogger(DeveloperConsole.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex)
+        {
+            java.util.logging.Logger.getLogger(DeveloperConsole.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
+            java.util.logging.Logger.getLogger(DeveloperConsole.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                new DeveloperConsole().setVisible(true);
+            }
+        });
+    }
+
+    private void startUpdaterThread()
+    {
+        Executors.newSingleThreadExecutor().submit(new Runnable()
+        {
+
+            @Override
+            public void run()
+            {
+                while (true)
+                {
+                    try
+                    {
+                        Thread.sleep(500);
+                        updateMap();
+                        contstructTree();
+                    } catch (InterruptedException ex)
+                    {
+                    }
+                }
+            }
+
+            private void updateMap()
+            {
+                for (Map.Entry<Client, States> entry : clients.entrySet())
+                {
+                    Client key = entry.getKey();
+                    States value = entry.getValue();
+                    if (!value.equals(key.clientState))
+                    {
+                        System.out.println("hey");
+                        clients.replace(key, key.clientState);
+                    }
+                }
+            }
+
+            private void contstructTree()
+            {
+                listeningClients.removeAllChildren();
+                sendingClients.removeAllChildren();
+                loggedClients.removeAllChildren();
+                for (Map.Entry<Client, States> entry : clients.entrySet())
+                {
+                    States value = entry.getValue();
+                    Client key = entry.getKey();
+                    switch (value)
+                    {
+                        case IDLE:
+                            listeningClients.add(new DefaultMutableTreeNode(key));
+                            break;
+                        case LOGGEDIN:
+                            loggedClients.add(new DefaultMutableTreeNode(key));
+                            break;
+                    }
+                }
+
+                DefaultTreeModel model = (DefaultTreeModel) clientTree.getModel();
+                DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+                root.add(listeningClients);
+                root.add(sendingClients);
+                root.add(loggedClients);
+                model.reload(clientTreeTop);
+                for (int i = 0; i < clientTree.getRowCount(); i++)
+                {
+                    clientTree.expandRow(i);
+                }
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents()
+    {
+
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        inputAmountOfClientsToStart = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        clientTree = new javax.swing.JTree();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Amount of Clients to start");
+
+        jButton1.setText("START");
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        inputAmountOfClientsToStart.setText("amount");
+        inputAmountOfClientsToStart.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                inputAmountOfClientsToStartActionPerformed(evt);
+            }
+        });
+
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Clients");
+        clientTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        clientTree.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener()
+        {
+            public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt)
+            {
+            }
+            public void treeExpanded(javax.swing.event.TreeExpansionEvent evt)
+            {
+                clientTreeTreeExpanded(evt);
+            }
+        });
+        jScrollPane1.setViewportView(clientTree);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(inputAmountOfClientsToStart, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton1)
+                    .addComponent(inputAmountOfClientsToStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(161, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void clientTreeTreeExpanded(javax.swing.event.TreeExpansionEvent evt)//GEN-FIRST:event_clientTreeTreeExpanded
+    {//GEN-HEADEREND:event_clientTreeTreeExpanded
+    }//GEN-LAST:event_clientTreeTreeExpanded
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
+    {//GEN-HEADEREND:event_jButton1ActionPerformed
+        for (int i = 0; i < Integer.parseInt(inputAmountOfClientsToStart.getText()); ++i)
+        {
+            clients.put(new Client(), States.IDLE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void inputAmountOfClientsToStartActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_inputAmountOfClientsToStartActionPerformed
+    {//GEN-HEADEREND:event_inputAmountOfClientsToStartActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputAmountOfClientsToStartActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTree clientTree;
+    private javax.swing.JTextField inputAmountOfClientsToStart;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    // End of variables declaration//GEN-END:variables
+}

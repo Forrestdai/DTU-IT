@@ -5,13 +5,11 @@
  */
 package connection.udp;
 
+import execute.Client;
 import execute.ProcessorRequest;
-import helpers.ClientData;
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.MulticastSocket;
 
 /**
  *
@@ -20,7 +18,7 @@ import java.util.logging.Logger;
 public class UDPListener implements ProcessorRequest
 {
 
-    private DatagramSocket socketUDP;
+    private MulticastSocket socketUDP;
     private String message;
     private String[] splitMessage;
 
@@ -28,7 +26,7 @@ public class UDPListener implements ProcessorRequest
     {
         try
         {
-            this.socketUDP = new DatagramSocket(ClientData.UDP_SERVER_PORT);
+            this.socketUDP = Client.udpconn.getSocket();
         } catch (Exception ex)
         {
         }
@@ -43,22 +41,11 @@ public class UDPListener implements ProcessorRequest
             DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
             socketUDP.receive(packet);
             message = new String(packet.getData(), 0, packet.getLength());
-            splitIncomingMessage();
+            ReadServerData serverData = new ReadServerData(message);
+            System.out.println(serverData.address + serverData.ticketCode + serverData.port);
+            
         } catch (IOException ex)
         {
-            Logger.getLogger(UDPListener.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    private void splitIncomingMessage()
-    {
-        splitMessage = message.split("\\s+"); //split on space
-    }
-    
-    public String[] getReturnMessage()
-    {
-        return splitMessage;
-    }
-
-    
 }

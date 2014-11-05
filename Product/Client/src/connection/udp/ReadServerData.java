@@ -14,11 +14,18 @@ public class ReadServerData
     public String address;
     public int port;
     public String ticketCode;
+    private String[] splitMessage;
 
-    public ReadServerData(String[] message)
+    public ReadServerData(String message)
     {
-        address = message[1];
-        port = Integer.parseInt(message[2]);
-        ticketCode = message[3];
+        splitIncomingMessage(message);
+        address = splitMessage[1];
+        port = Integer.parseInt(splitMessage[2]);
+        ticketCode = splitMessage[3];
+    }
+    
+    private void splitIncomingMessage(String message)
+    {
+        splitMessage = message.split("\\s+"); //split on space
     }
 }

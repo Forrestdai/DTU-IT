@@ -11,6 +11,7 @@ import threading.ThreadPerRequestScheduler;
 import connection.udp.ClientConnectionCode;
 import connection.tcp.IncomingConnectionsHandler;
 import connection.tcp.common.ServerTransmitter;
+import connection.udp.SetupUDP;
 import helpers.ActiveUsersArray;
 import helpers.PotentialUsersArray;
 
@@ -50,6 +51,8 @@ public class Server
         potentialUsers = new PotentialUsersArray();
         activeUsers = new ActiveUsersArray();
         serverTransmitter = new ServerTransmitter();
+        SetupUDP udp = new SetupUDP();
+        udp.getGPS().transmit();
     }
 
 }
