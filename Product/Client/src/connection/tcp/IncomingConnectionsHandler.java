@@ -5,10 +5,10 @@
  */
 package connection.tcp;
 
-import connection.tcp.common.ClientConnection;
 import connection.tcp.common.TCPConnection;
-import connection.tcp.processing.ConnectionProcessorRequest;
-import execute.Server;
+import connection.tcp.processing.ProcessConnection;
+import connection.tcp.common.ClientConnection;
+import execute.Client;
 import java.io.IOException;
 
 /**
@@ -30,8 +30,8 @@ public final class IncomingConnectionsHandler extends TCPConnection
             try
             {
                 ClientConnection clientConnection = connectionManager.awaitClient();
-                ConnectionProcessorRequest requestProcessor = new ConnectionProcessorRequest(clientConnection);
-                Server.threadPool.schedule(requestProcessor);
+                ProcessConnection requestProcessor = new ProcessConnection(clientConnection);
+                Client.threadPool.schedule(requestProcessor);
             } catch (IOException e)
             {
             }

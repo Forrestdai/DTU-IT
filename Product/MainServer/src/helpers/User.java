@@ -3,13 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package connection.tcp;
+
+package helpers;
+
+import java.io.Serializable;
 
 /**
  *
- * @author JamesFoxes
+ * @author James
  */
-public class ClientConnection
+public class User implements Serializable
 {
+    public Integer ID;
     
 }
