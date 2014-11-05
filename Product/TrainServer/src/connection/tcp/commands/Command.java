@@ -16,5 +16,5 @@ import connection.tcp.common.TransmissionPacket;
  */
 public interface Command
 {
-    public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException;
+    public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException, ClassNotFoundException;
 }

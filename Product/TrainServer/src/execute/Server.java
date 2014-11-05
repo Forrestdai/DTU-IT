@@ -5,15 +5,15 @@
  */
 package execute;
 
-import helpers.ServerState;
-import threading.PersistentExecutorPool;
-import threading.ThreadPerRequestScheduler;
-import connection.udp.ClientConnectionCode;
 import connection.tcp.IncomingConnectionsHandler;
 import connection.tcp.common.ServerTransmitter;
-import connection.udp.SetupUDP;
-import helpers.ActiveUsersArray;
-import helpers.PotentialUsersArray;
+import connection.udp.ClientConnectionCode;
+import helpers.ActiveUsers;
+import helpers.PotentialUsers;
+import helpers.ServerState;
+import helpers.UserArray;
+import threading.PersistentExecutorPool;
+import threading.ThreadPerRequestScheduler;
 
 /**
  *
@@ -25,8 +25,8 @@ public class Server
     public static ThreadPerRequestScheduler serverThreadPool = new ThreadPerRequestScheduler();
     public static PersistentExecutorPool threadPool = new PersistentExecutorPool();
 
-    public static PotentialUsersArray potentialUsers;
-    public static ActiveUsersArray activeUsers;
+    public static UserArray potentialUsers;
+    public static UserArray activeUsers;
 
     public static ServerTransmitter serverTransmitter;
     
@@ -48,11 +48,9 @@ public class Server
 
     public static void initialize()
     {
-        potentialUsers = new PotentialUsersArray();
-        activeUsers = new ActiveUsersArray();
+        potentialUsers = new PotentialUsers();
+        activeUsers = new ActiveUsers();
         serverTransmitter = new ServerTransmitter();
-        SetupUDP udp = new SetupUDP();
-        udp.getGPS().transmit();
     }
 
 }
