@@ -6,20 +6,28 @@
 
 package execute;
 
+import connection.tcp.IncomingConnectionsHandler;
 import threading.PersistentExecutorPool;
 
 /**
  *
  * @author James
  */
-public class StartServer
+public class Server
 {
 
     public static PersistentExecutorPool threadPool = new PersistentExecutorPool();
     
     public static void main(String[] args)
     {
-        // TODO code application logic here
+         try
+        {
+            IncomingConnectionsHandler incomingTCP = new IncomingConnectionsHandler();
+            SimpleProcessorRequest incomingTCPProcess = new SimpleProcessorRequest(incomingTCP);
+            Server.threadPool.schedule(incomingTCPProcess);
+        } catch (Exception ex)
+        {
+        }
     }
     
 }

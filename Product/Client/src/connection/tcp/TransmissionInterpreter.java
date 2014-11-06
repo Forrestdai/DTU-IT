@@ -5,9 +5,7 @@
  */
 package connection.tcp;
 
-import connection.tcp.commands.ErrorCommand;
-import connection.tcp.commands.Command;
-import connection.tcp.commands.GetUser;
+import connection.tcp.commands.*;
 import java.io.IOException;
 import java.net.Socket;
 import connection.tcp.common.TransmissionPacket;
@@ -35,12 +33,10 @@ public class TransmissionInterpreter
 
     private Command switchExecutionOnCommand()
     {
+        System.out.println("Stuff Happens");
         Command toExecute;
         switch (recievedTransmission.command)
         {
-            case GETUSERS:
-                toExecute = new GetUser();
-                break;
             default:
                 toExecute = new ErrorCommand();
                 break;

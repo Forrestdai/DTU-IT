@@ -6,17 +6,15 @@
 package developertools;
 
 import execute.Client;
-import execute.StartClient;
 import execute.States;
+import java.awt.Point;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
 
 /**
  *
@@ -30,11 +28,13 @@ public class DeveloperConsole extends javax.swing.JFrame
     DefaultMutableTreeNode sendingClients = new DefaultMutableTreeNode("Sending");
     DefaultMutableTreeNode loggedClients = new DefaultMutableTreeNode("LoggedIn");
     DefaultMutableTreeNode clientTreeTop = new DefaultMutableTreeNode("Clients");
+    Client selectedClient;
 
     public DeveloperConsole()
     {
         initComponents();
         startUpdaterThread();
+        clientTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     }
 
     public void redrawTree()
@@ -162,6 +162,7 @@ public class DeveloperConsole extends javax.swing.JFrame
         inputAmountOfClientsToStart = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         clientTree = new javax.swing.JTree();
+        btn_logon = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -176,7 +177,6 @@ public class DeveloperConsole extends javax.swing.JFrame
             }
         });
 
-        inputAmountOfClientsToStart.setText("amount");
         inputAmountOfClientsToStart.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -187,17 +187,24 @@ public class DeveloperConsole extends javax.swing.JFrame
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Clients");
         clientTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        clientTree.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener()
+        clientTree.addMouseListener(new java.awt.event.MouseAdapter()
         {
-            public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt)
+            public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-            }
-            public void treeExpanded(javax.swing.event.TreeExpansionEvent evt)
-            {
-                clientTreeTreeExpanded(evt);
+                clientTreeMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(clientTree);
+
+        btn_logon.setText("Log On");
+        btn_logon.setEnabled(false);
+        btn_logon.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btn_logonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -214,8 +221,10 @@ public class DeveloperConsole extends javax.swing.JFrame
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_logon)))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,17 +234,18 @@ public class DeveloperConsole extends javax.swing.JFrame
                     .addComponent(jLabel1)
                     .addComponent(jButton1)
                     .addComponent(inputAmountOfClientsToStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addComponent(btn_logon)))
                 .addContainerGap(161, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void clientTreeTreeExpanded(javax.swing.event.TreeExpansionEvent evt)//GEN-FIRST:event_clientTreeTreeExpanded
-    {//GEN-HEADEREND:event_clientTreeTreeExpanded
-    }//GEN-LAST:event_clientTreeTreeExpanded
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
@@ -247,11 +257,36 @@ public class DeveloperConsole extends javax.swing.JFrame
 
     private void inputAmountOfClientsToStartActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_inputAmountOfClientsToStartActionPerformed
     {//GEN-HEADEREND:event_inputAmountOfClientsToStartActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_inputAmountOfClientsToStartActionPerformed
+
+    private void clientTreeMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_clientTreeMouseClicked
+    {//GEN-HEADEREND:event_clientTreeMouseClicked
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) clientTree.getLastSelectedPathComponent();
+
+        if (node == null)
+        //Nothing is selected.  
+        {
+            return;
+        }
+
+        Object nodeInfo = node.getUserObject();
+
+        if (node.isLeaf() && nodeInfo instanceof Client)
+        {
+            selectedClient = (Client) nodeInfo;
+            btn_logon.setEnabled(true);
+        }
+    }//GEN-LAST:event_clientTreeMouseClicked
+
+    private void btn_logonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btn_logonActionPerformed
+    {//GEN-HEADEREND:event_btn_logonActionPerformed
+        selectedClient.loginToServer();
+    }//GEN-LAST:event_btn_logonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_logon;
     private javax.swing.JTree clientTree;
     private javax.swing.JTextField inputAmountOfClientsToStart;
     private javax.swing.JButton jButton1;

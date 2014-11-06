@@ -15,7 +15,7 @@ public class ServerData
     public static final int UDP_SERVER_PORT = 4445;
 
     public static final String TCP_LOCAL_ADDRESS = "localhost";
-    public static final int TCP_PORT = 2954;
+    public static final int TCP_PORT = 2955;
     
     public static final String TCP_SERVER_ADDRESS = "localhost";
     public static final int TCP_SERVER_PORT = 2954;
