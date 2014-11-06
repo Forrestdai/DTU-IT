@@ -5,17 +5,14 @@
  */
 package execute;
 
+import common.interfaces.ProcessorRequest;
 import connection.tcp.IncomingConnectionsHandler;
 import connection.tcp.common.MessageUtils;
 import connection.tcp.common.TransmissionPacket;
 import connection.udp.UDPConnection;
+import connection.udp.UDPListener;
 import helpers.ClientData;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import threading.PersistentExecutorPool;
 
 /**
@@ -26,8 +23,9 @@ public class Client
 {
 
     public static PersistentExecutorPool threadPool = new PersistentExecutorPool();
-    public static final UDPConnection udpconn = new UDPConnection();
     public States clientState = States.IDLE;
+
+    public ProcessorRequest udpListener;
 
     public Client()
     {
@@ -35,7 +33,12 @@ public class Client
         {
             IncomingConnectionsHandler incomingTCP = new IncomingConnectionsHandler();
             SimpleProcessorRequest incomingTCPProcess = new SimpleProcessorRequest(incomingTCP);
+            udpListener = new UDPListener();
+            System.out.println("Hey");
             Client.threadPool.schedule(incomingTCPProcess);
+            System.out.println("Hey2");
+            Client.threadPool.schedule(udpListener);
+            System.out.println("Hey3");
         } catch (Exception ex)
         {
         }
@@ -43,19 +46,33 @@ public class Client
 
     public void loginToServer()
     {
-        try
+        int clientID = this.hashCode();
+        threadPool.schedule(new ProcessorRequest()
         {
-            Socket serverSocket = new Socket(ClientData.TCP_SERVER_ADDRESS, ClientData.TCP_SERVER_PORT);
 
-            TransmissionPacket packet = new TransmissionPacket();
-            packet.command = TransmissionPacket.Commands.USERCONNECTION;
-            packet.dataString = "123";
+            @Override
+            public void process()
+            {
+                try
+                {
+                    Socket serverSocket = new Socket(ClientData.TCP_SERVER_ADDRESS, ClientData.TCP_SERVER_PORT);
 
-            MessageUtils.sendTransmission(serverSocket, packet);
-            TransmissionPacket returnPacket = MessageUtils.getTransmission(serverSocket);
-            System.out.println(returnPacket.command + " DS: " + returnPacket.dataString);
-        } catch (Exception ex)
-        {
-        }
+                    TransmissionPacket packet = new TransmissionPacket();
+                    packet.command = TransmissionPacket.Commands.USERCONNECTION;
+                    packet.dataString = Integer.toString(clientID);
+
+                    MessageUtils.sendTransmission(serverSocket, packet);
+                    clientState = States.SENDING;
+                    TransmissionPacket returnPacket = MessageUtils.getTransmission(serverSocket);
+                    System.out.println(returnPacket.command + " DS: " + returnPacket.dataString);
+                    if (returnPacket.command.equals(TransmissionPacket.Commands.ACKNOWLEDGE))
+                    {
+                        clientState = States.LOGGEDIN;
+                    }
+                } catch (Exception ex)
+                {
+                }
+            }
+        });
     }
 }

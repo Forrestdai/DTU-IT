@@ -5,9 +5,10 @@
  */
 package developertools;
 
+import common.interfaces.ProcessorRequest;
+import connection.udp.UDPListener;
 import execute.Client;
 import execute.States;
-import java.awt.Point;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -24,17 +25,17 @@ public class DeveloperConsole extends javax.swing.JFrame
 {
 
     private ConcurrentMap<Client, States> clients = new ConcurrentHashMap<>();
-    DefaultMutableTreeNode listeningClients = new DefaultMutableTreeNode("Listening");
-    DefaultMutableTreeNode sendingClients = new DefaultMutableTreeNode("Sending");
-    DefaultMutableTreeNode loggedClients = new DefaultMutableTreeNode("LoggedIn");
-    DefaultMutableTreeNode clientTreeTop = new DefaultMutableTreeNode("Clients");
-    Client selectedClient;
-
+    private DefaultMutableTreeNode listeningClients = new DefaultMutableTreeNode("Listening");
+    private DefaultMutableTreeNode sendingClients = new DefaultMutableTreeNode("Sending");
+    private DefaultMutableTreeNode loggedClients = new DefaultMutableTreeNode("LoggedIn");
+    private DefaultMutableTreeNode clientTreeTop = new DefaultMutableTreeNode("Clients");
+    private Client selectedClient;
+    
     public DeveloperConsole()
     {
         initComponents();
         startUpdaterThread();
-        clientTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        clientTree.getSelectionModel().setSelectionMode(TreeSelectionModel.CONTIGUOUS_TREE_SELECTION);
     }
 
     public void redrawTree()
@@ -112,7 +113,6 @@ public class DeveloperConsole extends javax.swing.JFrame
                     States value = entry.getValue();
                     if (!value.equals(key.clientState))
                     {
-                        System.out.println("hey");
                         clients.replace(key, key.clientState);
                     }
                 }
@@ -132,6 +132,8 @@ public class DeveloperConsole extends javax.swing.JFrame
                         case IDLE:
                             listeningClients.add(new DefaultMutableTreeNode(key));
                             break;
+                        case SENDING:
+                            sendingClients.add(new DefaultMutableTreeNode(key));
                         case LOGGEDIN:
                             loggedClients.add(new DefaultMutableTreeNode(key));
                             break;
@@ -275,6 +277,7 @@ public class DeveloperConsole extends javax.swing.JFrame
         if (node.isLeaf() && nodeInfo instanceof Client)
         {
             selectedClient = (Client) nodeInfo;
+            selectedClient.loginToServer();
             btn_logon.setEnabled(true);
         }
     }//GEN-LAST:event_clientTreeMouseClicked

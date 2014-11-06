@@ -5,6 +5,8 @@
  */
 package execute;
 
+import common.interfaces.ProcessorRequest;
+
 /**
  *
  * @author JamesFoxes

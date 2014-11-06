@@ -5,6 +5,7 @@
  */
 package execute;
 
+import common.interfaces.ProcessorRequest;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 

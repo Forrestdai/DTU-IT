@@ -1,0 +1,4 @@
+Errorhandling. for instance: UserID doesn't exist when user connects to trainserver. Can a user cheat. Conductor needs a proof of validity.
+Routefinding algorithm should not be on the train server. The important user server must not be overloaded.
+NoSQL database in the cloud with general access to it. (NoSQL is non relational)
+
