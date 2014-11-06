@@ -5,13 +5,14 @@
  */
 package connection.udp;
 
-import helpers.ServerData;
 import execute.Server;
 import helpers.LogPrinter;
+import helpers.ServerData;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import threading.executiontypes.ExecuteOnImpulse;
 
 /**
@@ -20,23 +21,24 @@ import threading.executiontypes.ExecuteOnImpulse;
  */
 public class BroadcastUDP implements ExecuteOnImpulse
 {
-    private DatagramSocket socket;
+    private MulticastSocket socket;
+    //private InetAddress castAddress;
+    
     private DatagramPacket packet;
     private byte[] messageBuffer;
-    private InetAddress transmitUDPAddess;
-
+    
     public BroadcastUDP()
     {
-        try
-        {
+        //try
+       // {
             messageBuffer = new byte[256];
-            transmitUDPAddess = InetAddress.getByName(ServerData.TCP_LOCAL_ADDRESS);
+            //castAddress = InetAddress.getByName(ServerData.UDP_ADDRESS);
 
-        } catch (IOException e)
-        {
-            LogPrinter.printError("ERR: UDP host error", e);
-            e.printStackTrace();
-        }
+       // } catch (IOException e)
+       // {
+        //    LogPrinter.printError("ERR: UDP host error", e);
+        //    e.printStackTrace();
+       // }
     }
 
     @Override
@@ -45,10 +47,13 @@ public class BroadcastUDP implements ExecuteOnImpulse
         Server.UDPCode = new ClientConnectionCode();
         try
         {
-            System.out.println("1");
-            socket = new DatagramSocket(ServerData.UDP_SERVER_PORT);
+            socket = new MulticastSocket(ServerData.UDP_SERVER_PORT);
+            //socket.joinGroup(castAddress);
             socket.setBroadcast(true);
+            
             send500Packets();
+            
+           // socket.leaveGroup(castAddress);
             socket.close();
             System.out.println("SENT");
         } catch (Exception ex)
@@ -59,12 +64,12 @@ public class BroadcastUDP implements ExecuteOnImpulse
 
     private void send500Packets() throws Exception
     {
-        for (int i = 0; i < 500; i++)
-        {
+        //for (int i = 0; i < 500; i++)
+        //{
             messageBuffer = (ServerData.TCP_LOCAL_ADDRESS + " " + ServerData.TCP_PORT + " " + Server.UDPCode.code).getBytes();
-            packet = new DatagramPacket(messageBuffer, messageBuffer.length, transmitUDPAddess, ServerData.UDP_SERVER_PORT + 1);
+            packet = new DatagramPacket(messageBuffer, messageBuffer.length, InetAddress.getByName(ServerData.UDP_ADDRESS), ServerData.UDP_SERVER_PORT + 1);
             socket.send(packet);
             Thread.sleep(10);
-        }
+        //}
     }
 }

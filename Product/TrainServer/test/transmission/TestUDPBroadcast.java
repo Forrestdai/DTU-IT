@@ -35,7 +35,7 @@ public class TestUDPBroadcast
     public void createServer() throws Exception
     {
         server = new SetupUDP();
-        clientSocket = new MulticastSocket(ServerData.UDP_SERVER_PORT + 1);
+        clientSocket = new MulticastSocket(ServerData.UDP_SERVER_PORT+1);
         addressGroup = InetAddress.getByName(ServerData.UDP_ADDRESS);
         clientSocket.joinGroup(addressGroup);
         expectedReturnHost = ServerData.TCP_LOCAL_ADDRESS;
@@ -59,13 +59,13 @@ public class TestUDPBroadcast
 
         expectedReturnCode = Integer.toString(Server.UDPCode.code);
 
-        for (int i = 0; i < clients.clients.length; ++i)
+        for (int i = 0; i < clients.clients.size(); ++i)
         {
-            clients.returnMessages[i] = clients.clients[i].getReturnedMessage();
-            LogPrinter.printTest("UDP Client " + i + " has recieved: " + clients.returnMessages[i]);
-            assertEquals(expectedReturnHost, clients.returnMessages[i][0]);
-            assertEquals(expectedReturnPort, clients.returnMessages[i][1]);
-            assertEquals(expectedReturnCode, clients.returnMessages[i][2]);
+            clients.returnMessages.add(clients.clients.get(i).getReturnedMessage());
+            LogPrinter.printTest("UDP Client " + i + " has recieved: " + clients.returnMessages.get(i));
+            assertEquals(expectedReturnHost, clients.returnMessages.get(i)[0]);
+            assertEquals(expectedReturnPort, clients.returnMessages.get(i)[1]);
+            assertEquals(expectedReturnCode, clients.returnMessages.get(i)[2]);
         }
     }
 
@@ -79,13 +79,13 @@ public class TestUDPBroadcast
 
         expectedReturnCode = Integer.toString(Server.UDPCode.code);
 
-        for (int i = 0; i < clients.clients.length; ++i)
+        for (int i = 0; i < clients.clients.size(); ++i)
         {
-            clients.returnMessages[i] = clients.clients[i].getReturnedMessage();
-            LogPrinter.printTest("UDP Client " + i + " has recieved: " + clients.returnMessages[i]);
-            assertEquals(expectedReturnHost, clients.returnMessages[i][0]);
-            assertEquals(expectedReturnPort, clients.returnMessages[i][1]);
-            assertEquals(expectedReturnCode, clients.returnMessages[i][2]);
+            clients.returnMessages.add(clients.clients.get(i).getReturnedMessage());
+            LogPrinter.printTest("UDP Client " + i + " has recieved: " + clients.returnMessages.get(i));
+            assertEquals(expectedReturnHost, clients.returnMessages.get(i)[0]);
+            assertEquals(expectedReturnPort, clients.returnMessages.get(i)[1]);
+            assertEquals(expectedReturnCode, clients.returnMessages.get(i)[2]);
         }
     }
 }

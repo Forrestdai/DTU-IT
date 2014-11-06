@@ -238,7 +238,7 @@ public class TestProtocol
         
         for (User user : users)
         {
-            assertTrue("Err: Users were not added to active users array", Server.activeUsers.testIfContainsUser(user));
+            assertTrue("Err: Users were not added to active users array", Server.activeUsers.userExists(user));
             assertEquals("Err: users were not removed from potential users array", 0, Server.potentialUsers.getArraySize());
         }
         printUserArrays();
@@ -255,7 +255,7 @@ public class TestProtocol
         LogPrinter.print("----------- Active Users -----------");
         for (int i = 0; i < Server.activeUsers.getArraySize(); i++)
         {
-            LogPrinter.print("Active User: " + Server.activeUsers.getUserByIndex(i).ID);
+            LogPrinter.print("Active User: " + Server.activeUsers.getUserByID(i).ID);
         }
         LogPrinter.print("----------------------");
     }

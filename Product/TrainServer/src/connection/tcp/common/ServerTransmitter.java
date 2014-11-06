@@ -5,8 +5,10 @@
  */
 package connection.tcp.common;
 
+import common.interfaces.ProcessorRequest;
 import static helpers.ServerData.*;
 import common.interfaces.ServerExecutable;
+import connection.tcp.TransmissionInterpreter;
 import execute.Server;
 import helpers.LogPrinter;
 import java.io.IOException;
@@ -17,6 +19,8 @@ import execute.SimpleProcessorRequest;
 import threading.executiontypes.CyclicalExecutor;
 import threading.executiontypes.ExecutableCyclic;
 import helpers.User;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,29 +30,26 @@ public class ServerTransmitter implements ExecutableCyclic
 {
 
     private final ConcurrentLinkedQueue<User> usersToBePushed;
-    private final int PUSH_INTERVAL = 2000;
-    private Socket serverSocket;
+    private final int PUSH_INTERVAL = 4000;
 
     public ServerTransmitter()
     {
         usersToBePushed = new ConcurrentLinkedQueue();
-        initializeServerSocket();
         initializeCyclicalPushing();
     }
 
-    private void initializeServerSocket()
+    private Socket initializeAndGetServerSocket()
     {
+        Socket toReturn = null;
         try
         {
-            if (serverSocket == null || serverSocket.isClosed())
-            {
-                serverSocket = new Socket(TCP_SERVER_ADDRESS, TCP_SERVER_PORT);
-            }
+            toReturn = new Socket(TCP_SERVER_ADDRESS, TCP_SERVER_PORT);
         } catch (IOException ex)
         {
             LogPrinter.printError("Initialize server sending socket", ex);
             ex.printStackTrace();
         }
+        return toReturn;
     }
 
     private void initializeCyclicalPushing()
@@ -68,12 +69,11 @@ public class ServerTransmitter implements ExecutableCyclic
     {
         if (usersToBePushed.size() > 0)
         {
-            initializeServerSocket();
-            pushAll();
+            pushAllUsers();
         }
     }
 
-    private void pushAll()
+    private void pushAllUsers()
     {
         ArrayList<User> users = new ArrayList<>();
         int usersToPush = usersToBePushed.size();
@@ -83,45 +83,67 @@ public class ServerTransmitter implements ExecutableCyclic
             users.add(usersToBePushed.poll());
         }
 
-        TransmissionPacket getUsersPacket = new TransmissionPacket();
-        getUsersPacket.command = TransmissionPacket.Commands.GETUSERS;
-        getUsersPacket.dataObject = users;
-        getUsersPacket.dataString = Integer.toString(users.size());
-        try
-        {
-            MessageUtils.sendTransmission(serverSocket, getUsersPacket);
-            TransmissionPacket returnUsers = MessageUtils.getTransmission(serverSocket);
-            if (!addRecievedUsers(returnUsers))
-            {
-                throw new Exception("Could not understand recieved user array from Main Server");
-            }
-
-        } catch (Exception ex)
-        {
-            usersToBePushed.addAll(users); //rollback
-            LogPrinter.print("Users have been re-added to send queue.");
-        }
+        Server.serverThreadPool.schedule(new RequestUsers(users));
     }
 
-    private boolean addRecievedUsers(TransmissionPacket userArray)
+    public int getDelay()
+    {
+        return PUSH_INTERVAL;
+    }
+
+    private class RequestUsers implements ProcessorRequest
+    {
+
+        Socket sendSocket = initializeAndGetServerSocket();
+        ArrayList<User> users;
+
+        public RequestUsers(ArrayList<User> users)
+        {
+            this.users = users;
+            for (User user : users)
+            {
+                System.out.println("USER: " + user);
+            }
+        }
+
+        @Override
+        public void process()
+        {
+            TransmissionPacket getUsersPacket = new TransmissionPacket();
+            getUsersPacket.command = TransmissionPacket.Commands.GETUSERS;
+            getUsersPacket.dataObject = users;
+            getUsersPacket.dataString = Integer.toString(users.size());
+            try
+            {
+                MessageUtils.sendTransmission(sendSocket, getUsersPacket);
+                TransmissionPacket returnUsers = MessageUtils.getTransmission(sendSocket);
+                new TransmissionInterpreter(returnUsers, sendSocket);
+                //sendSocket.close();
+            } catch (IOException | ClassNotFoundException ex)
+            {
+                usersToBePushed.addAll(users); //rollback
+                reOpenConnection(sendSocket);
+                LogPrinter.print("Users have been re-added to send queue.");
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    private void reOpenConnection(Socket toReopen)
     {
         try
         {
-            ArrayList<User> potentialArray = (ArrayList<User>) userArray.dataObject;
-            for (User user : potentialArray)
-            {
-                Server.potentialUsers.pushUser(user);
-            }
-            return true;
-        } catch (ClassCastException e)
+            toReopen.close();
+            toReopen = initializeAndGetServerSocket();
+        } catch (IOException ex)
         {
-            return false;
         }
     }
 
     public Socket getTestingSocket()
     {
-        return serverSocket;
+        return initializeAndGetServerSocket();
     }
 
     public int getUsersInArray()

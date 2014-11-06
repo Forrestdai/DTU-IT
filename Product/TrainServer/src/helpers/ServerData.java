@@ -11,7 +11,7 @@ package helpers;
  */
 public class ServerData
 {
-    public static final String UDP_ADDRESS = "224.0.1.255";
+    public static final String UDP_ADDRESS = "224.2.3.255";
     public static final int UDP_SERVER_PORT = 4445;
 
     public static final String TCP_LOCAL_ADDRESS = "localhost";

@@ -7,6 +7,7 @@ package transmission;
 
 import helpers.LogPrinter;
 import java.net.MulticastSocket;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,9 +16,9 @@ import java.net.MulticastSocket;
 class ClientsUDPSetup
 {
 
-    public Thread[] threads;
-    public UDPClient[] clients;
-    public String[][] returnMessages;
+    public ArrayList<Thread> threads;
+    public ArrayList<UDPClient> clients;
+    public ArrayList<String[]> returnMessages;
     private MulticastSocket socket;
     private int numberOfClients;
 
@@ -26,9 +27,9 @@ class ClientsUDPSetup
         this.socket = socket;
         this.numberOfClients = numberOfClients;
 
-        threads = new Thread[numberOfClients];
-        clients = new UDPClient[numberOfClients];
-        returnMessages = new String[numberOfClients][3];
+        threads = new ArrayList<>();
+        clients = new ArrayList<>();
+        returnMessages = new ArrayList<>();
 
         initializeClients();
     }
@@ -37,15 +38,12 @@ class ClientsUDPSetup
     {
         for (int i = 0; i < numberOfClients; i++)
         {
-            clients[i] = new UDPClient(socket);
-        }
-        for (int i = 0; i < numberOfClients; i++)
-        {
-            threads[i] = new Thread(clients[i]);
-        }
-        for (int i = 0; i < numberOfClients; i++)
-        {
-            returnMessages[i] = new String[3];
+            UDPClient client = new UDPClient(socket);
+            Thread thread = new Thread(client);
+
+            clients.add(client);
+            threads.add(thread);
+            returnMessages.add(new String[3]);
         }
     }
 
@@ -61,13 +59,14 @@ class ClientsUDPSetup
     {
         for (int i = 0; i < numberOfClients; i++)
         {
-            if (!threads[i].isAlive())
+            if (!threads.get(i).isAlive())
             {
-                returnMessages[i] = clients[i].getReturnedMessage();
-                LogPrinter.print(returnMessages[i] + " " + i);
+                String[] message = clients.get(i).getReturnedMessage();
+                returnMessages.set(i, message);
+                LogPrinter.print(message[i] + " " + i);
             } else
             {
-                threads[i].interrupt();
+                threads.get(i).interrupt();
             }
         }
     }

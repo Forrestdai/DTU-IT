@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.Socket;
 import connection.tcp.common.MessageUtils;
 import connection.tcp.common.TransmissionPacket;
+import helpers.LogPrinter;
 import helpers.ServerData;
 import helpers.User;
 
@@ -41,6 +42,7 @@ public class GetUserConnectionCommand implements Command
 
             reply.command = TransmissionPacket.Commands.ACKNOWLEDGE;
             reply.dataString = incomingPacket.dataString;
+            
         } else
         {
             reply.command = TransmissionPacket.Commands.nil;
@@ -48,23 +50,40 @@ public class GetUserConnectionCommand implements Command
         }
         MessageUtils.sendTransmission(clientConnection, reply);
     }
+    
+    private void waitToReply(User user)
+    {
+        while(!Server.potentialUsers.userExists(user) && !Server.activeUsers.userExists(user))
+            {
+                try
+                {
+                    Thread.sleep(Server.serverTransmitter.getDelay() / 4);
+                } catch (InterruptedException ex)
+                {
+                }
+            }
+    }
 
     private void compareWithArrays(User user) throws IOException, ClassNotFoundException
     {
         if (Server.potentialUsers.userExists(user))
         {
+            LogPrinter.print("Was in potential Array");
             Server.potentialUsers.removeUser(user);
             Server.activeUsers.pushUser(user);
         } else
         {
             if (!Server.activeUsers.userExists(user))
             {
+                LogPrinter.print("Was NEW");
                 Socket serverTransmission = new Socket(ServerData.TCP_SERVER_ADDRESS, ServerData.TCP_SERVER_PORT);
                 TransmissionPacket requestUser = new TransmissionPacket();
                 requestUser.command = TransmissionPacket.Commands.GETUSERS;
                 requestUser.dataString = Integer.toString(user.ID);
                 Server.serverTransmitter.requestUser(user);
+                waitToReply(user);
             }
+            else LogPrinter.print("Was in active Array");
         }
     }
 

@@ -5,9 +5,10 @@
  */
 package helpers;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -18,6 +19,7 @@ public abstract class UserArray
 {
 
     protected ConcurrentMap<Integer, User> userMap;
+    protected PropertyChangeSupport propertyChangeSupport;
 
     public UserArray()
     {

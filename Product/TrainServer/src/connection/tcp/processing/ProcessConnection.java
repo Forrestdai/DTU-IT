@@ -39,6 +39,7 @@ public class ProcessConnection implements ProcessorRequest
             }
             TransmissionPacket message = MessageUtils.getTransmission(connection);
             new TransmissionInterpreter(message, connection);
+            connection.close();
         } catch (IOException | ClassNotFoundException e)
         {
             e.printStackTrace();

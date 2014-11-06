@@ -172,6 +172,7 @@ class UDPClient implements Runnable
             socketUDP.receive(packet);
             message = new String(packet.getData(), 0, packet.getLength());
             splitIncomingMessage();
+            
         } catch (IOException e)
         {
             LogPrinter.printTestError("ERR: testing UDP failed to join group.", e);
