@@ -7,6 +7,7 @@
 package execute;
 
 import connection.tcp.IncomingConnectionsHandler;
+import database.DatabaseHandler;
 import threading.PersistentExecutorPool;
 
 /**
@@ -17,6 +18,7 @@ public class Server
 {
 
     public static PersistentExecutorPool threadPool = new PersistentExecutorPool();
+    public static DatabaseHandler database = new DatabaseHandler();
     
     public static void main(String[] args)
     {

@@ -9,13 +9,14 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
  *
  * @author James
  */
-public abstract class UserArray
+public class UserArray
 {
 
     protected ConcurrentMap<Integer, User> userMap;
@@ -23,6 +24,7 @@ public abstract class UserArray
 
     public UserArray()
     {
+        userMap = new ConcurrentHashMap<>();
     }
 
     public boolean userExists(User user)
@@ -57,5 +59,10 @@ public abstract class UserArray
     public int getArraySize()
     {
         return userMap.size();
+    }
+
+    public void replaceMap(UserArray chargeUserArray)
+    {
+        userMap = chargeUserArray.userMap;
     }
 }

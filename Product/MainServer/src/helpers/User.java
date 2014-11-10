@@ -15,5 +15,10 @@ import java.io.Serializable;
 public class User implements Serializable
 {
     public Integer ID;
+    public String firstName;
+    public String lastName;
+    public String passWord;
+    public double credit;
+    
     
 }

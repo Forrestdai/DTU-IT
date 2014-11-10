@@ -230,6 +230,9 @@ public class Console extends javax.swing.JFrame
 
     private void btn_arriveAtStationActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btn_arriveAtStationActionPerformed
     {//GEN-HEADEREND:event_btn_arriveAtStationActionPerformed
+        udpCaster.getGPS().setState(ServerState.arrivedAtStation);
+        field_serverState.setText(Server.state.toString());
+        
         Server.serverThreadPool.schedule(new ProcessorRequest()
         {
 
@@ -239,14 +242,22 @@ public class Console extends javax.swing.JFrame
                 udpCaster.getGPS().transmit();
             }
         });
-        
-        Server.state = ServerState.arrivedAtStation;
-        field_serverState.setText(Server.state.toString());
     }//GEN-LAST:event_btn_arriveAtStationActionPerformed
 
     private void btn_leaveStationActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btn_leaveStationActionPerformed
     {//GEN-HEADEREND:event_btn_leaveStationActionPerformed
-        // TODO add your handling code here:
+        udpCaster.getGPS().setState(ServerState.leftStation);
+        field_serverState.setText(Server.state.toString());
+        
+        Server.serverThreadPool.schedule(new ProcessorRequest()
+        {
+
+            @Override
+            public void process()
+            {
+                udpCaster.getGPS().transmit();
+            }
+        });
     }//GEN-LAST:event_btn_leaveStationActionPerformed
 
     /**

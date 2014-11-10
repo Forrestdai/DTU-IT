@@ -7,6 +7,7 @@ package connection.tcp.commands;
 
 import connection.tcp.common.MessageUtils;
 import connection.tcp.common.TransmissionPacket;
+import helpers.LogPrinter;
 import helpers.User;
 import java.io.IOException;
 import java.net.Socket;
@@ -82,7 +83,7 @@ public class GetUser implements Command
             //GET USER FUNCTION
             User toSend = new User();
             toSend.ID = user.ID;
-            System.out.println("Recieved: " + user.ID);
+            LogPrinter.print("Recieved: " + user.ID);
             returnUserArray.add(toSend);
         }
     }

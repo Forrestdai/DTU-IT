@@ -27,6 +27,7 @@ public class Server
 
     public static UserArray potentialUsers;
     public static UserArray activeUsers;
+    public static UserArray chargeUserArray;
 
     public static ServerTransmitter serverTransmitter;
     
@@ -48,8 +49,9 @@ public class Server
 
     public static void initialize()
     {
-        potentialUsers = new PotentialUsers();
-        activeUsers = new ActiveUsers();
+        potentialUsers = new UserArray();
+        activeUsers = new UserArray();
+        chargeUserArray = new UserArray();
         serverTransmitter = new ServerTransmitter();
     }
 

@@ -19,8 +19,10 @@ import execute.SimpleProcessorRequest;
 import threading.executiontypes.CyclicalExecutor;
 import threading.executiontypes.ExecutableCyclic;
 import helpers.User;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  *
@@ -29,12 +31,14 @@ import java.util.logging.Logger;
 public class ServerTransmitter implements ExecutableCyclic
 {
 
-    private final ConcurrentLinkedQueue<User> usersToBePushed;
+    private final ConcurrentLinkedQueue<User> getUserObjects;
+    private final ConcurrentMap<User, Double> chargeUsers;
     private final int PUSH_INTERVAL = 4000;
 
     public ServerTransmitter()
     {
-        usersToBePushed = new ConcurrentLinkedQueue();
+        getUserObjects = new ConcurrentLinkedQueue();
+        chargeUsers = new ConcurrentHashMap<>();
         initializeCyclicalPushing();
     }
 
@@ -61,26 +65,36 @@ public class ServerTransmitter implements ExecutableCyclic
 
     public void requestUser(User user)
     {
-        usersToBePushed.add(user);
+        getUserObjects.add(user);
+    }
+
+    public void chargeUser(User user, double amount)
+    {
+        chargeUsers.put(user, amount);
     }
 
     @Override
     public void execute()   //executes cyclically
     {
-        if (usersToBePushed.size() > 0)
+        if (getUserObjects.size() > 0)
         {
             pushAllUsers();
+        }
+
+        if (Server.chargeUserArray.getArraySize() > 0)
+        {
+            pushChargeUsers();
         }
     }
 
     private void pushAllUsers()
     {
         ArrayList<User> users = new ArrayList<>();
-        int usersToPush = usersToBePushed.size();
+        int usersToPush = getUserObjects.size();
 
         for (int i = 0; i < usersToPush; ++i)
         {
-            users.add(usersToBePushed.poll());
+            users.add(getUserObjects.poll());
         }
 
         Server.serverThreadPool.schedule(new RequestUsers(users));
@@ -89,6 +103,52 @@ public class ServerTransmitter implements ExecutableCyclic
     public int getDelay()
     {
         return PUSH_INTERVAL;
+    }
+
+    private void pushChargeUsers()
+    {
+        Map<User, Double> users = new HashMap<>();
+        
+        for (Map.Entry<User, Double> entrySet : chargeUsers.entrySet())
+        {
+            users.put(entrySet.getKey(), entrySet.getValue());
+            chargeUsers.remove(entrySet.getKey());
+        }
+        
+        Server.serverThreadPool.schedule(new ChargeUsers(users));
+    }
+
+    private class ChargeUsers implements ProcessorRequest
+    {
+
+        Socket sendSocket = initializeAndGetServerSocket();
+        Map<User, Double> users;
+
+        private ChargeUsers(Map<User, Double> chargeUsers)
+        {
+            this.users = chargeUsers;
+        }
+
+        @Override
+        public void process()
+        {
+            TransmissionPacket chargeUsersPacket = new TransmissionPacket();
+            chargeUsersPacket.command = TransmissionPacket.Commands.CHARGEUSERS;
+            chargeUsersPacket.dataObject = users;
+            chargeUsersPacket.dataString = Integer.toString(users.size());
+            try
+            {
+                MessageUtils.sendTransmission(sendSocket, chargeUsersPacket);
+                sendSocket.close();
+            } catch (IOException ex)
+            {
+                chargeUsers.putAll(users); //rollback
+                reOpenConnection(sendSocket);
+                LogPrinter.print("Charge users have been re-added to send queue.");
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     private class RequestUsers implements ProcessorRequest
@@ -121,7 +181,7 @@ public class ServerTransmitter implements ExecutableCyclic
                 //sendSocket.close();
             } catch (IOException | ClassNotFoundException ex)
             {
-                usersToBePushed.addAll(users); //rollback
+                getUserObjects.addAll(users); //rollback
                 reOpenConnection(sendSocket);
                 LogPrinter.print("Users have been re-added to send queue.");
                 ex.printStackTrace();
@@ -148,6 +208,6 @@ public class ServerTransmitter implements ExecutableCyclic
 
     public int getUsersInArray()
     {
-        return usersToBePushed.size();
+        return getUserObjects.size();
     }
 }

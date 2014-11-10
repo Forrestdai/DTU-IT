@@ -5,6 +5,7 @@
  */
 package connection.tcp;
 
+import connection.tcp.commands.ChargeUser;
 import connection.tcp.commands.ErrorCommand;
 import connection.tcp.commands.Command;
 import connection.tcp.commands.GetUser;
@@ -41,6 +42,8 @@ public class TransmissionInterpreter
             case GETUSERS:
                 toExecute = new GetUser();
                 break;
+            case CHARGEUSERS:
+                toExecute = new ChargeUser();
             default:
                 toExecute = new ErrorCommand();
                 break;
