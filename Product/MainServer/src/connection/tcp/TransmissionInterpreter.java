@@ -24,6 +24,7 @@ public class TransmissionInterpreter
 
     public TransmissionInterpreter(TransmissionPacket message, Socket clientConnection)
     {
+        System.out.println("Main server interpreting message: " + message.command.toString());
         recievedTransmission = message;
         try
         {
@@ -44,6 +45,7 @@ public class TransmissionInterpreter
                 break;
             case CHARGEUSERS:
                 toExecute = new ChargeUser();
+                break;
             default:
                 toExecute = new ErrorCommand();
                 break;

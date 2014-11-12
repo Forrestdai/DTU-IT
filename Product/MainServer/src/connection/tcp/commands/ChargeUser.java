@@ -19,7 +19,7 @@ public class ChargeUser implements Command
     @Override
     public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException
     {
-        
+        System.out.println("string data: " + incomingPacket.dataString);
     }
     
 }

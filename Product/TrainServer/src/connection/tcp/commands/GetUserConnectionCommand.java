@@ -85,7 +85,8 @@ public class GetUserConnectionCommand implements Command
                 System.out.println("was put to charged");
                 if (Server.activeUsers.userExists(user))
                 {
-                    Server.chargeUserArray.pushUser(user);
+                    //Server.chargeUserArray.pushUser(user);
+                    Server.serverTransmitter.chargeUser(user, 55);
                 }
         }
 

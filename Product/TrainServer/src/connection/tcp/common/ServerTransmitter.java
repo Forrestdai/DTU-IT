@@ -80,8 +80,7 @@ public class ServerTransmitter implements ExecutableCyclic
         {
             pushAllUsers();
         }
-
-        if (Server.chargeUserArray.getArraySize() > 0)
+        if (chargeUsers.size() > 0)
         {
             pushChargeUsers();
         }
@@ -111,6 +110,7 @@ public class ServerTransmitter implements ExecutableCyclic
         
         for (Map.Entry<User, Double> entrySet : chargeUsers.entrySet())
         {
+            System.out.println("Charge user entry: " + entrySet.getKey().ID + ", charge: " + entrySet.getValue());
             users.put(entrySet.getKey(), entrySet.getValue());
             chargeUsers.remove(entrySet.getKey());
         }
