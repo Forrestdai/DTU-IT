@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.Socket;
 import connection.tcp.common.MessageUtils;
 import connection.tcp.common.TransmissionPacket;
+import helpers.Journey;
+import helpers.User;
 
 /**
  *
@@ -28,9 +30,12 @@ public class GetJourneyCommand implements Command
     @Override
     public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException
     {
-        //calculate journey object
-        //send object and JOURNEY command
-        reply.command = TransmissionPacket.Commands.JOURNEY;
+
+        User requestingUser = (User) incomingPacket.dataObject;
+        Journey journey = new Journey(requestingUser.startLocation, requestingUser.endLocation);
+        reply.command = TransmissionPacket.Commands.ACKNOWLEDGE;
+        reply.dataObject = journey.getJourney();
+        reply.dataString = Double.toString(journey.getCost());
         
         MessageUtils.sendTransmission(clientConnection, reply);
     }

@@ -7,6 +7,7 @@ package connection.udp.gps;
 
 import helpers.ServerState;
 import threading.executiontypes.ExecuteOnImpulse;
+import trafficrouting.TransportNode;
 
 /**
  *
@@ -15,6 +16,7 @@ import threading.executiontypes.ExecuteOnImpulse;
 public interface GPS
 {
     public void transmit();
-    public void setState(ServerState state);
+    public void setState(ServerState.State state);
     public void setInterface(ExecuteOnImpulse sendUDPSignalImpulse);
+    public void setStop(TransportNode stop);
 }

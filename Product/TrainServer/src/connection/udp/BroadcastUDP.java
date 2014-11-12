@@ -62,7 +62,7 @@ public class BroadcastUDP implements ExecuteOnImpulse
             socket.close();
             System.out.println("SENT");
 
-            if (Server.state.equals(ServerState.leftStation))
+            if (Server.state.equals(ServerState.State.leftStation))
             {
                 Thread.sleep(5000);
                 findUsersToCharge();

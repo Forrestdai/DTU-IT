@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trafficRouting;
+package trafficrouting;
 
+import execute.Server;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -18,33 +18,29 @@ import java.util.Map;
 public class SetupGraph
 {
 
-    DatabaseHandler dbHandler;
     private Map<Integer, TransportNode> nodes;
 
-    public SetupGraph()
-    {
-        this.dbHandler = new DatabaseHandler();
-    }
-
-    public DirectedGraph<TransportNode> buildAndGetGraph(int goalIdentity)
+    public void buildGraph()
     {
         getNodesFromDatabase();
         assignNodeEdges();
-        
-        for (Map.Entry<Integer, TransportNode> entrySet : nodes.entrySet())
-        {
-            Integer key = entrySet.getKey();
-            TransportNode value = entrySet.getValue();
-            
-            for (Iterator<Edge> iterator = value.iterator(); iterator.hasNext();)
-            {
-                Edge edge = iterator.next();
-            }
-        }
-
+    }
+    
+    public DirectedGraph<TransportNode> getGraph(int goalIdentity)
+    {
         Graph graph = new Graph(goalIdentity);
         graph.addNodes(nodes);
         return graph.getDirectedGraph();
+    }
+    
+    public boolean isInvalid()
+    {
+        return nodes == null || nodes.isEmpty();
+    }
+    
+    public GraphTransmitObject getTransmitObject()
+    {
+        return new GraphTransmitObject(nodes);
     }
     
     public TransportNode getNode(int identity)
@@ -62,7 +58,7 @@ public class SetupGraph
         nodes = new HashMap<>();
         try
         {
-            nodes = dbHandler.getAllNodes();
+            nodes = Server.database.getAllNodes();
         } catch (SQLException ex)
         {
             ex.printStackTrace();
@@ -77,7 +73,7 @@ public class SetupGraph
             {
                 Integer nodeReference = node.getKey();
                 TransportNode element = node.getValue();
-                ArrayList<Edge> edges = dbHandler.getEdgesFromStop(nodeReference, nodes);
+                ArrayList<Edge> edges = Server.database.getEdgesFromStop(nodeReference, nodes);
                 element.setEdges(edges);
             } catch (SQLException ex)
             {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package database;
+package trafficrouting;
 
 /**
  *
@@ -27,7 +27,7 @@ public class Edge
         this.transportLineName = transportLineName;
     }
 
-    enum EdgeType
+    public enum EdgeType
     {
 
         TRAIN, BUS_A, BUS_E, BUS_N, BUS_S, BUS, METRO, WALKING, BOAT

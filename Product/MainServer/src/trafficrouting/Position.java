@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trafficRouting;
+package trafficrouting;
 
 /**
  *
  * @author JamesFoxes
  */
-class Position
+public class Position
 {
     double lat;
     double lon;

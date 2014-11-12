@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trafficRouting;
+package trafficrouting;
 
 import java.util.*;
 
@@ -11,7 +11,7 @@ import java.util.*;
  * 
  * @author JamesFoxes
  */
-class DirectedGraph<E> implements Iterable<E>
+public class DirectedGraph<E> implements Iterable<E>
 {
 
     private final Map<E, Map<E, Double>> graph = new HashMap<>();

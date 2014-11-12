@@ -1,27 +1,27 @@
-Wed Nov 12 09:22:24 CET 2014 : Apache Derby Network Server - 10.10.1.3 - (1557168) started and ready to accept connections on port 1527
+Wed Nov 12 16:32:40 CET 2014 : Apache Derby Network Server - 10.10.1.3 - (1557168) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Wed Nov 12 09:22:44 CET 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance a816c00e-0149-a318-addd-000054d9d0d6 
-on database directory C:\Users\James\Documents\DTU\3rdSemester\DTU-IT\Playground\James\Database\TrafficNetwork with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
-Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_25/db/lib/derby.jar
+Wed Nov 12 16:37:11 CET 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance a816c00e-0149-a4a2-778b-ffffc213e59c 
+on database directory F:\DTU\GIT Repository\DTU IT\DTU-IT\Playground\James\Database\Users with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_05/db/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_25-b18
-user.dir=C:\Program Files\Java\jdk1.8.0_25\db
+java.runtime.version=1.8.0_05-b13
+user.dir=C:\Program Files\Java\jdk1.8.0_05\db
 os.name=Windows 8.1
 os.arch=amd64
 os.version=6.3
-derby.system.home=C:\Users\James\Documents\DTU\3rdSemester\DTU-IT\Playground\James\Database
+derby.system.home=F:\DTU\GIT Repository\DTU IT\DTU-IT\Playground\James\Database
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
-Wed Nov 12 09:22:44 CET 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance 08264012-0149-a318-addd-000054d9d0d6 
-on database directory C:\Users\James\Documents\DTU\3rdSemester\DTU-IT\Playground\James\Database\Users with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
-Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_25/db/lib/derby.jar
+Wed Nov 12 16:38:29 CET 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance 888c4022-0149-a4a2-778b-ffffc213e59c 
+on database directory F:\DTU\GIT Repository\DTU IT\DTU-IT\Playground\James\Database\TrafficNetwork with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_05/db/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_25-b18
-user.dir=C:\Program Files\Java\jdk1.8.0_25\db
+java.runtime.version=1.8.0_05-b13
+user.dir=C:\Program Files\Java\jdk1.8.0_05\db
 os.name=Windows 8.1
 os.arch=amd64
 os.version=6.3
-derby.system.home=C:\Users\James\Documents\DTU\3rdSemester\DTU-IT\Playground\James\Database
+derby.system.home=F:\DTU\GIT Repository\DTU IT\DTU-IT\Playground\James\Database
 Database Class Loader started - derby.database.classpath=''

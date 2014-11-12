@@ -5,6 +5,7 @@
  */
 package connection.tcp.common;
 
+import trafficrouting.GraphTransmitObject;
 import common.interfaces.ProcessorRequest;
 import static helpers.ServerData.*;
 import common.interfaces.ServerExecutable;
@@ -72,7 +73,25 @@ public class ServerTransmitter implements ExecutableCyclic
     {
         chargeUsers.put(user, amount);
     }
-
+    
+    public GraphTransmitObject getTrafficGraph()
+    {
+        try
+        {
+            Socket sendSocket = initializeAndGetServerSocket();
+            TransmissionPacket packet = new TransmissionPacket();
+            packet.command = TransmissionPacket.Commands.GETGRAPH;
+            MessageUtils.sendTransmission(sendSocket, packet);
+            
+            TransmissionPacket returnPacket = MessageUtils.getTransmission(sendSocket);
+            return (GraphTransmitObject) returnPacket.dataObject;
+        } catch (IOException | ClassNotFoundException ex)
+        {
+            LogPrinter.printError("Error getting traffic graph from main server", ex);
+        }
+        return null;
+    }
+    
     @Override
     public void execute()   //executes cyclically
     {
@@ -106,27 +125,27 @@ public class ServerTransmitter implements ExecutableCyclic
 
     private void pushChargeUsers()
     {
-        Map<User, Double> users = new HashMap<>();
+        Map<User, Double> charges = new HashMap<>();
         
         for (Map.Entry<User, Double> entrySet : chargeUsers.entrySet())
         {
             System.out.println("Charge user entry: " + entrySet.getKey().ID + ", charge: " + entrySet.getValue());
-            users.put(entrySet.getKey(), entrySet.getValue());
+            charges.put(entrySet.getKey(), entrySet.getValue());
             chargeUsers.remove(entrySet.getKey());
         }
         
-        Server.serverThreadPool.schedule(new ChargeUsers(users));
+        Server.serverThreadPool.schedule(new ChargeUsers(charges));
     }
 
     private class ChargeUsers implements ProcessorRequest
     {
 
         Socket sendSocket = initializeAndGetServerSocket();
-        Map<User, Double> users;
+        Map<User, Double> charges;
 
         private ChargeUsers(Map<User, Double> chargeUsers)
         {
-            this.users = chargeUsers;
+            this.charges = chargeUsers;
         }
 
         @Override
@@ -134,15 +153,15 @@ public class ServerTransmitter implements ExecutableCyclic
         {
             TransmissionPacket chargeUsersPacket = new TransmissionPacket();
             chargeUsersPacket.command = TransmissionPacket.Commands.CHARGEUSERS;
-            chargeUsersPacket.dataObject = users;
-            chargeUsersPacket.dataString = Integer.toString(users.size());
+            chargeUsersPacket.dataObject = charges;
+            chargeUsersPacket.dataString = Integer.toString(charges.size());
             try
             {
                 MessageUtils.sendTransmission(sendSocket, chargeUsersPacket);
                 sendSocket.close();
             } catch (IOException ex)
             {
-                chargeUsers.putAll(users); //rollback
+                chargeUsers.putAll(charges); //rollback
                 reOpenConnection(sendSocket);
                 LogPrinter.print("Charge users have been re-added to send queue.");
                 ex.printStackTrace();

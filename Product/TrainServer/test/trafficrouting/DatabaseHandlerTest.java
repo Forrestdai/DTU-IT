@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trafficRouting;
+package trafficrouting;
 
+import trafficrouting.AStarTraversal;
+import trafficrouting.TransportNode;
+import trafficrouting.DirectedGraph;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +63,7 @@ public class DatabaseHandlerTest
         DirectedGraph<TransportNode> directedGraph = graph.buildAndGetGraph(5);
 
         AStarTraversal graphTraverser = new AStarTraversal();
-        Map<TransportNode, Double> result = graphTraverser.findShortestPath(directedGraph, graph.getNode(0), graph.getNode(5));
+        Map<TransportNode, Double> result = graphTraverser.findShortestPaths(directedGraph, graph.getNode(0), graph.getNode(5));
 
         for (Map.Entry<TransportNode, Double> entrySet : result.entrySet())
         {

@@ -8,6 +8,7 @@ package connection.udp.gps;
 import execute.Server;
 import helpers.ServerState;
 import threading.executiontypes.ExecuteOnImpulse;
+import trafficrouting.TransportNode;
 
 /**
  *
@@ -30,9 +31,15 @@ public class FauxGPSImplementation implements GPS
     }
 
     @Override
-    public void setState(ServerState state)
+    public void setState(ServerState.State state)
     {
-        Server.state = state;
+        Server.state.currentState = state;
+    }
+
+    @Override
+    public void setStop(TransportNode stop)
+    {
+        Server.state.currentStop = stop;
     }
 
 }

@@ -7,6 +7,7 @@
 package helpers;
 
 import java.io.Serializable;
+import trafficrouting.TransportNode;
 
 /**
  *
@@ -18,7 +19,8 @@ public class User implements Serializable
     public String firstName;
     public String lastName;
     public String passWord;
-    public double credit;
+    public Double balance;
     
-    
+    public TransportNode startLocation;
+    public TransportNode endLocation;
 }

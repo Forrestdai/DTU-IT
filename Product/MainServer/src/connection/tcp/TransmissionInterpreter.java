@@ -8,6 +8,7 @@ package connection.tcp;
 import connection.tcp.commands.ChargeUser;
 import connection.tcp.commands.ErrorCommand;
 import connection.tcp.commands.Command;
+import connection.tcp.commands.GetGraph;
 import connection.tcp.commands.GetUser;
 import java.io.IOException;
 import java.net.Socket;
@@ -46,6 +47,8 @@ public class TransmissionInterpreter
             case CHARGEUSERS:
                 toExecute = new ChargeUser();
                 break;
+            case GETGRAPH:
+                toExecute = new GetGraph();
             default:
                 toExecute = new ErrorCommand();
                 break;

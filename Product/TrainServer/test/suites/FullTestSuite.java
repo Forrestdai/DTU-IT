@@ -7,10 +7,10 @@ package suites;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import trafficRouting.DatabaseHandlerTest;
-import trafficRouting.DijkstraTraversalTest;
-import trafficRouting.FibonacciHeapTest;
-import trafficRouting.GraphTest;
+import trafficrouting.DatabaseHandlerTest;
+import trafficrouting.DijkstraTraversalTest;
+import trafficrouting.FibonacciHeapTest;
+import trafficrouting.GraphTest;
 import transmission.TestClientConnection;
 import transmission.TestProtocol;
 import transmission.TestServer;

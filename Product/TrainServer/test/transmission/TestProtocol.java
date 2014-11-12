@@ -49,7 +49,7 @@ public class TestProtocol
     public void createServer() throws Exception
     {
         Server.UDPCode = new ClientConnectionCode();
-        Server.state = ServerState.arrivedAtStation;
+        Server.state.currentState = ServerState.State.arrivedAtStation;
         scheduler = Executors.newCachedThreadPool();
         serverConnection = new IncomingConnectionsHandler();
         SimpleProcessorRequest setupServer = new SimpleProcessorRequest(serverConnection);

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package database;
+package trafficrouting;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,8 +17,9 @@ public class TransportNode implements Iterable<Edge>
     public Double cost;
     public TransportNode returnNode;
     public int referenceID;
+    public int zone;
 
-    public TransportNode(Position position, String identity, int ref)
+    public TransportNode(Position position, String identity, int ref, int zone)
     {
         edges = new ArrayList<>();
         this.position = position;
@@ -26,6 +27,7 @@ public class TransportNode implements Iterable<Edge>
         cost = Double.POSITIVE_INFINITY;
         returnNode = this;
         referenceID = ref;
+        this.zone = zone;
     }
     
     public void addEdge(Edge edge)

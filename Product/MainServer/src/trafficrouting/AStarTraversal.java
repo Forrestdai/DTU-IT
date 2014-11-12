@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trafficRouting;
+package trafficrouting;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,6 +19,7 @@ public class AStarTraversal
     private final FibonacciHeap<TransportNode> myHeap;
     private final Map<TransportNode, FibonacciHeap.HeapElement<TransportNode>> heapGraphNodes;
     private final Map<TransportNode, Double> visitedNodes;
+    private DirectedGraph<TransportNode> graphToSearch;
 
     public AStarTraversal()
     {
@@ -26,8 +27,13 @@ public class AStarTraversal
         this.heapGraphNodes = new HashMap<>();
         this.myHeap = new FibonacciHeap<>();
     }
+    
+    public void updateGraph(DirectedGraph<TransportNode> graphToSearch)
+    {
+        this.graphToSearch = graphToSearch;
+    }
 
-    public Map<TransportNode, Double> findShortestPath(DirectedGraph<TransportNode> graphToSearch, TransportNode startPoint, TransportNode goalNode)
+    public Map<TransportNode, Double> findShortestPaths(TransportNode startPoint, TransportNode goalNode)
     {
         //initialize the entries
         for (TransportNode node : graphToSearch)

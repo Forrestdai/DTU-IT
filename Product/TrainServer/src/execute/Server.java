@@ -8,12 +8,11 @@ package execute;
 import connection.tcp.IncomingConnectionsHandler;
 import connection.tcp.common.ServerTransmitter;
 import connection.udp.ClientConnectionCode;
-import helpers.ActiveUsers;
-import helpers.PotentialUsers;
 import helpers.ServerState;
 import helpers.UserArray;
 import threading.PersistentExecutorPool;
 import threading.ThreadPerRequestScheduler;
+import trafficrouting.GraphTransmitObject;
 
 /**
  *
@@ -30,6 +29,7 @@ public class Server
     public static UserArray chargeUserArray;
 
     public static ServerTransmitter serverTransmitter;
+    public static GraphTransmitObject trafficGraph;
     
     public static ClientConnectionCode UDPCode;
     
@@ -52,7 +52,11 @@ public class Server
         potentialUsers = new UserArray();
         activeUsers = new UserArray();
         chargeUserArray = new UserArray();
+        
         serverTransmitter = new ServerTransmitter();
+        trafficGraph = serverTransmitter.getTrafficGraph();
+        
+        state = new ServerState();
     }
 
 }

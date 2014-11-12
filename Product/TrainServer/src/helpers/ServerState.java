@@ -5,11 +5,21 @@
  */
 package helpers;
 
+import trafficrouting.TransportNode;
+
 /**
  *
  * @author JamesFoxes
  */
-public enum ServerState
+public class ServerState
 {
-    arrivedAtStation, leftStation
+
+    public State currentState = State.leftStation;
+    public TransportNode currentStop;
+
+    public enum State
+    {
+
+        arrivedAtStation, leftStation
+    }
 }

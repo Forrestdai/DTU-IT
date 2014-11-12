@@ -11,7 +11,12 @@ import java.io.IOException;
 import java.net.Socket;
 import connection.tcp.common.MessageUtils;
 import connection.tcp.common.TransmissionPacket;
+import helpers.Journey;
+import helpers.ServerData;
 import helpers.User;
+import java.util.ArrayList;
+import java.util.Stack;
+import trafficrouting.TransportNode;
 
 /**
  *
@@ -21,10 +26,12 @@ public class GetUserConnectionCommand implements Command
 {
 
     private TransmissionPacket reply;
+    private User user;
 
     public GetUserConnectionCommand()
     {
-        this.reply = new TransmissionPacket();
+        reply = new TransmissionPacket();
+        user = new User();
     }
 
     @Override
@@ -33,10 +40,9 @@ public class GetUserConnectionCommand implements Command
         int userID = Integer.parseInt(incomingPacket.dataString); //checkConnectionValidityReturnUserID(incomingPacket);
         if (userID != -1)
         {
-            User user = new User();
             user.ID = userID;
 
-            compareWithArrays(user);
+            compareUserWithArrays();
 
             reply.command = TransmissionPacket.Commands.ACKNOWLEDGE;
             reply.dataString = incomingPacket.dataString;
@@ -48,7 +54,7 @@ public class GetUserConnectionCommand implements Command
         MessageUtils.sendTransmission(clientConnection, reply);
     }
 
-    private void waitToReply(User user)
+    private void waitToReply()
     {
         while (!Server.potentialUsers.userExists(user) && !Server.activeUsers.userExists(user))
         {
@@ -61,42 +67,68 @@ public class GetUserConnectionCommand implements Command
         }
     }
 
-    private void compareWithArrays(User user) throws IOException, ClassNotFoundException
+    private void compareUserWithArrays() throws IOException, ClassNotFoundException
     {
-        switch (Server.state)
+        switch (Server.state.currentState)
         {
             case arrivedAtStation:
-                if (Server.potentialUsers.userExists(user))
+                if (userIsPotential())
                 {
-                    System.out.println("Was potential");
-                    Server.potentialUsers.removeUser(user);
-                    Server.activeUsers.pushUser(user);
+                    moveToActiveArray();
                 } else
                 {
-                    if (!Server.activeUsers.userExists(user))
-                    {
-                        System.out.println("Was new");
-                        Server.serverTransmitter.requestUser(user);
-                        waitToReply(user);
-                    }
+                    addToPotentialArray();
                 }
                 break;
             case leftStation:
                 System.out.println("was put to charged");
-                if (Server.activeUsers.userExists(user))
+                if (userIsActive())
                 {
-                    //Server.chargeUserArray.pushUser(user);
-                    Server.serverTransmitter.chargeUser(user, 55);
+                    user.endLocation = Server.state.currentStop;
+                    Server.serverTransmitter.chargeUser(user, calculateUserCharge());
+                    Server.activeUsers.removeUser(user);
                 }
+                break;
         }
+    }
 
+    private boolean userIsPotential()
+    {
+        return !Server.activeUsers.userExists(user) && Server.potentialUsers.userExists(user);
+    }
+    
+    private boolean userIsActive()
+    {
+        return Server.activeUsers.userExists(user);
+    }
+
+    private void moveToActiveArray()
+    {
+        System.out.println("Was potential");
+        Server.potentialUsers.removeUser(user);
+        Server.activeUsers.pushUser(user);
+    }
+
+    private void addToPotentialArray()
+    {
+        System.out.println("Was new");
+        user.startLocation = Server.state.currentStop;
+        Server.serverTransmitter.requestUser(user);
+        waitToReply();
+    }
+
+    private double calculateUserCharge()
+    {
+        Journey shortestPath = new Journey(user.startLocation, user.endLocation);
+
+        return shortestPath.getCost();
     }
 
     private int checkConnectionValidityReturnUserID(TransmissionPacket incomingPacket)
     {
         try
         {
-            if (Server.state == ServerState.arrivedAtStation)
+            if (Server.state.currentState == ServerState.State.arrivedAtStation)
             {
                 String[] message = incomingPacket.dataString.split("\\s+");
                 if (Integer.parseInt(message[1]) == Server.UDPCode.code)

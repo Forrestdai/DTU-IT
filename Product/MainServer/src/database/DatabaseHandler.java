@@ -12,17 +12,19 @@ import helpers.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import threading.executiontypes.CyclicalExecutor;
 import threading.executiontypes.ExecutableCyclic;
+import trafficrouting.Edge;
+import trafficrouting.Position;
+import trafficrouting.TransportNode;
 
 /**
  *
@@ -34,7 +36,7 @@ public class DatabaseHandler
     private Database trafficDatabase;
     private Database userDatabase;
     private final int PUSH_INTERVAL = 4000;
-    private UpdateUserDatabase userDatabaseUpdater;
+    private ChargeUserDatabase userDatabaseUpdater;
 
     public DatabaseHandler()
     {
@@ -51,13 +53,31 @@ public class DatabaseHandler
 
     private void initializeCyclicalPushing()
     {
-        userDatabaseUpdater = new UpdateUserDatabase();
+        userDatabaseUpdater = new ChargeUserDatabase();
         ServerExecutable toExecute = new CyclicalExecutor(userDatabaseUpdater, PUSH_INTERVAL);
         SimpleProcessorRequest process = new SimpleProcessorRequest(toExecute);
         Server.threadPool.schedule(process);
     }
 
-    public User getUser(int userID) throws SQLException
+    public void addUser(User user)
+    {
+        try
+        {
+            String addUserSQL = "INSERT INTO Users (CustomerID, First_Name, Last_Name, Password, balance "
+                    + "VALUES ('?','?','?','?','?')";
+
+            Object[] properties =
+            {
+                user.ID, user.firstName, user.lastName, user.passWord, user.balance
+            };
+
+            ResultSet userData = userDatabase.pushPreparedStatement(addUserSQL, properties);
+        } catch (SQLException ex)
+        {
+        }
+    }
+
+    public User getUser(int userID) throws SQLException, NotFound
     {
         User user = new User();
 
@@ -65,7 +85,7 @@ public class DatabaseHandler
 
         String userSQL = "SELECT * FROM Customers WHERE CustomerID = ?";
 
-        Integer[] properties =
+        Object[] properties =
         {
             userID
         };
@@ -78,7 +98,12 @@ public class DatabaseHandler
             user.firstName = userData.getString("FIRST_NAME");
             user.lastName = userData.getString("LAST_NAME");
             user.passWord = userData.getString("PASSWORD");
-            user.credit = userData.getDouble("CREDIT");
+            user.balance = userData.getDouble("CREDIT");
+        }
+
+        if (user.ID == -1)
+        {
+            throw new NotFound();
         }
 
         return user;
@@ -89,15 +114,20 @@ public class DatabaseHandler
         userDatabaseUpdater.updateUser(user);
     }
 
-    private void pushUpdates(Set<Entry<Integer, User>> users) throws SQLException
+    public void chargeUser(User user, double charge)
     {
-        for (Entry<Integer, User> userEntry : users)
+        userDatabaseUpdater.chargeUser(user, charge);
+    }
+
+    private void pushUpdates(Collection<User> users) throws SQLException
+    {
+        for (User user : users)
         {
             String userSQL = "UPDATE Customers SET First_Name = ?, Last_Name = ?, Password = ?, credit = ? WHERE CustomerID = ?";
 
             Object[] properties =
             {
-                userEntry.getValue().firstName, userEntry.getValue().lastName, userEntry.getValue().passWord, userEntry.getValue().credit, userEntry.getKey()
+                user.firstName, user.lastName, user.passWord, user.balance, user.ID
             };
 
             userDatabase.pushPreparedStatement(userSQL, properties);
@@ -117,9 +147,10 @@ public class DatabaseHandler
             int ref = stops.getInt("REF");
             double latitude = stops.getDouble("LAT");
             double longetude = stops.getDouble("LON");
+            int zone = stops.getInt("PRICE_ZONE");
 
             Position position = new Position(latitude, longetude);
-            TransportNode nodeToAdd = new TransportNode(position, name, ref);
+            TransportNode nodeToAdd = new TransportNode(position, name, ref, zone);
             nodes.put(ref, nodeToAdd);
         }
         return nodes;
@@ -169,16 +200,18 @@ public class DatabaseHandler
         return edges;
     }
 
-    class UpdateUserDatabase implements ExecutableCyclic
+    class ChargeUserDatabase implements ExecutableCyclic
     {
 
-        private ConcurrentMap<Integer, User> toPushToDatabase;
+        private Map<Integer, User> toPushToDatabase;
+        private final ConcurrentMap<User, Double> usersToCharge;
         private final ConcurrentLinkedQueue<User> usersToUpdate;
 
-        public UpdateUserDatabase()
+        public ChargeUserDatabase()
         {
+            usersToCharge = new ConcurrentHashMap<>();
             usersToUpdate = new ConcurrentLinkedQueue<>();
-            toPushToDatabase = new ConcurrentHashMap<>();
+            toPushToDatabase = new HashMap<>();
         }
 
         @Override
@@ -186,27 +219,21 @@ public class DatabaseHandler
         {
             try
             {
-                for (User user : usersToUpdate)
-                {
-                    User existing;
-                    if (toPushToDatabase.containsKey(user.ID))
-                    {
-                        existing = toPushToDatabase.get(user.ID);
-                    } else
-                    {
-                        existing = getUser(user.ID);
-                    }
-                    User combined = combineUserFields(existing, user);
-                    toPushToDatabase.replace(user.ID, combined);
-                    usersToUpdate.remove(user);
-                }
+                runUpdates();
+                runCharges();
 
-                pushUpdates(toPushToDatabase.entrySet());
+                pushUpdates(toPushToDatabase.values());
                 toPushToDatabase.clear();
             } catch (SQLException ex)
             {
-                
+            } catch (NotFound ex)
+            {
             }
+        }
+
+        private void chargeUser(User user, double amount)
+        {
+            usersToCharge.put(user, amount);
         }
 
         private void updateUser(User user)
@@ -214,14 +241,60 @@ public class DatabaseHandler
             usersToUpdate.add(user);
         }
 
-        private User combineUserFields(User one, User two)
+        private void runUpdates() throws SQLException, NotFound
+        {
+            for (User user : usersToUpdate)
+            {
+                User existing;
+                if (toPushToDatabase.containsKey(user.ID))
+                {
+                    existing = toPushToDatabase.get(user.ID);
+                } else
+                {
+                    existing = getUser(user.ID);
+                    toPushToDatabase.put(existing.ID, existing);
+                }
+                User updated = updateUserFields(existing, user);
+                toPushToDatabase.replace(user.ID, updated);
+                usersToUpdate.remove(user);
+            }
+        }
+
+        private void runCharges() throws SQLException, NotFound
+        {
+            for (Entry<User, Double> userEntry : usersToCharge.entrySet())
+            {
+                User user = userEntry.getKey();
+                User existing;
+                if (toPushToDatabase.containsKey(user.ID))
+                {
+                    existing = toPushToDatabase.get(user.ID);
+                } else
+                {
+                    existing = getUser(user.ID);
+                    toPushToDatabase.put(existing.ID, existing);
+                }
+                User charged = chargeUserFields(existing, userEntry.getValue());
+                toPushToDatabase.replace(user.ID, charged);
+                usersToCharge.remove(user);
+            }
+        }
+
+        private User updateUserFields(User existing, User adding)
         {
             User combined = new User();
-            combined.ID = one.ID;
-            combined.firstName = two.firstName;
-            combined.lastName = two.lastName;
-            combined.passWord = two.lastName;
-            combined.credit = one.credit - two.credit;
+            combined.ID = existing.ID;
+            combined.firstName = adding.firstName;
+            combined.lastName = adding.lastName;
+            combined.passWord = adding.lastName;
+            combined.balance = adding.balance;
+            return combined;
+        }
+
+        private User chargeUserFields(User existing, Double charge)
+        {
+            User combined = existing;
+            combined.balance = existing.balance - charge;
             return combined;
         }
 
