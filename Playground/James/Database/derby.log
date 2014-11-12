@@ -25,3 +25,8 @@ os.arch=amd64
 os.version=6.3
 derby.system.home=F:\DTU\GIT Repository\DTU IT\DTU-IT\Playground\James\Database
 Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Thu Nov 13 00:21:52 CET 2014: Shutting down Derby engine
+----------------------------------------------------------------
+Thu Nov 13 00:21:52 CET 2014:
+Shutting down instance 888c4022-0149-a4a2-778b-ffffc213e59c on database directory F:\DTU\GIT Repository\DTU IT\DTU-IT\Playground\James\Database\TrafficNetwork with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
