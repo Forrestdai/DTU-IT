@@ -32,7 +32,7 @@ public class FibonacciHeapTest
     {
     }
 
-    @Test
+    @Test(timeout = 200)
     public void testEnqueueSingleElement()
     {
         FibonacciHeap<Integer> myHeap = new FibonacciHeap();
@@ -61,7 +61,7 @@ public class FibonacciHeapTest
         assertEquals("Heap didn't add or dequeue the corret elements", 0, (int) toAdd.size());
     }
 
-    @Test
+    @Test(timeout = 200)
     public void testDeQueueMin()
     {
         int amountOfElementsToAdd = 1000;
@@ -123,7 +123,7 @@ public class FibonacciHeapTest
         return myHeap;
     }
 
-    @Test
+    @Test(timeout = 200)
     public void testMergeNullHeaps()
     {
         int amountOfElementsToAdd = 500;
@@ -150,7 +150,7 @@ public class FibonacciHeapTest
         assertEquals("heap with second heap as null, had wrong number of elements", amountOfElementsToAdd, mergedSecondNullHeap.getHeapSize());
     }
 
-    @Test
+    @Test(timeout = 200)
     public void testMergeSingleElementHeaps()
     {
         FibonacciHeap<Integer> heap1 = new FibonacciHeap();
@@ -173,7 +173,7 @@ public class FibonacciHeapTest
         assertEquals("Wrong merged heap min element", 23, (int) secondElement.getNodeContents());
     }
 
-    @Test
+    @Test(timeout = 200)
     public void testMergeManyElementHeaps()
     {
         int amountOfElementsToAdd = 500;
@@ -207,7 +207,7 @@ public class FibonacciHeapTest
         }
     }
 
-    @Test
+    @Test(timeout = 200)
     public void testDecreaseSingleKey()
     {
         FibonacciHeap<Integer> myHeap = new FibonacciHeap();
@@ -223,7 +223,7 @@ public class FibonacciHeapTest
         assertEquals(41, myHeap.getMinElement().getNodePriority(), 0.0001);
     }
     
-    @Test
+    @Test(timeout = 200)
     public void testDecreaseKeyOneOfMany()
     {
         FibonacciHeap<Integer> myHeap = new FibonacciHeap();
@@ -245,7 +245,7 @@ public class FibonacciHeapTest
         assertEquals(301, (int) elementToTest.getNodeContents());
     }
     
-    @Test
+    @Test(timeout = 200)
     public void testDecreaseKeyMany()
     {
         FibonacciHeap<Integer> myHeap = new FibonacciHeap();
@@ -268,13 +268,13 @@ public class FibonacciHeapTest
         }
     }
     
-    @Test
+    @Test(timeout = 200)
     public void testGetMinElement()
     {
 
     }
 
-    @Test
+    @Test(timeout = 200)
     public void testIsEmpty()
     {
         FibonacciHeap<Integer> myHeap = new FibonacciHeap();
@@ -284,7 +284,7 @@ public class FibonacciHeapTest
         assertTrue(!myHeap.isEmpty());
     }
 
-    @Test
+    @Test(timeout = 200)
     public void testGetHeapSize()
     {
         FibonacciHeap<Integer> myHeap = new FibonacciHeap();

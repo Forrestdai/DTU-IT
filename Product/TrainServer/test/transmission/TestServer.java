@@ -47,7 +47,7 @@ public class TestServer
         
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testSendGetUsers() throws Exception
     {
         int amountToSend = 10;

@@ -48,10 +48,7 @@ public class DijkstraTraversalTest
     {
     }
 
-    /**
-     * Test of findShortestPaths method, of class DijkstraTraversal.
-     */
-    @Test
+    @Test(timeout = 200)
     public void testFindShortestPathsKnownGraph()
     {
         DijkstraTraversal graphTraverser = new DijkstraTraversal();
@@ -105,7 +102,7 @@ public class DijkstraTraversalTest
 
     }
 
-    @Test
+    @Test(timeout = 600)
     public void testFindShortestPathsManyRandom()
     {
         DijkstraTraversal graphTraverser = new DijkstraTraversal();

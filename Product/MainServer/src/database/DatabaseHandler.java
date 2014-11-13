@@ -160,41 +160,59 @@ public class DatabaseHandler
     {
         ArrayList<Edge> edges = new ArrayList<>();
 
-        String getEdges = "SELECT *"
-                + " FROM line_identity"
-                + " INNER JOIN"
-                + " paths lines ON (lines.line_ref = line_identity.line_ref)"
-                + " AND from_stop_ref = ?";
+        String getNodeInformation = "SELECT  * FROM transport_stop_relation"
+                + " INNER JOIN line_identity"
+                + " ON transport_stop_relation.transport_ref = line_identity.line_ref"
+                + " INNER JOIN stops_stations"
+                + " ON transport_stop_relation.stop_ref = stops_stations.ref"
+                + " AND transport_stop_relation.stop_ref = ?";
 
-        Integer[] properties =
+        Integer[] nodeInformationProperties =
         {
             fromStopReference
         };
-        ResultSet stops = trafficDatabase.pushPreparedStatement(getEdges, properties);
+        ResultSet node = trafficDatabase.pushPreparedStatement(getNodeInformation, nodeInformationProperties);
 
-        while (stops.next())
+        while (node.next())
         {
-            String type = stops.getString("TYPE");
-            int fromStopRef = stops.getInt("FROM_STOP_REF");
-            int toStopRef = stops.getInt("TO_STOP_REF");
-            int transportID = stops.getInt("LINE_REF");
-            String transportName = stops.getString("LINE_NAME");
+            String type = node.getString("TYPE");
+            int fromStopRef = node.getInt("STOP_REF");
+            int transportID = node.getInt("LINE_REF");
+            String transportName = node.getString("LINE_NAME");
+            int stopSequenceIndex = node.getInt("STOP_SEQUENCE");
 
-            Edge.EdgeType edgeType = Edge.EdgeType.valueOf(type);
-            Edge edge = new Edge(edgeType, nodes.get(fromStopRef), nodes.get(toStopRef), transportID, transportName);
+            String toRef = "SELECT  stop_ref FROM transport_stop_relation"
+                    + " WHERE transport_ref = ?"
+                    + " AND (stop_sequence = ?"
+                    + " OR stop_sequence = ?)";
 
-            boolean addEdge = true;
-            for (Edge existing : edges)
+            Integer[] toRefProperties =
             {
-                if (existing.toNode.referenceID == edge.toNode.referenceID && existing.transportLineReference == edge.transportLineReference)
+                transportID, (stopSequenceIndex - 1), (stopSequenceIndex + 1)
+            };
+
+            ResultSet toRefResult = trafficDatabase.pushPreparedStatement(toRef, toRefProperties);
+
+            while (toRefResult.next())
+            {
+                int toStopRef = toRefResult.getInt("STOP_REF");
+
+                Edge.EdgeType edgeType = Edge.EdgeType.valueOf(type);
+                Edge edge = new Edge(edgeType, nodes.get(fromStopRef), nodes.get(toStopRef), transportID, transportName);
+
+                boolean addEdge = true;
+                for (Edge existing : edges)
                 {
-                    addEdge = false;
-                    break;
+                    if (existing.toNode.referenceID == edge.toNode.referenceID && existing.transportLineReference == edge.transportLineReference)
+                    {
+                        addEdge = false;
+                        break;
+                    }
                 }
-            }
-            if (addEdge)
-            {
-                edges.add(edge);
+                if (addEdge)
+                {
+                    edges.add(edge);
+                }
             }
         }
         return edges;
