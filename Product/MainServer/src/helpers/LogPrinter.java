@@ -16,6 +16,7 @@ public class LogPrinter
     public static void printError(String errorMessage, Exception e)
     {
         System.err.println("Err: " + errorMessage);
+        e.printStackTrace();
     }
     
     public static void print(String message)

@@ -8,6 +8,7 @@ package database;
 import common.interfaces.ServerExecutable;
 import execute.Server;
 import execute.SimpleProcessorRequest;
+import helpers.LogPrinter;
 import helpers.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,7 +37,7 @@ public class DatabaseHandler
     private Database trafficDatabase;
     private Database userDatabase;
     private final int PUSH_INTERVAL = 4000;
-    private ChargeUserDatabase userDatabaseUpdater;
+    private UpdateUsers userDatabaseUpdater;
 
     public DatabaseHandler()
     {
@@ -53,7 +54,7 @@ public class DatabaseHandler
 
     private void initializeCyclicalPushing()
     {
-        userDatabaseUpdater = new ChargeUserDatabase();
+        userDatabaseUpdater = new UpdateUsers();
         ServerExecutable toExecute = new CyclicalExecutor(userDatabaseUpdater, PUSH_INTERVAL);
         SimpleProcessorRequest process = new SimpleProcessorRequest(toExecute);
         Server.threadPool.schedule(process);
@@ -63,18 +64,31 @@ public class DatabaseHandler
     {
         try
         {
-            String addUserSQL = "INSERT INTO Users (CustomerID, First_Name, Last_Name, Password, balance "
-                    + "VALUES ('?','?','?','?','?')";
+            String addUserSQL = "INSERT INTO users (CustomerID, First_Name, Last_Name, Password, balance) "
+                    + "VALUES (?,?,?,?,?)";
 
             Object[] properties =
             {
                 user.ID, user.firstName, user.lastName, user.passWord, user.balance
             };
 
-            ResultSet userData = userDatabase.pushPreparedStatement(addUserSQL, properties);
+            ResultSet userData = userDatabase.pushPreparedStatement(addUserSQL, properties, true);
         } catch (SQLException ex)
         {
+            LogPrinter.printError("Could not add user to database", ex);
         }
+    }
+
+    public void removeUser(int userID) throws SQLException
+    {
+        String userSQL = "Delete FROM Users WHERE CustomerID = ?";
+
+        Object[] properties =
+        {
+            userID
+        };
+
+        userDatabase.pushPreparedStatement(userSQL, properties, true);
     }
 
     public User getUser(int userID) throws SQLException, NotFound
@@ -83,14 +97,14 @@ public class DatabaseHandler
 
         user.ID = -1;
 
-        String userSQL = "SELECT * FROM Customers WHERE CustomerID = ?";
+        String userSQL = "SELECT * FROM Users WHERE CustomerID = ?";
 
         Object[] properties =
         {
             userID
         };
 
-        ResultSet userData = userDatabase.pushPreparedStatement(userSQL, properties);
+        ResultSet userData = userDatabase.pushPreparedStatement(userSQL, properties, false);
 
         while (userData.next())
         {
@@ -98,7 +112,7 @@ public class DatabaseHandler
             user.firstName = userData.getString("FIRST_NAME");
             user.lastName = userData.getString("LAST_NAME");
             user.passWord = userData.getString("PASSWORD");
-            user.balance = userData.getDouble("CREDIT");
+            user.balance = userData.getDouble("BALANCE");
         }
 
         if (user.ID == -1)
@@ -123,14 +137,14 @@ public class DatabaseHandler
     {
         for (User user : users)
         {
-            String userSQL = "UPDATE Customers SET First_Name = ?, Last_Name = ?, Password = ?, credit = ? WHERE CustomerID = ?";
+            String userSQL = "UPDATE Users SET First_Name = ?, Last_Name = ?, Password = ?, balance = ? WHERE CustomerID = ?";
 
             Object[] properties =
             {
                 user.firstName, user.lastName, user.passWord, user.balance, user.ID
             };
 
-            userDatabase.pushPreparedStatement(userSQL, properties);
+            userDatabase.pushPreparedStatement(userSQL, properties, true);
         }
     }
 
@@ -171,7 +185,7 @@ public class DatabaseHandler
         {
             fromStopReference
         };
-        ResultSet node = trafficDatabase.pushPreparedStatement(getNodeInformation, nodeInformationProperties);
+        ResultSet node = trafficDatabase.pushPreparedStatement(getNodeInformation, nodeInformationProperties, false);
 
         while (node.next())
         {
@@ -191,7 +205,7 @@ public class DatabaseHandler
                 transportID, (stopSequenceIndex - 1), (stopSequenceIndex + 1)
             };
 
-            ResultSet toRefResult = trafficDatabase.pushPreparedStatement(toRef, toRefProperties);
+            ResultSet toRefResult = trafficDatabase.pushPreparedStatement(toRef, toRefProperties, false);
 
             while (toRefResult.next())
             {
@@ -218,14 +232,14 @@ public class DatabaseHandler
         return edges;
     }
 
-    class ChargeUserDatabase implements ExecutableCyclic
+    class UpdateUsers implements ExecutableCyclic
     {
 
         private Map<Integer, User> toPushToDatabase;
         private final ConcurrentMap<User, Double> usersToCharge;
         private final ConcurrentLinkedQueue<User> usersToUpdate;
 
-        public ChargeUserDatabase()
+        public UpdateUsers()
         {
             usersToCharge = new ConcurrentHashMap<>();
             usersToUpdate = new ConcurrentLinkedQueue<>();
@@ -244,8 +258,10 @@ public class DatabaseHandler
                 toPushToDatabase.clear();
             } catch (SQLException ex)
             {
+                LogPrinter.printError("SQL error", ex);
             } catch (NotFound ex)
             {
+                LogPrinter.printError("SQL error", ex);
             }
         }
 

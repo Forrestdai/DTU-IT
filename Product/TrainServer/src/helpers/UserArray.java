@@ -20,7 +20,6 @@ public class UserArray
 {
 
     protected ConcurrentMap<Integer, User> userMap;
-    protected PropertyChangeSupport propertyChangeSupport;
 
     public UserArray()
     {
@@ -64,5 +63,10 @@ public class UserArray
     public void replaceMap(UserArray chargeUserArray)
     {
         userMap = chargeUserArray.userMap;
+    }
+    
+    public void clear()
+    {
+        userMap.clear();
     }
 }

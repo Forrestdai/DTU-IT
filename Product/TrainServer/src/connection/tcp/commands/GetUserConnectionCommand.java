@@ -68,6 +68,10 @@ public class GetUserConnectionCommand implements Command
         switch (Server.state.currentState)
         {
             case arrivedAtStation:
+                if (userIsPotential())
+                {
+                    moveToActiveArray();
+                }
                 if (userIsActive())
                 {
                     user.endLocation = Server.state.currentStop; //update end position.
@@ -77,10 +81,7 @@ public class GetUserConnectionCommand implements Command
                 }
                 break;
             case leftStation:
-                if (userIsPotential())
-                {
-                    moveToActiveArray();
-                }
+                Server.noChargeUserArray.pushUser(user);
                 break;
         }
     }

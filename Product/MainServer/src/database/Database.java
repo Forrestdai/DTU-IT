@@ -28,10 +28,13 @@ public class Database
         checkConnection();
         Statement statement = connection.createStatement();
 
-        return statement.executeQuery(toPush);
+        ResultSet results = statement.executeQuery(toPush);
+        connection.commit();
+
+        return results;
     }
 
-    public ResultSet pushPreparedStatement(String toPush, Object[] properties) throws SQLException
+    public ResultSet pushPreparedStatement(String toPush, Object[] properties, boolean isUpdate) throws SQLException
     {
         checkConnection();
         PreparedStatement statement = null;
@@ -49,12 +52,19 @@ public class Database
             {
                 statement.setString(i, (String) property);
             }
-            if (property instanceof String)
+            if (property instanceof Double)
             {
                 statement.setDouble(i, (Double) property);
             }
         }
-        ResultSet results = statement.executeQuery();
+        ResultSet results = null;
+        if (isUpdate)
+        {
+            statement.executeUpdate();
+        } else
+        {
+            results = statement.executeQuery();
+        }
         connection.commit();
 
         return results;

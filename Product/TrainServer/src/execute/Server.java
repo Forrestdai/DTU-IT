@@ -26,7 +26,7 @@ public class Server
 
     public static UserArray potentialUsers;
     public static UserArray activeUsers;
-    public static UserArray chargeUserArray;
+    public static UserArray noChargeUserArray;
 
     public static ServerTransmitter serverTransmitter;
     public static GraphTransmitObject trafficGraph;
@@ -51,7 +51,7 @@ public class Server
     {
         potentialUsers = new UserArray();
         activeUsers = new UserArray();
-        chargeUserArray = new UserArray();
+        noChargeUserArray = new UserArray();
         
         serverTransmitter = new ServerTransmitter();
         trafficGraph = serverTransmitter.getTrafficGraph();

@@ -62,7 +62,7 @@ public class BroadcastUDP implements ExecuteOnImpulse
             socket.close();
             System.out.println("SENT");
 
-            if (Server.state.equals(ServerState.State.leftStation))
+            if (Server.state.currentState.equals(ServerState.State.leftStation))
             {
                 Thread.sleep(5000);
                 findUsersToCharge();
@@ -76,18 +76,16 @@ public class BroadcastUDP implements ExecuteOnImpulse
 
     private void findUsersToCharge()
     {
-        Set<Entry<Integer, User>> oldActive = Server.activeUsers.getUserEntrySet();
-        Server.activeUsers.replaceMap(Server.chargeUserArray);
-
-        for (Entry<Integer, User> entry : oldActive)
+        for (Entry<Integer, User> userEntry : Server.activeUsers.getUserEntrySet())
         {
-            User user = entry.getValue();
-            if (!Server.activeUsers.userExists(user))
+            User user = userEntry.getValue();
+            if (!Server.noChargeUserArray.userExists(user))
             {
                 Server.serverTransmitter.chargeUser(user, calculateCharge(user));
+                Server.activeUsers.removeUser(user);
             }
         }
-        Server.chargeUserArray = new UserArray();
+        Server.noChargeUserArray.clear();
     }
 
     private void send500Packets() throws Exception

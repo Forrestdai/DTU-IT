@@ -6,6 +6,7 @@
 package database;
 
 import helpers.User;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import trafficrouting.DirectedGraph;
 import trafficrouting.Edge;
 import trafficrouting.Position;
@@ -52,78 +54,58 @@ public class DatabaseHandlerTest
     {
     }
 
-    /**
-     * Test of addUser method, of class DatabaseHandler.
-     */
     @Test
-    public void testAddUser()
-    {
-        User user = null;
-        DatabaseHandler instance = new DatabaseHandler();
-        instance.addUser(user);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getUser method, of class DatabaseHandler.
-     */
-    @Test
-    public void testGetUser() throws Exception
-    {
-        int userID = 0;
-        DatabaseHandler instance = new DatabaseHandler();
-        User expResult = null;
-        User result = instance.getUser(userID);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of updateUser method, of class DatabaseHandler.
-     */
-    @Test
-    public void testUpdateUser()
-    {
-        User user = null;
-        DatabaseHandler instance = new DatabaseHandler();
-        instance.updateUser(user);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of chargeUser method, of class DatabaseHandler.
-     */
-    @Test
-    public void testChargeUser()
-    {
-        User user = null;
-        double charge = 0.0;
-        DatabaseHandler instance = new DatabaseHandler();
-        instance.chargeUser(user, charge);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getAllNodes method, of class DatabaseHandler.
-     */
-    @Test
-    public void testGetAllNodes() throws Exception
+    public void testAddUser() throws SQLException, NotFound, InterruptedException
     {
         DatabaseHandler database = new DatabaseHandler();
-        Map<Integer, TransportNode> expResult = null;
-        Map<Integer, TransportNode> result = database.getAllNodes();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        User user = database.getUser(0);
+        user.balance = 50.0;
+        database.removeUser(0);
+        
+        database.addUser(user);
+        
+        user = database.getUser(0);
+        assertEquals(50, user.balance, 0.001);
     }
 
-    /**
-     * Test of getEdgesFromStop method, of class DatabaseHandler.
-     */
+    @Test
+    public void testGetUser() throws SQLException, NotFound, InterruptedException
+    {
+        DatabaseHandler database = new DatabaseHandler();
+        User user = database.getUser(0);
+        
+        assertEquals("default", user.firstName);
+        assertEquals("default", user.lastName);
+        assertEquals("default", user.passWord);
+    }
+
+    @Test (timeout = 5500)
+    public void testUpdateUser() throws SQLException, NotFound, InterruptedException
+    {
+        DatabaseHandler database = new DatabaseHandler();
+        User user = database.getUser(0);
+        user.balance = 0.0;
+        
+        database.updateUser(user);  //updating takes precedense during execution.
+        database.chargeUser(user, 5);
+        Thread.sleep(4500);
+        user = database.getUser(0);
+        assertEquals(-5.0, user.balance, 0.001);
+    }
+
+    @Test (timeout = 5500)
+    public void testChargeUser() throws SQLException, NotFound, InterruptedException
+    {
+        DatabaseHandler database = new DatabaseHandler();
+        User user = database.getUser(0);
+        double currentBalance = user.balance;
+        
+        database.chargeUser(user, 5);
+        Thread.sleep(4500);
+        user = database.getUser(0);
+        assertEquals(5, currentBalance - user.balance, 0.001);
+    }
+
     @Test
     public void testGetEdgesFromStop() throws Exception
     {

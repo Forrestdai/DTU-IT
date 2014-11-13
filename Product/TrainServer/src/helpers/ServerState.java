@@ -14,8 +14,13 @@ import trafficrouting.TransportNode;
 public class ServerState
 {
 
-    public State currentState = State.leftStation;
+    public State currentState;
     public TransportNode currentStop;
+
+    public ServerState()
+    {
+        this.currentState = State.leftStation;
+    }
 
     public enum State
     {

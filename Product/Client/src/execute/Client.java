@@ -59,7 +59,7 @@ public class Client
 
                     TransmissionPacket packet = new TransmissionPacket();
                     packet.command = TransmissionPacket.Commands.USERCONNECTION;
-                    packet.dataString = Integer.toString(clientID);
+                    packet.dataString = Integer.toString(0); //PUT CLIENT ID
 
                     MessageUtils.sendTransmission(serverSocket, packet);
                     clientState = States.SENDING;
