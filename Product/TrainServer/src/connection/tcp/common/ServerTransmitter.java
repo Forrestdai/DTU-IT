@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import trafficrouting.TransportNode;
 
 /**
  *
@@ -84,7 +85,8 @@ public class ServerTransmitter implements ExecutableCyclic
             MessageUtils.sendTransmission(sendSocket, packet);
             
             TransmissionPacket returnPacket = MessageUtils.getTransmission(sendSocket);
-            return (GraphTransmitObject) returnPacket.dataObject;
+            GraphTransmitObject graph = new GraphTransmitObject((Map<Integer, TransportNode>) returnPacket.dataObject);
+            return graph;
         } catch (IOException | ClassNotFoundException ex)
         {
             LogPrinter.printError("Error getting traffic graph from main server", ex);

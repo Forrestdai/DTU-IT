@@ -12,11 +12,7 @@ import java.net.Socket;
 import connection.tcp.common.MessageUtils;
 import connection.tcp.common.TransmissionPacket;
 import helpers.Journey;
-import helpers.ServerData;
 import helpers.User;
-import java.util.ArrayList;
-import java.util.Stack;
-import trafficrouting.TransportNode;
 
 /**
  *
@@ -72,21 +68,18 @@ public class GetUserConnectionCommand implements Command
         switch (Server.state.currentState)
         {
             case arrivedAtStation:
-                if (userIsPotential())
+                if (userIsActive())
                 {
-                    moveToActiveArray();
+                    user.endLocation = Server.state.currentStop; //update end position.
                 } else
                 {
                     addToPotentialArray();
                 }
                 break;
             case leftStation:
-                System.out.println("was put to charged");
-                if (userIsActive())
+                if (userIsPotential())
                 {
-                    user.endLocation = Server.state.currentStop;
-                    Server.serverTransmitter.chargeUser(user, calculateUserCharge());
-                    Server.activeUsers.removeUser(user);
+                    moveToActiveArray();
                 }
                 break;
         }
@@ -96,20 +89,28 @@ public class GetUserConnectionCommand implements Command
     {
         return !Server.activeUsers.userExists(user) && Server.potentialUsers.userExists(user);
     }
-    
+
     private boolean userIsActive()
     {
         return Server.activeUsers.userExists(user);
     }
 
+    private void chargeAndRemoveUser()
+    {
+        user.endLocation = Server.state.currentStop;
+        Server.serverTransmitter.chargeUser(user, calculateUserCharge());
+        Server.activeUsers.removeUser(user);
+    }
+
     private void moveToActiveArray()
     {
         System.out.println("Was potential");
+        user.endLocation = Server.state.currentStop;
         Server.potentialUsers.removeUser(user);
         Server.activeUsers.pushUser(user);
     }
 
-    private void addToPotentialArray()
+    private void addToPotentialArray() //New User
     {
         System.out.println("Was new");
         user.startLocation = Server.state.currentStop;

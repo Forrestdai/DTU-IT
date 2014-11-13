@@ -5,14 +5,13 @@
  */
 package trafficrouting;
 
-import java.io.Serializable;
 import java.util.Map;
 
 /**
  *
  * @author JamesFoxes
  */
-public class GraphTransmitObject implements Serializable
+public class GraphTransmitObject
 {
     private final Map<Integer, TransportNode> nodes;
 
@@ -26,5 +25,10 @@ public class GraphTransmitObject implements Serializable
         Graph graph = new Graph(goalIdentity);
         graph.addNodes(nodes);
         return graph.getDirectedGraph();
+    }
+
+    public Map<Integer, TransportNode> getNodes()
+    {
+        return nodes;
     }
 }

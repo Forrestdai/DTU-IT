@@ -5,10 +5,11 @@
  */
 package trafficrouting;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TransportNode implements Iterable<Edge>
+public class TransportNode implements Iterable<Edge>, Serializable
 {
     private ArrayList<Edge> edges;
     public Position position;

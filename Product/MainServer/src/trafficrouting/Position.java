@@ -5,11 +5,13 @@
  */
 package trafficrouting;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JamesFoxes
  */
-public class Position
+public class Position implements Serializable
 {
     double lat;
     double lon;

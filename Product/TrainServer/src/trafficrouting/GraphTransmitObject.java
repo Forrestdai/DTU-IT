@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author JamesFoxes
  */
-public class GraphTransmitObject implements Serializable
+public class GraphTransmitObject
 {
     private final Map<Integer, TransportNode> nodes;
 

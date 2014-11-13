@@ -5,11 +5,13 @@
  */
 package trafficrouting;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JamesFoxes
  */
-public class Edge
+public class Edge implements Serializable
 {
 
     public EdgeType edgeType;
@@ -27,7 +29,7 @@ public class Edge
         this.transportLineName = transportLineName;
     }
 
-    enum EdgeType
+    enum EdgeType implements Serializable
     {
 
         TRAIN, BUS_A, BUS_E, BUS_N, BUS_S, BUS, METRO, WALKING, BOAT

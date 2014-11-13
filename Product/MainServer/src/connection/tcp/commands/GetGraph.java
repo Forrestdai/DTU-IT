@@ -5,6 +5,7 @@
  */
 package connection.tcp.commands;
 
+import connection.tcp.common.MessageUtils;
 import connection.tcp.common.TransmissionPacket;
 import execute.Server;
 import java.io.IOException;
@@ -27,7 +28,8 @@ public class GetGraph implements Command
         
         TransmissionPacket returnPacket = new TransmissionPacket();
         returnPacket.command = TransmissionPacket.Commands.ACKNOWLEDGE;
-        returnPacket.dataObject = Server.trafficGraph.getTransmitObject();
+        returnPacket.dataObject = Server.trafficGraph.getTransmitObject().getNodes();
+        MessageUtils.sendTransmission(clientConnection, returnPacket);
     }
 
 }

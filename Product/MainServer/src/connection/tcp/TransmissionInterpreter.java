@@ -49,6 +49,7 @@ public class TransmissionInterpreter
                 break;
             case GETGRAPH:
                 toExecute = new GetGraph();
+                break;
             default:
                 toExecute = new ErrorCommand();
                 break;
