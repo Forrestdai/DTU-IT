@@ -55,8 +55,7 @@ public class TestServer
         
         for (int i = 0; i < amountToSend; i++)
         {
-            User user = new User();
-            user.ID = 123 * i;
+            User user = new User(123 * i);
             expectedUserIDSum += user.ID;
             Server.serverTransmitter.requestUser(user);
         }

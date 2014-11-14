@@ -20,7 +20,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
 import threading.executiontypes.CyclicalExecutor;
 import threading.executiontypes.ExecutableCyclic;
 import trafficrouting.Edge;
@@ -72,7 +71,7 @@ public class DatabaseHandler
                 user.ID, user.firstName, user.lastName, user.passWord, user.balance
             };
 
-            ResultSet userData = userDatabase.pushPreparedStatement(addUserSQL, properties, true);
+            userDatabase.pushPreparedStatement(addUserSQL, properties, true);
         } catch (SQLException ex)
         {
             LogPrinter.printError("Could not add user to database", ex);
@@ -91,12 +90,8 @@ public class DatabaseHandler
         userDatabase.pushPreparedStatement(userSQL, properties, true);
     }
 
-    public User getUser(int userID) throws SQLException, NotFound
+    public User getUser(int userID) throws SQLException
     {
-        User user = new User();
-
-        user.ID = -1;
-
         String userSQL = "SELECT * FROM Users WHERE CustomerID = ?";
 
         Object[] properties =
@@ -106,21 +101,30 @@ public class DatabaseHandler
 
         ResultSet userData = userDatabase.pushPreparedStatement(userSQL, properties, false);
 
-        while (userData.next())
-        {
-            user.ID = userData.getInt("CUSTOMERID");
-            user.firstName = userData.getString("FIRST_NAME");
-            user.lastName = userData.getString("LAST_NAME");
-            user.passWord = userData.getString("PASSWORD");
-            user.balance = userData.getDouble("BALANCE");
-        }
+        User user = new User(0);
 
-        if (user.ID == -1)
+        if (!userData.next())
         {
-            throw new NotFound();
+            user = createDefaultUser(userID);
+        } else
+        {
+            do
+            {
+                user.ID = userData.getInt("CUSTOMERID");
+                user.firstName = userData.getString("FIRST_NAME");
+                user.lastName = userData.getString("LAST_NAME");
+                user.passWord = userData.getString("PASSWORD");
+                user.balance = userData.getDouble("BALANCE");
+            } while (userData.next());
         }
-
         return user;
+    }
+
+    private User createDefaultUser(int ID) throws SQLException
+    {
+        User user = new User(ID);
+        addUser(user);
+        return getUser(ID);
     }
 
     public void updateUser(User user)
@@ -259,9 +263,6 @@ public class DatabaseHandler
             } catch (SQLException ex)
             {
                 LogPrinter.printError("SQL error", ex);
-            } catch (NotFound ex)
-            {
-                LogPrinter.printError("SQL error", ex);
             }
         }
 
@@ -275,7 +276,7 @@ public class DatabaseHandler
             usersToUpdate.add(user);
         }
 
-        private void runUpdates() throws SQLException, NotFound
+        private void runUpdates() throws SQLException
         {
             for (User user : usersToUpdate)
             {
@@ -294,7 +295,7 @@ public class DatabaseHandler
             }
         }
 
-        private void runCharges() throws SQLException, NotFound
+        private void runCharges() throws SQLException
         {
             for (Entry<User, Double> userEntry : usersToCharge.entrySet())
             {
@@ -316,11 +317,10 @@ public class DatabaseHandler
 
         private User updateUserFields(User existing, User adding)
         {
-            User combined = new User();
-            combined.ID = existing.ID;
+            User combined = new User(existing.ID);
             combined.firstName = adding.firstName;
             combined.lastName = adding.lastName;
-            combined.passWord = adding.lastName;
+            combined.passWord = adding.passWord;
             combined.balance = adding.balance;
             return combined;
         }

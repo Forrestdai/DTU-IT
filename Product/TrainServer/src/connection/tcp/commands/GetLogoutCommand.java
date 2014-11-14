@@ -30,8 +30,7 @@ public class GetLogoutCommand implements Command
     @Override
     public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException
     {
-        User user = new User();
-        user.ID = getID(clientConnection, incomingPacket);
+        User user = new User(getID(clientConnection, incomingPacket));
 
         if (Server.potentialUsers.userExists(user))
         {
