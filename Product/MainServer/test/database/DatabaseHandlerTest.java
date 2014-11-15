@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import trafficrouting.DirectedGraph;
 import trafficrouting.Edge;
 import trafficrouting.Position;
@@ -34,10 +35,8 @@ public class DatabaseHandlerTest
     }
 
     @BeforeClass
-    public static void setUpClass() throws SQLException
+    public static void setUpClass()
     {
-        DatabaseHandler db = new DatabaseHandler();
-        db.getUser(0);
     }
 
     @AfterClass
@@ -56,7 +55,7 @@ public class DatabaseHandlerTest
     }
 
     @Test
-    public void testAddUser() throws SQLException, InterruptedException
+    public void testAddUser() throws SQLException, NotFound, InterruptedException
     {
         DatabaseHandler database = new DatabaseHandler();
         User user = database.getUser(0);
@@ -70,18 +69,18 @@ public class DatabaseHandlerTest
     }
 
     @Test
-    public void testGetUser() throws SQLException, InterruptedException
+    public void testGetUser() throws SQLException, NotFound, InterruptedException
     {
         DatabaseHandler database = new DatabaseHandler();
         User user = database.getUser(0);
         
-        assertEquals("unknown", user.firstName);
-        assertEquals("unknown", user.lastName);
-        assertEquals("none", user.passWord);
+        assertEquals("default", user.firstName);
+        assertEquals("default", user.lastName);
+        assertEquals("default", user.passWord);
     }
 
     @Test (timeout = 5500)
-    public void testUpdateUser() throws SQLException, InterruptedException
+    public void testUpdateUser() throws SQLException, NotFound, InterruptedException
     {
         DatabaseHandler database = new DatabaseHandler();
         User user = database.getUser(0);
@@ -95,7 +94,7 @@ public class DatabaseHandlerTest
     }
 
     @Test (timeout = 5500)
-    public void testChargeUser() throws SQLException, InterruptedException
+    public void testChargeUser() throws SQLException, NotFound, InterruptedException
     {
         DatabaseHandler database = new DatabaseHandler();
         User user = database.getUser(0);

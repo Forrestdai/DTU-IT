@@ -23,15 +23,4 @@ public class User implements Serializable
     
     public TransportNode startLocation;
     public TransportNode endLocation;
-
-    public User(int ID)
-    {
-        this.ID = ID;
-        firstName = "unknown";
-        lastName = "unknown";
-        passWord = "none";
-        balance = 0.0;
-    }
-    
-    
 }

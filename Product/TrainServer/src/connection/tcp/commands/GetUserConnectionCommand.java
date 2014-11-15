@@ -27,13 +27,13 @@ public class GetUserConnectionCommand implements Command
     public GetUserConnectionCommand()
     {
         reply = new TransmissionPacket();
+        user = new User();
     }
 
     @Override
     public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException, ClassNotFoundException
     {
         int userID = Integer.parseInt(incomingPacket.dataString); //checkConnectionValidityReturnUserID(incomingPacket);
-        user = new User(userID);
         if (userID != -1)
         {
             user.ID = userID;
