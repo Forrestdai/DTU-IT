@@ -81,7 +81,8 @@ public class GetUser implements Command
         for (User user : inputArray)
         {
             //GET USER FUNCTION
-            User toSend = new User(user.ID);
+            User toSend = new User();
+            toSend.ID = user.ID;
             LogPrinter.print("Recieved: " + user.ID);
             returnUserArray.add(toSend);
         }
