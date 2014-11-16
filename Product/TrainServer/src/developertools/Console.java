@@ -16,13 +16,17 @@ import helpers.UserArray;
 import java.awt.List;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListModel;
+import trafficrouting.TransportNode;
 
 /**
  *
@@ -31,6 +35,8 @@ import javax.swing.ListModel;
 public class Console extends javax.swing.JFrame
 {
     SetupUDP udpCaster;
+    Map<Integer, TransportNode> nodes;
+    Map<String, Integer> nameStopRelation = new HashMap<>();
 
     public Console()
     {
@@ -44,6 +50,10 @@ public class Console extends javax.swing.JFrame
             SimpleProcessorRequest incomingTCPProcess = new SimpleProcessorRequest(incomingTCP);
             Server.serverThreadPool.schedule(incomingTCPProcess);
 
+            Server.trafficGraph = Server.serverTransmitter.getTrafficGraph();
+            nodes = Server.trafficGraph.getNodes();
+            createDropDownBox();
+            
             Server.serverThreadPool.schedule(new ProcessorRequest()
             {
 
@@ -96,6 +106,20 @@ public class Console extends javax.swing.JFrame
         }
         return model;
     }
+    
+    private void createDropDownBox()
+    {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel();
+        for (Entry<Integer, TransportNode> nodeSet : nodes.entrySet())
+        {
+            Integer key = nodeSet.getKey();
+            TransportNode value = nodeSet.getValue();
+            model.addElement(value.identity);
+            
+            nameStopRelation.put(value.identity, key);
+        }
+        stationDropDown.setModel(model);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,17 +135,18 @@ public class Console extends javax.swing.JFrame
         potentialUsers = new javax.swing.JList();
         jScrollPane2 = new javax.swing.JScrollPane();
         activeUsers = new javax.swing.JList();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        toBeChargedUsers = new javax.swing.JList();
         btn_arriveAtStation = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         field_serverState = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         btn_leaveStation = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        stationDropDown = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         potentialUsers.setModel(new javax.swing.AbstractListModel()
         {
@@ -131,6 +156,8 @@ public class Console extends javax.swing.JFrame
         });
         jScrollPane1.setViewportView(potentialUsers);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 174, 290));
+
         activeUsers.setModel(new javax.swing.AbstractListModel()
         {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -139,13 +166,7 @@ public class Console extends javax.swing.JFrame
         });
         jScrollPane2.setViewportView(activeUsers);
 
-        toBeChargedUsers.setModel(new javax.swing.AbstractListModel()
-        {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane3.setViewportView(toBeChargedUsers);
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, 184, 290));
 
         btn_arriveAtStation.setText("Arrive At Station");
         btn_arriveAtStation.addActionListener(new java.awt.event.ActionListener()
@@ -155,14 +176,17 @@ public class Console extends javax.swing.JFrame
                 btn_arriveAtStationActionPerformed(evt);
             }
         });
+        getContentPane().add(btn_arriveAtStation, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, -1, -1));
 
         jLabel1.setText("Potential Users:");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
 
         jLabel2.setText("Active Users:");
-
-        jLabel3.setText("Users to be charged:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, -1, -1));
+        getContentPane().add(field_serverState, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 150, 25));
 
         jLabel4.setText("Train Server state:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
 
         btn_leaveStation.setText("Leave Station");
         btn_leaveStation.addActionListener(new java.awt.event.ActionListener()
@@ -172,64 +196,33 @@ public class Console extends javax.swing.JFrame
                 btn_leaveStationActionPerformed(evt);
             }
         });
+        getContentPane().add(btn_leaveStation, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, 130, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
-                            .addComponent(jLabel1)
-                            .addComponent(field_serverState))
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btn_arriveAtStation)
-                                .addGap(18, 18, 18)
-                                .addComponent(btn_leaveStation))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2))
-                                .addGap(36, 36, 36)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addComponent(jLabel4))
-                .addContainerGap(176, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_arriveAtStation)
-                    .addComponent(field_serverState, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_leaveStation))
-                .addGap(54, 54, 54)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(162, Short.MAX_VALUE))
-        );
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setText("GPS");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, -1, 20));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel5.setText("SERVER");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, -1, -1));
+
+        stationDropDown.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        stationDropDown.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                stationDropDownActionPerformed(evt);
+            }
+        });
+        getContentPane().add(stationDropDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 170, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_arriveAtStationActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btn_arriveAtStationActionPerformed
     {//GEN-HEADEREND:event_btn_arriveAtStationActionPerformed
+        Server.state.currentStop = nodes.get(nameStopRelation.get((String)stationDropDown.getSelectedItem()));
+        System.out.println("Stop: " + Server.state.currentStop.identity);
         udpCaster.getGPS().setState(ServerState.State.arrivedAtStation);
         field_serverState.setText(Server.state.toString());
         
@@ -259,6 +252,11 @@ public class Console extends javax.swing.JFrame
             }
         });
     }//GEN-LAST:event_btn_leaveStationActionPerformed
+
+    private void stationDropDownActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_stationDropDownActionPerformed
+    {//GEN-HEADEREND:event_stationDropDownActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_stationDropDownActionPerformed
 
     /**
      * @param args the command line arguments
@@ -314,10 +312,10 @@ public class Console extends javax.swing.JFrame
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList potentialUsers;
-    private javax.swing.JList toBeChargedUsers;
+    private javax.swing.JComboBox stationDropDown;
     // End of variables declaration//GEN-END:variables
 }

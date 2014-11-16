@@ -12,6 +12,7 @@ import helpers.ServerState;
 import helpers.User;
 import helpers.UserArray;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.Map;
@@ -52,15 +53,30 @@ public class BroadcastUDP implements ExecuteOnImpulse
         Server.UDPCode = new ClientConnectionCode();
         try
         {
-            socket = new MulticastSocket(ServerData.UDP_SERVER_PORT);
-            //socket.joinGroup(castAddress);
-            socket.setBroadcast(true);
+            System.out.println("Sender");
+            DatagramSocket socket = null;
+            DatagramPacket outPacket = null;
+            byte[] outBuffer;
+            final int PORT = 8888;
 
-            send500Packets();
+            socket = new DatagramSocket();
+            long counter = 0;
+            String msg;
 
-            // socket.leaveGroup(castAddress);
-            socket.close();
-            System.out.println("SENT");
+            outBuffer = Server.UDPCode.toString().getBytes();
+
+            //Send to multicast IP address and port
+            InetAddress address = InetAddress.getByName("224.2.2.3");
+            outPacket = new DatagramPacket(outBuffer, outBuffer.length, address, PORT);
+
+            socket.send(outPacket);
+
+            try
+            {
+                Thread.sleep(500);
+            } catch (InterruptedException ie)
+            {
+            }
 
             if (Server.state.currentState.equals(ServerState.State.leftStation))
             {

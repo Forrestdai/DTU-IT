@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import trafficrouting.TransportNode;
 
 /**
  *
@@ -68,5 +69,12 @@ public class UserArray
     public void clear()
     {
         userMap.clear();
+    }
+    
+    public void setUserStartStop(int ID, TransportNode stop)
+    {
+        User user = userMap.get(ID);
+        user.startLocation = stop;
+        userMap.replace(ID, user);
     }
 }

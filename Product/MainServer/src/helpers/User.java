@@ -19,10 +19,12 @@ public class User implements Serializable
     public String firstName;
     public String lastName;
     public String passWord;
-    public Double balance;
+    public Integer balance;
     
     public TransportNode startLocation;
     public TransportNode endLocation;
+    
+    public Integer cost;
 
     public User(int ID)
     {
@@ -30,7 +32,8 @@ public class User implements Serializable
         firstName = "unknown";
         lastName = "unknown";
         passWord = "none";
-        balance = 0.0;
+        balance = 0;
+        cost = 0;
     }
     
     

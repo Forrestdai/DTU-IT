@@ -111,9 +111,9 @@ public class DeveloperConsole extends javax.swing.JFrame
                 {
                     Client key = entry.getKey();
                     States value = entry.getValue();
-                    if (!value.equals(key.clientState))
+                    if (!value.equals(key.getData().clientState))
                     {
-                        clients.replace(key, key.clientState);
+                        clients.replace(key, key.getData().clientState);
                     }
                 }
             }
@@ -130,12 +130,12 @@ public class DeveloperConsole extends javax.swing.JFrame
                     switch (value)
                     {
                         case IDLE:
-                            listeningClients.add(new DefaultMutableTreeNode(key));
+                            listeningClients.add(new DefaultMutableTreeNode("client: " + key.data.clientID));
                             break;
                         case SENDING:
-                            sendingClients.add(new DefaultMutableTreeNode(key));
+                            sendingClients.add(new DefaultMutableTreeNode("client: " + key.data.clientID));
                         case LOGGEDIN:
-                            loggedClients.add(new DefaultMutableTreeNode(key));
+                            loggedClients.add(new DefaultMutableTreeNode("client: " + key.data.clientID));
                             break;
                     }
                 }
@@ -160,22 +160,21 @@ public class DeveloperConsole extends javax.swing.JFrame
     {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        startClient_btn = new javax.swing.JButton();
         inputAmountOfClientsToStart = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         clientTree = new javax.swing.JTree();
-        btn_logon = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Amount of Clients to start");
 
-        jButton1.setText("START");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
+        startClient_btn.setText("START");
+        startClient_btn.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jButton1ActionPerformed(evt);
+                startClient_btnActionPerformed(evt);
             }
         });
 
@@ -198,34 +197,20 @@ public class DeveloperConsole extends javax.swing.JFrame
         });
         jScrollPane1.setViewportView(clientTree);
 
-        btn_logon.setText("Log On");
-        btn_logon.setEnabled(false);
-        btn_logon.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                btn_logonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(inputAmountOfClientsToStart, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_logon)))
+                        .addComponent(startClient_btn)))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -234,28 +219,23 @@ public class DeveloperConsole extends javax.swing.JFrame
                 .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1)
+                    .addComponent(startClient_btn)
                     .addComponent(inputAmountOfClientsToStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(btn_logon)))
+                .addGap(35, 35, 35)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(161, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
-    {//GEN-HEADEREND:event_jButton1ActionPerformed
+    private void startClient_btnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_startClient_btnActionPerformed
+    {//GEN-HEADEREND:event_startClient_btnActionPerformed
         for (int i = 0; i < Integer.parseInt(inputAmountOfClientsToStart.getText()); ++i)
         {
             clients.put(new Client(), States.IDLE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_startClient_btnActionPerformed
 
     private void inputAmountOfClientsToStartActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_inputAmountOfClientsToStartActionPerformed
     {//GEN-HEADEREND:event_inputAmountOfClientsToStartActionPerformed
@@ -264,36 +244,14 @@ public class DeveloperConsole extends javax.swing.JFrame
 
     private void clientTreeMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_clientTreeMouseClicked
     {//GEN-HEADEREND:event_clientTreeMouseClicked
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) clientTree.getLastSelectedPathComponent();
-
-        if (node == null)
-        //Nothing is selected.  
-        {
-            return;
-        }
-
-        Object nodeInfo = node.getUserObject();
-
-        if (node.isLeaf() && nodeInfo instanceof Client)
-        {
-            selectedClient = (Client) nodeInfo;
-            selectedClient.loginToServer();
-            btn_logon.setEnabled(true);
-        }
     }//GEN-LAST:event_clientTreeMouseClicked
-
-    private void btn_logonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btn_logonActionPerformed
-    {//GEN-HEADEREND:event_btn_logonActionPerformed
-        selectedClient.loginToServer();
-    }//GEN-LAST:event_btn_logonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_logon;
     private javax.swing.JTree clientTree;
     private javax.swing.JTextField inputAmountOfClientsToStart;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton startClient_btn;
     // End of variables declaration//GEN-END:variables
 }

@@ -131,7 +131,7 @@ public class ServerTransmitter implements ExecutableCyclic
         
         for (Map.Entry<User, Double> entrySet : chargeUsers.entrySet())
         {
-            System.out.println("Charge user entry: " + entrySet.getKey().ID + ", charge: " + entrySet.getValue());
+            LogPrinter.print("Charge user entry: " + entrySet.getKey().ID + ", charge: " + entrySet.getValue());
             charges.put(entrySet.getKey(), entrySet.getValue());
             chargeUsers.remove(entrySet.getKey());
         }
@@ -183,7 +183,7 @@ public class ServerTransmitter implements ExecutableCyclic
             this.users = users;
             for (User user : users)
             {
-                System.out.println("USER: " + user);
+                LogPrinter.print("USER: " + user);
             }
         }
 

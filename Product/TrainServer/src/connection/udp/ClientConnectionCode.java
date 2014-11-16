@@ -17,4 +17,10 @@ public class ClientConnectionCode
     {
         code = (int)(Math.random()*100000000);
     }
+    
+    @Override
+    public String toString()
+    {
+        return Integer.toString(code);
+    }
 }

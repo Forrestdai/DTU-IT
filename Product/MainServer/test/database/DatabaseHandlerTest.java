@@ -5,6 +5,7 @@
  */
 package database;
 
+import helpers.LogPrinter;
 import helpers.User;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class DatabaseHandlerTest
     {
         DatabaseHandler database = new DatabaseHandler();
         User user = database.getUser(0);
-        user.balance = 50.0;
+        user.balance = 50;
         database.removeUser(0);
         
         database.addUser(user);
@@ -85,7 +86,7 @@ public class DatabaseHandlerTest
     {
         DatabaseHandler database = new DatabaseHandler();
         User user = database.getUser(0);
-        user.balance = 0.0;
+        user.balance = 0;
         
         database.updateUser(user);  //updating takes precedense during execution.
         database.chargeUser(user, 5);
@@ -138,7 +139,7 @@ public class DatabaseHandlerTest
         int numberOfStops = 0;
         for (TransportNode node : directedGraph)
         {
-            System.out.println(node.identity);
+            LogPrinter.print(node.identity);
             assertTrue("invalid nodes added to directed graph", node.referenceID >= 0);
             ++numberOfStops;
 

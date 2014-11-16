@@ -6,16 +6,14 @@
 package connection.udp;
 
 import common.interfaces.ProcessorRequest;
+import connection.tcp.common.ServerTransmitter;
 import execute.Client;
 import helpers.ClientData;
+import helpers.LogPrinter;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
-import java.net.NetworkInterface;
-import java.net.SocketAddress;
-import java.util.Enumeration;
 
 /**
  *
@@ -25,57 +23,50 @@ public class UDPListener implements ProcessorRequest
 {
 
     private MulticastSocket socketUDP;
-    private SocketAddress castAddress;
-    private NetworkInterface networkInterface;
-    private String message;
-    private String[] splitMessage;
+    private InetAddress castAddress;
+    private DatagramPacket incomingMessage;
+    private ClientData data;
 
-    public UDPListener()
+    private ServerTransmitter serverTransmitter;
+
+    public UDPListener(ClientData data)
     {
-        try
-        {
-            socketUDP = new MulticastSocket(ClientData.UDP_SERVER_PORT);
-            castAddress = new InetSocketAddress(ClientData.UDP_ADDRESS, ClientData.UDP_SERVER_PORT);
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-
-            while (interfaces.hasMoreElements())
-            {
-                NetworkInterface next = interfaces.nextElement();
-                if (next.supportsMulticast())
-                {
-                    System.out.println("Network Interface: " + next.getName() + " full: " + next.getDisplayName());
-                }
-            }
-            networkInterface = NetworkInterface.getByName("eth1");
-
-            socketUDP.joinGroup(castAddress, networkInterface);
-        } catch (Exception ex)
-        {
-        }
+        this.data = data;
     }
-    
+
     @Override
     public void process()
     {
-        System.out.println("hey " + socketUDP.toString());
-        try
+        while (true)
         {
-            byte[] messageBuffer = new byte[256];
-            DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
-            System.out.println("Listens");
-            socketUDP.receive(packet);
-            System.out.println("Recieved");
-            
-            socketUDP.leaveGroup(castAddress, networkInterface);
-            socketUDP.close();
-            
-            System.err.println("HELLO");
-            message = new String(packet.getData(), 0, packet.getLength());
-            ReadServerData serverData = new ReadServerData(message);
-            System.out.println(serverData.address + serverData.ticketCode + serverData.port);
-            
-        } catch (IOException ex)
-        {
+            try
+            {
+                System.out.println("Reciever");
+
+                socketUDP = new MulticastSocket(data.UDP_SERVER_PORT);
+                castAddress = InetAddress.getByName(data.UDP_ADDRESS);
+                socketUDP.joinGroup(castAddress);
+
+                byte[] inputBuffer = new byte[256];
+                incomingMessage = new DatagramPacket(inputBuffer, inputBuffer.length);
+                socketUDP.receive(incomingMessage);
+
+                String message = new String(inputBuffer, 0, incomingMessage.getLength());
+
+                data.TCP_SERVER_ADDRESS = incomingMessage.getAddress().toString().substring(1);
+                data.ServerTicket = message;
+                LogPrinter.print("Recieved code: " + message);
+
+                serverTransmitter = new ServerTransmitter(data);
+                serverTransmitter.loginToServer();
+
+                /*System.err.println("HELLO");
+                 message = new String(packet.getData(), 0, packet.getLength());
+                 ReadServerData serverData = new ReadServerData(message);
+                 LogPrinter.print(serverData.address + serverData.ticketCode + serverData.port);*/
+            } catch (IOException ex)
+            {
+            }
         }
     }
 }

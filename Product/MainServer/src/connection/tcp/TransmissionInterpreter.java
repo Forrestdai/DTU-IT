@@ -13,6 +13,7 @@ import connection.tcp.commands.GetUser;
 import java.io.IOException;
 import java.net.Socket;
 import connection.tcp.common.TransmissionPacket;
+import helpers.LogPrinter;
 
 /**
  *
@@ -25,7 +26,7 @@ public class TransmissionInterpreter
 
     public TransmissionInterpreter(TransmissionPacket message, Socket clientConnection)
     {
-        System.out.println("Main server interpreting message: " + message.command.toString());
+        LogPrinter.print("Main server interpreting message: " + message.command.toString());
         recievedTransmission = message;
         try
         {

@@ -7,6 +7,7 @@ package trafficrouting;
 
 import trafficrouting.DirectedGraph;
 import depricated.DijkstraTraversal;
+import helpers.LogPrinter;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -149,6 +150,6 @@ public class DijkstraTraversalTest
             }
         }
 
-        System.out.println("Time to sort:" + timeToSortMilli + " ms. with: " + connectedNodes + " out of " + nodes + " connected nodes");
+        LogPrinter.print("Time to sort:" + timeToSortMilli + " ms. with: " + connectedNodes + " out of " + nodes + " connected nodes");
     }
 }

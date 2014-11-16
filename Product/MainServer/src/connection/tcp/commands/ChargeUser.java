@@ -27,8 +27,8 @@ public class ChargeUser implements Command
         TransmissionPacket reply = new TransmissionPacket();
         try
         {
-            Map<User, Double> userCharges = castUserObject(incomingPacket.dataObject);
-            for (Entry<User, Double> chargeSet : userCharges.entrySet())
+            Map<User, Integer> userCharges = castUserObject(incomingPacket.dataObject);
+            for (Entry<User, Integer> chargeSet : userCharges.entrySet())
             {
                 Server.database.chargeUser(chargeSet.getKey(), chargeSet.getValue());
             }
@@ -39,12 +39,12 @@ public class ChargeUser implements Command
         }
     }
 
-    private Map<User, Double> castUserObject(Object toCast) throws Exception
+    private Map<User, Integer> castUserObject(Object toCast) throws Exception
     {
-        Map<User, Double> users;
+        Map<User, Integer> users;
         try
         {
-            users = (Map<User, Double>) toCast;
+            users = (Map<User, Integer>) toCast;
         } catch (ClassCastException e)
         {
             users = new HashMap<>();

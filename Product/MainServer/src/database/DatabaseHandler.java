@@ -114,7 +114,7 @@ public class DatabaseHandler
                 user.firstName = userData.getString("FIRST_NAME");
                 user.lastName = userData.getString("LAST_NAME");
                 user.passWord = userData.getString("PASSWORD");
-                user.balance = userData.getDouble("BALANCE");
+                user.balance = userData.getInt("BALANCE");
             } while (userData.next());
         }
         return user;
@@ -132,7 +132,7 @@ public class DatabaseHandler
         userDatabaseUpdater.updateUser(user);
     }
 
-    public void chargeUser(User user, double charge)
+    public void chargeUser(User user, Integer charge)
     {
         userDatabaseUpdater.chargeUser(user, charge);
     }
@@ -240,7 +240,7 @@ public class DatabaseHandler
     {
 
         private Map<Integer, User> toPushToDatabase;
-        private final ConcurrentMap<User, Double> usersToCharge;
+        private final ConcurrentMap<User, Integer> usersToCharge;
         private final ConcurrentLinkedQueue<User> usersToUpdate;
 
         public UpdateUsers()
@@ -266,7 +266,7 @@ public class DatabaseHandler
             }
         }
 
-        private void chargeUser(User user, double amount)
+        private void chargeUser(User user, Integer amount)
         {
             usersToCharge.put(user, amount);
         }
@@ -297,7 +297,7 @@ public class DatabaseHandler
 
         private void runCharges() throws SQLException
         {
-            for (Entry<User, Double> userEntry : usersToCharge.entrySet())
+            for (Entry<User, Integer> userEntry : usersToCharge.entrySet())
             {
                 User user = userEntry.getKey();
                 User existing;
@@ -325,7 +325,7 @@ public class DatabaseHandler
             return combined;
         }
 
-        private User chargeUserFields(User existing, Double charge)
+        private User chargeUserFields(User existing, Integer charge)
         {
             User combined = existing;
             combined.balance = existing.balance - charge;

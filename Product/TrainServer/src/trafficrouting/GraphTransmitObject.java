@@ -27,4 +27,9 @@ public class GraphTransmitObject
         graph.addNodes(nodes);
         return graph.getDirectedGraph();
     }
+    
+    public Map<Integer, TransportNode> getNodes()
+    {
+        return nodes;
+    }
 }

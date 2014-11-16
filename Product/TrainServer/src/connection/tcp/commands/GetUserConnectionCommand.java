@@ -12,7 +12,9 @@ import java.net.Socket;
 import connection.tcp.common.MessageUtils;
 import connection.tcp.common.TransmissionPacket;
 import helpers.Journey;
+import helpers.LogPrinter;
 import helpers.User;
+import java.util.NoSuchElementException;
 
 /**
  *
@@ -32,7 +34,7 @@ public class GetUserConnectionCommand implements Command
     @Override
     public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException, ClassNotFoundException
     {
-        int userID = Integer.parseInt(incomingPacket.dataString); //checkConnectionValidityReturnUserID(incomingPacket);
+        int userID = checkConnectionValidityReturnUserID(incomingPacket);
         user = new User(userID);
         if (userID != -1)
         {
@@ -68,13 +70,15 @@ public class GetUserConnectionCommand implements Command
         switch (Server.state.currentState)
         {
             case arrivedAtStation:
-                if (userIsPotential())
+                if (isUserPotential())
                 {
+                    user = Server.potentialUsers.getUserByID(user.ID);
                     moveToActiveArray();
                 }
-                if (userIsActive())
+                if (isUserActive())
                 {
-                    user.endLocation = Server.state.currentStop; //update end position.
+                    user = Server.activeUsers.getUserByID(user.ID);
+                    updateUserTravelCost(); //update end position.
                 } else
                 {
                     addToPotentialArray();
@@ -86,63 +90,58 @@ public class GetUserConnectionCommand implements Command
         }
     }
 
-    private boolean userIsPotential()
+    private boolean isUserPotential()
     {
         return !Server.activeUsers.userExists(user) && Server.potentialUsers.userExists(user);
     }
 
-    private boolean userIsActive()
+    private boolean isUserActive()
     {
         return Server.activeUsers.userExists(user);
     }
 
-    private void chargeAndRemoveUser()
-    {
-        user.endLocation = Server.state.currentStop;
-        Server.serverTransmitter.chargeUser(user, calculateUserCharge());
-        Server.activeUsers.removeUser(user);
-    }
-
     private void moveToActiveArray()
     {
-        System.out.println("Was potential");
-        user.endLocation = Server.state.currentStop;
+        LogPrinter.print("Was potential");
+        updateUserTravelCost();
+
         Server.potentialUsers.removeUser(user);
         Server.activeUsers.pushUser(user);
     }
 
-    private void addToPotentialArray() //New User
+    private void updateUserTravelCost()
     {
-        System.out.println("Was new");
-        user.startLocation = Server.state.currentStop;
-        Server.serverTransmitter.requestUser(user);
-        waitToReply();
+        user.endLocation = Server.state.currentStop;
+        int newCost = calculateUserCharge();
+        if (newCost > user.cost)
+        {
+            user.cost = newCost;
+        }
     }
 
-    private double calculateUserCharge()
+    private void addToPotentialArray() //New User
+    {
+        LogPrinter.print("Was new");
+        Server.serverTransmitter.requestUser(user);
+        waitToReply();
+        Server.potentialUsers.setUserStartStop(user.ID, Server.state.currentStop);
+    }
+
+    private int calculateUserCharge()
     {
         Journey shortestPath = new Journey(user.startLocation, user.endLocation);
 
         return shortestPath.getCost();
     }
 
-    private int checkConnectionValidityReturnUserID(TransmissionPacket incomingPacket)
+    private int checkConnectionValidityReturnUserID(TransmissionPacket incomingPacket) throws NoSuchElementException
     {
-        try
-        {
-            if (Server.state.currentState == ServerState.State.arrivedAtStation)
-            {
-                String[] message = incomingPacket.dataString.split("\\s+");
-                if (Integer.parseInt(message[1]) == Server.UDPCode.code)
-                {
-                    return Integer.parseInt(message[0]);
-                }
-            }
-            return -1;
+        String[] message = incomingPacket.dataString.split("\\s+"); //split on space regex
 
-        } catch (Exception e)
+        if (Integer.parseInt(message[0]) == Server.UDPCode.code)
         {
-            return -1;
+            return Integer.parseInt(message[1]);
         }
+        throw new NoSuchElementException("Wrong user Ticket code");
     }
 }

@@ -19,11 +19,11 @@ import trafficrouting.TransportNode;
 public class Journey
 {
 
-    private Stack<TransportNode> journey;
+    private final Stack<TransportNode> journey;
     private final TransportNode startPoint;
     private final TransportNode endPoint;
-    private double cost = 0;
-    private double timeToTravel = 0;
+    private int cost = 0;
+    private double journeyTime = 0;
 
     public Journey(TransportNode startPoint, TransportNode endPoint)
     {
@@ -33,7 +33,7 @@ public class Journey
 
         findShortestPath();
         calculateCost();
-        calculateTime();
+        calculateJourneyTime();
     }
 
     private void findShortestPath()
@@ -80,7 +80,7 @@ public class Journey
         cost = ServerData.costPerZone * numberOfZonesGoneThrough;
     }
 
-    private void calculateTime()
+    private void calculateJourneyTime()
     {
         Stack<TransportNode> tempStack = (Stack<TransportNode>) journey.clone();
 
@@ -94,7 +94,7 @@ public class Journey
                 {
                     if (edge.toNode.equals(tempStack.peek()))
                     {
-                        timeToTravel += edge.cost;
+                        journeyTime += edge.cost;
                         break;
                     }
                 }
@@ -107,13 +107,13 @@ public class Journey
         return journey;
     }
 
-    public double getCost()
+    public int getCost()
     {
         return cost;
     }
 
     public double getTimeToTravel()
     {
-        return timeToTravel;
+        return journeyTime;
     }
 }

@@ -5,19 +5,22 @@
  */
 package helpers;
 
+import execute.States;
+
 /**
  *
  * @author JamesFoxes
  */
 public class ClientData
 {
-    public static final String UDP_ADDRESS = "224.2.3.255";
-    public static final int UDP_SERVER_PORT = 4446;
+    public final String UDP_ADDRESS = "224.2.2.3";
+    public final int UDP_SERVER_PORT = 8888;
     
-    public static final String TCP_LOCAL_ADDRESS = "localhost";
-    public static final int TCP_PORT = 2954;
+    public String TCP_SERVER_ADDRESS = "localhost"; //192.168.0.22
+    public int TCP_SERVER_PORT = 2954;
     
-    public static final String TCP_SERVER_ADDRESS = "localhost"; //192.168.0.22
-    public static final int TCP_SERVER_PORT = 2954;
-
+    public String ServerTicket;
+    public int clientID;
+    
+    public States clientState = States.IDLE;
 }

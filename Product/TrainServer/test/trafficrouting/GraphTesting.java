@@ -6,6 +6,7 @@
 package trafficrouting;
 
 import helpers.Journey;
+import helpers.LogPrinter;
 import helpers.ServerData;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class GraphTesting
         for (Iterator<TransportNode> iterator = testGraph.iterator(); iterator.hasNext();)
         {
             TransportNode next = iterator.next();
-            System.out.println(next.identity);
+            LogPrinter.print(next.identity);
         }
     }
 
@@ -55,10 +56,10 @@ public class GraphTesting
             TransportNode key = entrySet.getKey();
             Double value = entrySet.getValue();
 
-            System.out.println("key: " + key.identity);
-            System.out.println("value: " + value);
-            System.out.println("PATH:" + key.returnNode.identity);
-            System.out.println("");
+            LogPrinter.print("key: " + key.identity);
+            LogPrinter.print("value: " + value);
+            LogPrinter.print("PATH:" + key.returnNode.identity);
+            LogPrinter.print("");
 
             if (key.referenceID == 5)
             {
@@ -68,7 +69,7 @@ public class GraphTesting
                     System.out.print(node.identity + " -> ");
                     node = node.returnNode;
                 }
-                System.out.println(node.identity);
+                LogPrinter.print(node.identity);
                 assertEquals(1, node.referenceID);
 
             }
@@ -91,8 +92,8 @@ public class GraphTesting
         assertTrue(time > start.cost / 130);
         assertTrue(cost >= 1.0);
         
-        System.out.println("Cost: " + cost);
-        System.out.println("Time: " + time + " min");
+        LogPrinter.print("Cost: " + cost);
+        LogPrinter.print("Time: " + time + " min");
     }
 
     private Stack<TransportNode> fillStack(TransportNode endPoint)
