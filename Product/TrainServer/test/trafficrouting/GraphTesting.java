@@ -28,7 +28,7 @@ public class GraphTesting
     {
         TransportNode start = new TransportNode(new Position(55, 12), "A", 1, 1);
         TransportNode end = new TransportNode(new Position(55.5, 12.1), "B", 2, 1);
-        GraphTransmitObject toReturn = getGraph(start, end);
+        GraphObject toReturn = getGraph(start, end);
 
         DirectedGraph<TransportNode> testGraph = toReturn.getGraph(5);
 
@@ -45,7 +45,7 @@ public class GraphTesting
         TransportNode start = new TransportNode(new Position(55, 12), "A", 1, 1);
         TransportNode end = new TransportNode(new Position(54.3, 12.3), "E", 5, 2);
 
-        GraphTransmitObject toReturn = getGraph(start, end);
+        GraphObject toReturn = getGraph(start, end);
 
         DirectedGraph<TransportNode> testGraph = toReturn.getGraph(5);
         AStarTraversal traversal = new AStarTraversal();
@@ -81,7 +81,7 @@ public class GraphTesting
     {
         TransportNode start = new TransportNode(new Position(55, 12), "A", 1, 1);
         TransportNode end = new TransportNode(new Position(54.3, 12.3), "E", 5, 2);
-        GraphTransmitObject toReturn = getGraph(start, end);
+        GraphObject toReturn = getGraph(start, end);
         DirectedGraph<TransportNode> testGraph = toReturn.getGraph(5);
         new AStarTraversal().findShortestPaths(testGraph, start, end);
 
@@ -154,7 +154,7 @@ public class GraphTesting
         return timeToTravel;
     }
 
-    public static GraphTransmitObject getGraph(TransportNode start, TransportNode end)
+    public static GraphObject getGraph(TransportNode start, TransportNode end)
     {
         Map<Integer, trafficrouting.TransportNode> nodes = new HashMap<>();
         nodes.put(1, start);
@@ -182,7 +182,7 @@ public class GraphTesting
             }
         }
 
-        GraphTransmitObject toReturn = new GraphTransmitObject(nodes);
+        GraphObject toReturn = new GraphObject(new GraphObject.GraphTransmitObject(nodes, null));
         return toReturn;
     }
 }

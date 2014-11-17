@@ -12,7 +12,7 @@ import helpers.ServerState;
 import helpers.UserArray;
 import threading.PersistentExecutorPool;
 import threading.ThreadPerRequestScheduler;
-import trafficrouting.GraphTransmitObject;
+import trafficrouting.GraphObject;
 
 /**
  *
@@ -29,11 +29,12 @@ public class Server
     public static UserArray noChargeUserArray;
 
     public static ServerTransmitter serverTransmitter;
-    public static GraphTransmitObject trafficGraph;
+    public static GraphObject trafficGraph;
     
     public static ClientConnectionCode UDPCode;
     
     public static ServerState state;
+    
 
     public static void main(String[] args)
     {

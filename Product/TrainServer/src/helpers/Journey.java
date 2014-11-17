@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 import trafficrouting.AStarTraversal;
 import trafficrouting.Edge;
+import trafficrouting.SearchZones;
 import trafficrouting.TransportNode;
 
 /**
@@ -62,22 +63,8 @@ public class Journey
 
     private void calculateCost()
     {
-        Stack<TransportNode> tempStack = (Stack<TransportNode>) journey.clone();
-
-        int numberOfZonesGoneThrough = 0;
-        ArrayList<Integer> zonesGoneThrough = new ArrayList<>();
-
-        TransportNode node;
-        while (!tempStack.empty())
-        {
-            node = tempStack.pop();
-            if (!zonesGoneThrough.contains(node.zone))
-            {
-                ++numberOfZonesGoneThrough;
-                zonesGoneThrough.add(node.zone);
-            }
-        }
-        cost = ServerData.costPerZone * numberOfZonesGoneThrough;
+        SearchZones zones = new SearchZones();
+        cost = ServerData.costPerZone * zones.getZonesNeeded(startPoint, endPoint);
     }
 
     private void calculateJourneyTime()

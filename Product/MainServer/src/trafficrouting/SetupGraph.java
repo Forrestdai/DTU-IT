@@ -38,9 +38,9 @@ public class SetupGraph
         return nodes == null || nodes.isEmpty();
     }
     
-    public GraphTransmitObject getTransmitObject()
+    public GraphObject getTransmitObject()
     {
-        return new GraphTransmitObject(nodes);
+        return new GraphObject(nodes);
     }
     
     public TransportNode getNode(int identity)

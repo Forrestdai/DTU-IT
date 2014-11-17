@@ -5,7 +5,7 @@
  */
 package connection.tcp.common;
 
-import trafficrouting.GraphTransmitObject;
+import trafficrouting.GraphObject;
 import common.interfaces.ProcessorRequest;
 import static helpers.ServerData.*;
 import common.interfaces.ServerExecutable;
@@ -75,7 +75,7 @@ public class ServerTransmitter implements ExecutableCyclic
         chargeUsers.put(user, amount);
     }
     
-    public GraphTransmitObject getTrafficGraph()
+    public GraphObject getTrafficGraph()
     {
         try
         {
@@ -85,7 +85,7 @@ public class ServerTransmitter implements ExecutableCyclic
             MessageUtils.sendTransmission(sendSocket, packet);
             
             TransmissionPacket returnPacket = MessageUtils.getTransmission(sendSocket);
-            GraphTransmitObject graph = new GraphTransmitObject((Map<Integer, TransportNode>) returnPacket.dataObject);
+            GraphObject graph = new GraphObject((GraphObject.GraphTransmitObject) returnPacket.dataObject);
             return graph;
         } catch (IOException | ClassNotFoundException ex)
         {

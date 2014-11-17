@@ -20,5 +20,5 @@ public class ServerData
     public static final String TCP_SERVER_ADDRESS = "localhost"; //192.168.0.16
     public static final int TCP_SERVER_PORT = 2955;
     
-    public static int costPerZone = 100; //øre
+    public static int costPerZone = 1200; //øre
 }

@@ -6,12 +6,11 @@
 package connection.tcp;
 
 import connection.tcp.commands.ErrorCommand;
-import connection.tcp.commands.GetInfoCommand;
 import connection.tcp.commands.GetJourneyCommand;
-import connection.tcp.commands.GetLogoutCommand;
 import connection.tcp.commands.Command;
 import connection.tcp.commands.GetUserConnectionCommand;
 import connection.tcp.commands.ReturnedUsersCommand;
+import connection.tcp.commands.UpdateTicketCostCommand;
 import java.io.IOException;
 import java.net.Socket;
 import connection.tcp.common.TransmissionPacket;
@@ -42,20 +41,17 @@ public class TransmissionInterpreter
         Command toExecute;
         switch (recievedTransmission.command)
         {
-            case GETINFORMATION:
-                toExecute = new GetInfoCommand();
-                break;
             case GETJOURNEY:
                 toExecute = new GetJourneyCommand();
-                break;
-            case LOGOUT:
-                toExecute = new GetLogoutCommand();
                 break;
             case USERCONNECTION:
                 toExecute = new GetUserConnectionCommand();
                 break;
             case RETURNUSERS:
                 toExecute = new ReturnedUsersCommand();
+                break;
+            case TICKETCOST:
+                toExecute = new UpdateTicketCostCommand();
                 break;
             default:
                 toExecute = new ErrorCommand();

@@ -5,6 +5,7 @@
  */
 package database;
 
+import helpers.Zone;
 import helpers.LogPrinter;
 import helpers.User;
 import java.sql.SQLException;
@@ -62,9 +63,9 @@ public class DatabaseHandlerTest
         User user = database.getUser(0);
         user.balance = 50;
         database.removeUser(0);
-        
+
         database.addUser(user);
-        
+
         user = database.getUser(0);
         assertEquals(50, user.balance, 0.001);
     }
@@ -74,19 +75,19 @@ public class DatabaseHandlerTest
     {
         DatabaseHandler database = new DatabaseHandler();
         User user = database.getUser(0);
-        
-        assertEquals("default", user.firstName);
-        assertEquals("default", user.lastName);
-        assertEquals("default", user.passWord);
+
+        assertEquals("unknown", user.firstName);
+        assertEquals("unknown", user.lastName);
+        assertEquals("none", user.passWord);
     }
 
-    @Test (timeout = 5500)
+    @Test(timeout = 5500)
     public void testUpdateUser() throws SQLException, NotFound, InterruptedException
     {
         DatabaseHandler database = new DatabaseHandler();
         User user = database.getUser(0);
         user.balance = 0;
-        
+
         database.updateUser(user);  //updating takes precedense during execution.
         database.chargeUser(user, 5);
         Thread.sleep(4500);
@@ -94,13 +95,13 @@ public class DatabaseHandlerTest
         assertEquals(-5.0, user.balance, 0.001);
     }
 
-    @Test (timeout = 5500)
+    @Test(timeout = 5500)
     public void testChargeUser() throws SQLException, NotFound, InterruptedException
     {
         DatabaseHandler database = new DatabaseHandler();
         User user = database.getUser(0);
         double currentBalance = user.balance;
-        
+
         database.chargeUser(user, 5);
         Thread.sleep(4500);
         user = database.getUser(0);
@@ -153,9 +154,27 @@ public class DatabaseHandlerTest
             {
                 assertTrue("No edges added to " + node.identity, numberOfEdges > 0);
             }
-            
+
         }
         assertTrue("No stops added to directed graph", numberOfStops > 0);
+    }
+
+    @Test
+    public void testZoneMap() throws SQLException
+    {
+        DatabaseHandler database = new DatabaseHandler();
+        Map<Integer, Zone> zoneMap = database.getZoneMap();
+
+        for (Map.Entry<Integer, Zone> zoneEntry : zoneMap.entrySet())
+        {
+            Zone value = zoneEntry.getValue();
+
+            LogPrinter.print("Zone: " + value.zone);
+            for (Zone neighbour : value)
+            {
+                LogPrinter.print("neighbour: " + neighbour.zone);
+            }
+        }
     }
 
 }

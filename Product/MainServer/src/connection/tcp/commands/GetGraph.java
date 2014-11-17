@@ -28,7 +28,7 @@ public class GetGraph implements Command
         
         TransmissionPacket returnPacket = new TransmissionPacket();
         returnPacket.command = TransmissionPacket.Commands.ACKNOWLEDGE;
-        returnPacket.dataObject = Server.trafficGraph.getTransmitObject().getNodes();
+        returnPacket.dataObject = Server.trafficGraph.getTransmitObject().getTransmitObject();
         MessageUtils.sendTransmission(clientConnection, returnPacket);
     }
 

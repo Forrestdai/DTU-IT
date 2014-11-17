@@ -5,6 +5,7 @@
  */
 package database;
 
+import helpers.Zone;
 import common.interfaces.ServerExecutable;
 import execute.Server;
 import execute.SimpleProcessorRequest;
@@ -234,6 +235,32 @@ public class DatabaseHandler
             }
         }
         return edges;
+    }
+
+    public Map<Integer, Zone> getZoneMap() throws SQLException
+    {
+        String getZones = "SELECT * FROM ZoneMap";
+        Map<Integer, Zone> zones = new HashMap<>();
+
+        ResultSet result = trafficDatabase.pushStatement(getZones);
+
+        while (result.next())
+        {
+            int zoneNumber = result.getInt("ZONE");
+            int neighbourNumber = result.getInt("NEIGHBOURZONES");
+            
+            if (zones.containsKey(zoneNumber))
+            {
+                zones.get(zoneNumber).addNeighbour(new Zone(neighbourNumber));
+            } else
+            {
+                Zone temp = new Zone(zoneNumber);
+                temp.addNeighbour(new Zone(neighbourNumber));
+                zones.put(zoneNumber, temp);
+            }
+        }
+        
+        return zones;
     }
 
     class UpdateUsers implements ExecutableCyclic

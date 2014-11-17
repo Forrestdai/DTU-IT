@@ -30,6 +30,7 @@ public class GetJourneyCommand implements Command
     @Override
     public void execute(Socket clientConnection, TransmissionPacket incomingPacket) throws IOException
     {
+        //Might look into not using a User object here:
 
         User requestingUser = (User) incomingPacket.dataObject;
         Journey journey = new Journey(requestingUser.startLocation, requestingUser.endLocation);
