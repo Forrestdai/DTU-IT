@@ -34,7 +34,7 @@ public class ServerTransmitter implements ExecutableCyclic
 {
 
     private final ConcurrentLinkedQueue<User> getUserObjects;
-    private final ConcurrentMap<User, Double> chargeUsers;
+    private final ConcurrentMap<User, Integer> chargeUsers;
     private final int PUSH_INTERVAL = 4000;
 
     public ServerTransmitter()
@@ -70,7 +70,7 @@ public class ServerTransmitter implements ExecutableCyclic
         getUserObjects.add(user);
     }
 
-    public void chargeUser(User user, double amount)
+    public void chargeUser(User user, int amount)
     {
         chargeUsers.put(user, amount);
     }
@@ -127,9 +127,9 @@ public class ServerTransmitter implements ExecutableCyclic
 
     private void pushChargeUsers()
     {
-        Map<User, Double> charges = new HashMap<>();
+        Map<User, Integer> charges = new HashMap<>();
         
-        for (Map.Entry<User, Double> entrySet : chargeUsers.entrySet())
+        for (Map.Entry<User, Integer> entrySet : chargeUsers.entrySet())
         {
             LogPrinter.print("Charge user entry: " + entrySet.getKey().ID + ", charge: " + entrySet.getValue());
             charges.put(entrySet.getKey(), entrySet.getValue());
@@ -143,9 +143,9 @@ public class ServerTransmitter implements ExecutableCyclic
     {
 
         Socket sendSocket = initializeAndGetServerSocket();
-        Map<User, Double> charges;
+        Map<User, Integer> charges;
 
-        private ChargeUsers(Map<User, Double> chargeUsers)
+        private ChargeUsers(Map<User, Integer> chargeUsers)
         {
             this.charges = chargeUsers;
         }

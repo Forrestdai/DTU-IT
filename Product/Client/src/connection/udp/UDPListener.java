@@ -8,12 +8,14 @@ package connection.udp;
 import common.interfaces.ProcessorRequest;
 import connection.tcp.common.ServerTransmitter;
 import execute.Client;
+import execute.States;
 import helpers.ClientData;
 import helpers.LogPrinter;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import threading.PersistentExecutorPool;
 
 /**
  *
@@ -26,18 +28,20 @@ public class UDPListener implements ProcessorRequest
     private InetAddress castAddress;
     private DatagramPacket incomingMessage;
     private ClientData data;
+    private PersistentExecutorPool threadPool;
 
     private ServerTransmitter serverTransmitter;
 
-    public UDPListener(ClientData data)
+    public UDPListener(ClientData data, PersistentExecutorPool threadPool)
     {
         this.data = data;
+        this.threadPool = threadPool;
     }
 
     @Override
     public void process()
     {
-        while (true)
+        while (data.clientState != States.GONE)
         {
             try
             {
@@ -57,7 +61,7 @@ public class UDPListener implements ProcessorRequest
                 data.ServerTicket = message;
                 LogPrinter.print("Recieved code: " + message);
 
-                serverTransmitter = new ServerTransmitter(data);
+                serverTransmitter = new ServerTransmitter(data, threadPool);
                 serverTransmitter.loginToServer();
 
                 /*System.err.println("HELLO");

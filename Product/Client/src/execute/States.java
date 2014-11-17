@@ -11,5 +11,5 @@ package execute;
  */
 public enum States
 {
-    IDLE, SENDING, LOGGEDIN
+    IDLE, SENDING, LOGGEDIN, GONE
 }

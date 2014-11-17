@@ -13,19 +13,13 @@ import execute.SimpleProcessorRequest;
 import helpers.ServerState;
 import helpers.User;
 import helpers.UserArray;
-import java.awt.List;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.ListModel;
 import trafficrouting.TransportNode;
 
 /**
@@ -224,7 +218,7 @@ public class Console extends javax.swing.JFrame
         Server.state.currentStop = nodes.get(nameStopRelation.get((String)stationDropDown.getSelectedItem()));
         System.out.println("Stop: " + Server.state.currentStop.identity);
         udpCaster.getGPS().setState(ServerState.State.arrivedAtStation);
-        field_serverState.setText(Server.state.toString());
+        field_serverState.setText(Server.state.currentState.name());
         
         Server.serverThreadPool.schedule(new ProcessorRequest()
         {
@@ -240,7 +234,7 @@ public class Console extends javax.swing.JFrame
     private void btn_leaveStationActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btn_leaveStationActionPerformed
     {//GEN-HEADEREND:event_btn_leaveStationActionPerformed
         udpCaster.getGPS().setState(ServerState.State.leftStation);
-        field_serverState.setText(Server.state.toString());
+        field_serverState.setText(Server.state.currentState.name());
         
         Server.serverThreadPool.schedule(new ProcessorRequest()
         {

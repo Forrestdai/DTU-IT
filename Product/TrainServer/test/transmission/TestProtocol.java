@@ -67,23 +67,6 @@ public class TestProtocol
     }
 
     @Test(timeout = TIMEOUT)
-    public void clientGETINFO() throws Exception
-    {
-        TransmissionPacket toSend = new TransmissionPacket();
-        TransmissionPacket toRecieve = new TransmissionPacket();
-
-        toSend.command = TransmissionPacket.Commands.GETINFORMATION;
-        toRecieve.command = TransmissionPacket.Commands.INFORMATION;
-
-        testCommand(toSend, toRecieve);
-
-        toSend.dataString = "This does nothing";
-        toRecieve.dataString = null;
-
-        testDataString(toSend, toRecieve);
-    }
-
-    @Test(timeout = TIMEOUT)
     public void clientGETJOURNEY() throws Exception
     {
         TransmissionPacket toSend = new TransmissionPacket();
@@ -91,23 +74,6 @@ public class TestProtocol
 
         toSend.command = TransmissionPacket.Commands.GETJOURNEY;
         toRecieve.command = TransmissionPacket.Commands.JOURNEY;
-
-        testCommand(toSend, toRecieve);
-
-        toSend.dataString = "This does nothing";
-        toRecieve.dataString = null;
-
-        testDataString(toSend, toRecieve);
-    }
-
-    //@Test(timeout = TIMEOUT)
-    public void clientLOGOUT() throws Exception
-    {
-        TransmissionPacket toSend = new TransmissionPacket();
-        TransmissionPacket toRecieve = new TransmissionPacket();
-
-        toSend.command = TransmissionPacket.Commands.LOGOUT;
-        toRecieve.command = TransmissionPacket.Commands.ACKLOGOUT;
 
         testCommand(toSend, toRecieve);
 
@@ -258,45 +224,6 @@ public class TestProtocol
             LogPrinter.print("Active User: " + Server.activeUsers.getUserByID(i).ID);
         }
         LogPrinter.print("----------------------");
-    }
-
-    //@Test
-    public void testUserLogout() throws Exception
-    {
-        int numberOfClients = 10;
-        ArrayList<TransmissionPacket> requests;
-        ArrayList<Future<TransmissionPacket>> returnValues;
-
-        // false logout message. No users exists. Should return nil.
-        requests = createUniqueDataClientRequests(Commands.LOGOUT, numberOfClients);
-        returnValues = createClientFutureArray(requests);
-        compareUserConnections(returnValues, requests, Commands.nil);
-
-        //Clients connect:
-        requests = createUniqueDataClientRequests(Commands.USERCONNECTION, numberOfClients);
-        returnValues = createClientFutureArray(requests);
-        compareUserConnections(returnValues, requests, Commands.ACKNOWLEDGE);
-
-        ArrayList<User> users = listenToServerSocketAndReplyWithUsers();
-
-        //Test that users are added
-        for (User user : users)
-        {
-            assertTrue("Err: Users were not added to potential users array", Server.potentialUsers.userExists(user));
-        }
-
-        // logout message. users exists. Should return ACKLOGOUT.
-        requests = createUniqueDataClientRequests(Commands.LOGOUT, numberOfClients);
-        returnValues = createClientFutureArray(requests);
-        compareUserConnections(returnValues, requests, Commands.ACKLOGOUT);
-
-        //Test that users are removed
-        assertEquals("Err: Users were not removed from potential users array", 0, Server.potentialUsers.getArraySize());
-        
-        Socket serverSocket = Server.serverTransmitter.getTestingSocket();
-        TransmissionPacket sendRMIRequest = MessageUtils.getTransmission(serverSocket);
-        
-        assertEquals("Err: RMI Request wasn't sent", Commands.GETRMI, sendRMIRequest.command);
     }
 
     private void compareUserConnections(ArrayList<Future<TransmissionPacket>> returnValues, ArrayList<TransmissionPacket> requests, TransmissionPacket.Commands command) throws Exception

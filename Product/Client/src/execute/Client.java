@@ -19,7 +19,7 @@ import threading.PersistentExecutorPool;
 public class Client
 {
 
-    public static PersistentExecutorPool threadPool = new PersistentExecutorPool();
+    public PersistentExecutorPool threadPool = new PersistentExecutorPool();
     public ClientData data = new ClientData();
 
     public ProcessorRequest udpListener;
@@ -29,8 +29,8 @@ public class Client
         try
         {
             data.clientID = this.hashCode();
-            udpListener = new UDPListener(data);
-            Client.threadPool.schedule(udpListener);
+            udpListener = new UDPListener(data, threadPool);
+            threadPool.schedule(udpListener);
         } catch (Exception ex)
         {
             LogPrinter.printError("Start Client error", ex);
@@ -45,5 +45,9 @@ public class Client
     public void setState(States state)
     {
         data.clientState = state;
+        if (state == States.GONE)
+        {
+            threadPool.forceShutdown();
+        }
     }
 }

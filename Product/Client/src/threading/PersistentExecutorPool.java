@@ -38,4 +38,9 @@ public class PersistentExecutorPool implements Scheduler
         };
         executor.execute(runnable);
     }
+    
+    public void forceShutdown()
+    {
+        executor.shutdownNow();
+    }
 }

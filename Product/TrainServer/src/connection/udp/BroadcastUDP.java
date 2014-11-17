@@ -97,7 +97,7 @@ public class BroadcastUDP implements ExecuteOnImpulse
             User user = userEntry.getValue();
             if (!Server.noChargeUserArray.userExists(user))
             {
-                Server.serverTransmitter.chargeUser(user, calculateCharge(user));
+                Server.serverTransmitter.chargeUser(user, user.cost);
                 Server.activeUsers.removeUser(user);
             }
         }
@@ -113,10 +113,5 @@ public class BroadcastUDP implements ExecuteOnImpulse
         socket.send(packet);
         Thread.sleep(10);
         //}
-    }
-
-    private double calculateCharge(User user)
-    {
-        return 1.0;
     }
 }

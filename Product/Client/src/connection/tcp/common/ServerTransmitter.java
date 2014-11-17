@@ -6,12 +6,11 @@
 package connection.tcp.common;
 
 import common.interfaces.ProcessorRequest;
-import execute.Client;
-import static execute.Client.threadPool;
 import execute.States;
 import helpers.ClientData;
 import helpers.LogPrinter;
 import java.net.Socket;
+import threading.PersistentExecutorPool;
 
 /**
  *
@@ -20,9 +19,11 @@ import java.net.Socket;
 public class ServerTransmitter
 {
     private final ClientData data;
+    private PersistentExecutorPool threadPool;
 
-    public ServerTransmitter(ClientData data)
+    public ServerTransmitter(ClientData data, PersistentExecutorPool threadPool)
     {
+        this.threadPool = threadPool;
         this.data = data;
         
     }
