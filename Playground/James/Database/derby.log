@@ -1,8 +1,8 @@
-Mon Nov 17 11:30:58 CET 2014 : Apache Derby Network Server - 10.10.1.3 - (1557168) started and ready to accept connections on port 1527
+Tue Nov 18 11:24:59 CET 2014 : Apache Derby Network Server - 10.10.1.3 - (1557168) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Mon Nov 17 11:31:11 CET 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance a816c00e-0149-bd4e-2f4b-000054d9d0d6 
-on database directory C:\Users\James\Documents\DTU\3rdSemester\DTU-IT\Playground\James\Database\TrafficNetwork with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Tue Nov 18 11:24:59 CET 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance a816c00e-0149-c26f-0f26-000054d9d0d6 
+on database directory C:\Users\James\Documents\DTU\3rdSemester\DTU-IT\Playground\James\Database\Users with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
 Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_25/db/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_25-b18
@@ -13,9 +13,9 @@ os.version=6.3
 derby.system.home=C:\Users\James\Documents\DTU\3rdSemester\DTU-IT\Playground\James\Database
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
-Mon Nov 17 11:31:12 CET 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance 08264012-0149-bd4e-2f4b-000054d9d0d6 
-on database directory C:\Users\James\Documents\DTU\3rdSemester\DTU-IT\Playground\James\Database\Users with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Tue Nov 18 11:32:06 CET 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance 21abc03b-0149-c26f-0f26-000054d9d0d6 
+on database directory C:\Users\James\Documents\DTU\3rdSemester\DTU-IT\Playground\James\Database\TrafficNetwork with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
 Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_25/db/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_25-b18

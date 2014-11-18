@@ -5,6 +5,7 @@
  */
 package connection.tcp.commands;
 
+import connection.tcp.common.MessageUtils;
 import connection.tcp.common.TransmissionPacket;
 import execute.Server;
 import helpers.User;
@@ -36,6 +37,7 @@ public class ChargeUser implements Command
         } catch (Exception ex)
         {
             reply.command = TransmissionPacket.Commands.nil;
+            MessageUtils.sendTransmission(clientConnection, reply);
         }
     }
 
