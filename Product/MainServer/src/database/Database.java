@@ -14,12 +14,13 @@ import java.sql.*;
 public class Database
 {
 
-    private String host = "jdbc:derby://localhost:1527/TrafficNetwork";
+    private String host = "jdbc:mysql://thelizard6.eitlab.ihk-edu.dk:3306/james3e14";
+    private String user = "james3e14";
+    private String pass = "s071954";
     Connection connection;
 
-    public Database(String host) throws SQLException
+    public Database() throws SQLException
     {
-        this.host = host;
         checkConnection();
     }
 
@@ -74,7 +75,7 @@ public class Database
     {
         if (connection == null || connection.isClosed())
         {
-            connection = DriverManager.getConnection(host);
+            connection = DriverManager.getConnection(host, user, pass);
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(connection.TRANSACTION_REPEATABLE_READ);
         }

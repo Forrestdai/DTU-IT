@@ -34,18 +34,16 @@ import trafficrouting.TransportNode;
 public class DatabaseHandler
 {
 
-    private Database trafficDatabase;
-    private Database userDatabase;
+    private Database database;
     private final int PUSH_INTERVAL = 4000;
-    private UpdateUsers userDatabaseUpdater;
+    private UpdateUsers databaseUpdater;
 
     public DatabaseHandler()
     {
         try
         {
             initializeCyclicalPushing();
-            trafficDatabase = new Database("jdbc:derby://localhost:1527/TrafficNetwork");
-            userDatabase = new Database("jdbc:derby://localhost:1527/Users");
+            database = new Database();
         } catch (SQLException ex)
         {
             ex.printStackTrace();
@@ -54,8 +52,8 @@ public class DatabaseHandler
 
     private void initializeCyclicalPushing()
     {
-        userDatabaseUpdater = new UpdateUsers();
-        ServerExecutable toExecute = new CyclicalExecutor(userDatabaseUpdater, PUSH_INTERVAL);
+        databaseUpdater = new UpdateUsers();
+        ServerExecutable toExecute = new CyclicalExecutor(databaseUpdater, PUSH_INTERVAL);
         SimpleProcessorRequest process = new SimpleProcessorRequest(toExecute);
         Server.threadPool.schedule(process);
     }
@@ -64,7 +62,7 @@ public class DatabaseHandler
     {
         try
         {
-            String addUserSQL = "INSERT INTO users (CustomerID, First_Name, Last_Name, Password, balance) "
+            String addUserSQL = "INSERT INTO `USERS` (CustomerID, First_Name, Last_Name, Password, balance) "
                     + "VALUES (?,?,?,?,?)";
 
             Object[] properties =
@@ -72,7 +70,7 @@ public class DatabaseHandler
                 user.ID, user.firstName, user.lastName, user.passWord, user.balance
             };
 
-            userDatabase.pushPreparedStatement(addUserSQL, properties, true);
+            database.pushPreparedStatement(addUserSQL, properties, true);
         } catch (SQLException ex)
         {
             LogPrinter.printError("Could not add user to database", ex);
@@ -81,26 +79,26 @@ public class DatabaseHandler
 
     public void removeUser(int userID) throws SQLException
     {
-        String userSQL = "Delete FROM Users WHERE CustomerID = ?";
+        String userSQL = "Delete FROM `USERS` WHERE CustomerID = ?";
 
         Object[] properties =
         {
             userID
         };
 
-        userDatabase.pushPreparedStatement(userSQL, properties, true);
+        database.pushPreparedStatement(userSQL, properties, true);
     }
 
     public User getUser(int userID) throws SQLException
     {
-        String userSQL = "SELECT * FROM Users WHERE CustomerID = ?";
+        String userSQL = "SELECT * FROM `USERS` WHERE CustomerID = ?";
 
         Object[] properties =
         {
             userID
         };
 
-        ResultSet userData = userDatabase.pushPreparedStatement(userSQL, properties, false);
+        ResultSet userData = database.pushPreparedStatement(userSQL, properties, false);
 
         User user = new User(0);
 
@@ -130,26 +128,26 @@ public class DatabaseHandler
 
     public void updateUser(User user)
     {
-        userDatabaseUpdater.updateUser(user);
+        databaseUpdater.updateUser(user);
     }
 
     public void chargeUser(User user, Integer charge)
     {
-        userDatabaseUpdater.chargeUser(user, charge);
+        databaseUpdater.chargeUser(user, charge);
     }
 
     private void pushUpdates(Collection<User> users) throws SQLException
     {
         for (User user : users)
         {
-            String userSQL = "UPDATE Users SET First_Name = ?, Last_Name = ?, Password = ?, balance = ? WHERE CustomerID = ?";
+            String userSQL = "UPDATE `USERS` SET First_Name = ?, Last_Name = ?, Password = ?, balance = ? WHERE CustomerID = ?";
 
             Object[] properties =
             {
                 user.firstName, user.lastName, user.passWord, user.balance, user.ID
             };
 
-            userDatabase.pushPreparedStatement(userSQL, properties, true);
+            database.pushPreparedStatement(userSQL, properties, true);
         }
     }
 
@@ -157,8 +155,8 @@ public class DatabaseHandler
     {
         Map<Integer, TransportNode> nodes = new HashMap<>();
 
-        String SQL = "SELECT * FROM STOPS_STATIONS";
-        ResultSet stops = trafficDatabase.pushStatement(SQL);
+        String SQL = "SELECT * FROM `STOPS_STATIONS`";
+        ResultSet stops = database.pushStatement(SQL);
 
         while (stops.next())
         {
@@ -179,18 +177,18 @@ public class DatabaseHandler
     {
         ArrayList<Edge> edges = new ArrayList<>();
 
-        String getNodeInformation = "SELECT  * FROM transport_stop_relation"
-                + " INNER JOIN line_identity"
-                + " ON transport_stop_relation.transport_ref = line_identity.line_ref"
-                + " INNER JOIN stops_stations"
-                + " ON transport_stop_relation.stop_ref = stops_stations.ref"
-                + " AND transport_stop_relation.stop_ref = ?";
+        String getNodeInformation = "SELECT * FROM `TRANSPORT_STOP_RELATION`"
+                + " INNER JOIN `LINE_IDENTITY`"
+                + " ON `TRANSPORT_STOP_RELATION`.transport_ref = `LINE_IDENTITY`.line_ref"
+                + " INNER JOIN `STOPS_STATIONS`"
+                + " ON `TRANSPORT_STOP_RELATION`.stop_ref = `STOPS_STATIONS`.ref"
+                + " AND `TRANSPORT_STOP_RELATION`.stop_ref = ?";
 
         Integer[] nodeInformationProperties =
         {
             fromStopReference
         };
-        ResultSet node = trafficDatabase.pushPreparedStatement(getNodeInformation, nodeInformationProperties, false);
+        ResultSet node = database.pushPreparedStatement(getNodeInformation, nodeInformationProperties, false);
 
         while (node.next())
         {
@@ -200,7 +198,7 @@ public class DatabaseHandler
             String transportName = node.getString("LINE_NAME");
             int stopSequenceIndex = node.getInt("STOP_SEQUENCE");
 
-            String toRef = "SELECT  stop_ref FROM transport_stop_relation"
+            String toRef = "SELECT stop_ref FROM `TRANSPORT_STOP_RELATION`"
                     + " WHERE transport_ref = ?"
                     + " AND (stop_sequence = ?"
                     + " OR stop_sequence = ?)";
@@ -210,7 +208,7 @@ public class DatabaseHandler
                 transportID, (stopSequenceIndex - 1), (stopSequenceIndex + 1)
             };
 
-            ResultSet toRefResult = trafficDatabase.pushPreparedStatement(toRef, toRefProperties, false);
+            ResultSet toRefResult = database.pushPreparedStatement(toRef, toRefProperties, false);
 
             while (toRefResult.next())
             {
@@ -222,7 +220,7 @@ public class DatabaseHandler
                 boolean addEdge = true;
                 for (Edge existing : edges)
                 {
-                    if (existing.toNode.referenceID == edge.toNode.referenceID && existing.transportLineReference == edge.transportLineReference)
+                    if (shouldAddEdge(existing, edge))
                     {
                         addEdge = false;
                         break;
@@ -237,18 +235,27 @@ public class DatabaseHandler
         return edges;
     }
 
+    private boolean shouldAddEdge(Edge existing, Edge edge)
+    {
+        if (existing == null || edge == null || existing.toNode == null || edge.toNode == null)
+        {
+            return false;
+        }
+        return existing.toNode.referenceID == edge.toNode.referenceID && existing.transportLineReference == edge.transportLineReference;
+    }
+
     public Map<Integer, Zone> getZoneMap() throws SQLException
     {
-        String getZones = "SELECT * FROM ZoneMap";
+        String getZones = "SELECT * FROM `ZONEMAP`";
         Map<Integer, Zone> zones = new HashMap<>();
 
-        ResultSet result = trafficDatabase.pushStatement(getZones);
+        ResultSet result = database.pushStatement(getZones);
 
         while (result.next())
         {
             int zoneNumber = result.getInt("ZONE");
             int neighbourNumber = result.getInt("NEIGHBOURZONES");
-            
+
             if (zones.containsKey(zoneNumber))
             {
                 zones.get(zoneNumber).addNeighbour(new Zone(neighbourNumber));
@@ -259,7 +266,7 @@ public class DatabaseHandler
                 zones.put(zoneNumber, temp);
             }
         }
-        
+
         return zones;
     }
 
