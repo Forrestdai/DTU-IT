@@ -6,45 +6,46 @@
 
 package collection;
 
-import collection.nodes.BetweenNode;
+
+import collection.nodes.BetweenNodeDouble;
 import java.util.LinkedList;
 
 /**
  *
  * @author JamesFoxes
  */
-public class MyJavaLinkedList implements MyCollection
+public class MyJavaLinkedListDouble implements MyCollectionDouble
 {
 
-    LinkedList<Object> linkedList;
+    LinkedList<Double> linkedList;
     
-    public MyJavaLinkedList()
+    public MyJavaLinkedListDouble()
     {
         linkedList = new LinkedList<>();
     }
 
     @Override
-    public void addFirst(int dataToStore)
+    public void addFirst(double dataToStore)
     {
         linkedList.addFirst(dataToStore);
     }
 
     @Override
-    public void addLast(int dataToStore)
+    public void addLast(double dataToStore)
     {
         linkedList.addLast(dataToStore);
     }
 
     @Override
-    public void add(int dataToStore, int index)
+    public void add(double dataToStore, int index)
     {
         linkedList.add(index, dataToStore);
     }
 
     @Override
-    public BetweenNode get(int index)
+    public BetweenNodeDouble get(int index)
     {
-        return new BetweenNode(linkedList.get(index));
+        return new BetweenNodeDouble(linkedList.get(index));
     }
 
     @Override
@@ -54,15 +55,15 @@ public class MyJavaLinkedList implements MyCollection
     }
 
     @Override
-    public void update(int dataToAdd, int index)
+    public void update(double dataToAdd, int index)
     {
         linkedList.set(index, dataToAdd);
     }
 
     @Override
-    public int[] toArray()
+    public double[] toArray()
     {
-        int[] toReturn = new int[linkedList.size()];
+        double[] toReturn = new double[linkedList.size()];
         for (int i = 0; i < linkedList.size(); i++)
         {
             toReturn[i] = linkedList.get(i);
@@ -71,9 +72,9 @@ public class MyJavaLinkedList implements MyCollection
     }
 
     @Override
-    public MyCollection createFromArray(int[] array)
+    public MyCollectionDouble createFromArray(double[] array)
     {
-        MyCollection toReturn = new MyArrayList();
+        MyCollectionDouble toReturn = new MyArrayListDouble();
         for (int i = 0; i < linkedList.size(); i++)
         {
             toReturn.add(array[i], i);
@@ -84,22 +85,22 @@ public class MyJavaLinkedList implements MyCollection
     @Override
     public void printArrayInLine()
     {
-        for (Integer arrayListElement : linkedList)
+        for (Double arrayListElement : linkedList)
         {
             System.out.print(arrayListElement);
         }
     }
 
     @Override
-    public BetweenNode getFirst()
+    public BetweenNodeDouble getFirst()
     {
-        return new BetweenNode(linkedList.getFirst());
+        return new BetweenNodeDouble(linkedList.getFirst());
     }
 
     @Override
-    public BetweenNode getLast()
+    public BetweenNodeDouble getLast()
     {
-        return new BetweenNode(linkedList.getLast());
+        return new BetweenNodeDouble(linkedList.getLast());
     }
 
     @Override

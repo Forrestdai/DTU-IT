@@ -12,15 +12,17 @@ package Assignment6;
 
 
 import collection.MyJavaLinkedListChar;
+import collection.MyJavaLinkedListDouble;
         
 public class Assignment6
 {
-    //String infix = "2-3*(4/5+6)*((7-8)/9)";
-    
-    String infix = "5+5+5+5+5+5+5+5+5";
+    String infix = "2-3*(4/5+6)*((7-8)/9)";
     char token;
     MyJavaLinkedListChar postfixResult = new MyJavaLinkedListChar();
     MyJavaLinkedListChar stack = new MyJavaLinkedListChar();
+    MyJavaLinkedListDouble result = new MyJavaLinkedListDouble();
+    double op1 = 0;
+    double op2 = 0;
     
     public String getType(char token){
         switch (token)
@@ -62,6 +64,29 @@ public class Assignment6
             
             default : return "Illegal";
         }
+    }
+    
+    public double operator(char operator, double operand2, double operand1){
+        double tempResult = 0;
+        switch(operator)
+        {
+            case '*' :
+                tempResult = operand1 * operand2;
+                break;
+            case '/' :
+                tempResult = operand1 / operand2;
+                break;
+            case '+' :
+                tempResult = operand1 + operand2;
+                break;
+            case '-' :
+                tempResult = operand1 - operand2;
+                break;
+            
+        }
+        
+        return tempResult;
+        
     }
     
     public void Assignment6()
@@ -133,22 +158,49 @@ public class Assignment6
                     stack.removeFirst();
                     break;
             }
-            
-            
-            System.out.println("token : "+token);
-            System.out.println("Postfix: ");
-            postfixResult.printArrayInLine();
-            System.out.println("\nStack: ");
-            stack.printArrayInLine();
-            System.out.println("\n\n");
         }
         while(stack.size()!=0) {
                 postfixResult.addLast(stack.getFirst().getContents());
                 stack.removeFirst();
             }
-        System.out.println("Postfix: ");
+        System.out.println("Postfix Result: ");
         postfixResult.printArrayInLine();
         System.out.println("\n");
+        
+        
+        
+        while (postfixResult.size()!=0) {
+            
+            switch(getType(postfixResult.getFirst().getContents()))
+            {
+                case "operand" :
+                    result.addLast(Character.getNumericValue(postfixResult.getFirst().getContents()));
+                    postfixResult.removeFirst();
+                    break;
+            
+                case "operatorPrecedence0" :
+                    op1 = result.getLast().getContents();
+                    result.removeLast();
+                    op2 = result.getLast().getContents();
+                    result.removeLast();
+                    result.addLast(operator(postfixResult.getFirst().getContents(), op1, op2));
+                    postfixResult.removeFirst();
+                    break;
+                
+                case "operatorPrecedence1" :
+                    op1 = result.getLast().getContents();
+                    result.removeLast();
+                    op2 = result.getLast().getContents();
+                    result.removeLast();
+                    result.addLast(operator(postfixResult.getFirst().getContents(), op1, op2));
+                    postfixResult.removeFirst();
+                    break;
+            }
+        }
+        System.out.println("Postfix calculated: ");
+        result.printArrayInLine();
+        System.out.println("\n");
+        
     }
     
     
