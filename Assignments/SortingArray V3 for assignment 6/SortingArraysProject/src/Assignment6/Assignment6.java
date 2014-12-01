@@ -16,10 +16,10 @@ import collection.MyJavaLinkedListDouble;
         
 public class Assignment6
 {
-    String infix = "2-3*(4/5+6)*((7-8)/9)";
+    String infix;
     char token;
     MyJavaLinkedListChar postfixResult = new MyJavaLinkedListChar();
-    MyJavaLinkedListChar stack = new MyJavaLinkedListChar();
+    MyJavaLinkedListChar operatorStack = new MyJavaLinkedListChar();
     MyJavaLinkedListDouble result = new MyJavaLinkedListDouble();
     double op1 = 0;
     double op2 = 0;
@@ -89,12 +89,12 @@ public class Assignment6
         
     }
     
-    public void Assignment6()
+    public void Assignment6(String infix)
     {
-        
+        this.infix = infix;
         int i = 0;
-        while(i < infix.length()){
-            token = infix.charAt(i++);
+        while(i < this.infix.length()){
+            token = this.infix.charAt(i++);
             
             switch (getType(token))
             {
@@ -105,63 +105,66 @@ public class Assignment6
                     break;
                 
                 case "operatorPrecedence0" : 
-                    if (stack.size()==0) {
-                        stack.addFirst(token);
+                    if (operatorStack.size()==0) {
+                        operatorStack.addFirst(token);
                     }
-                    else if (getType(stack.getFirst().getContents()).equals("operatorPrecedence0")) 
+                    else if (getType(operatorStack.getFirst().getContents()).equals("operatorPrecedence0")) 
                     {
-                        postfixResult.addLast(stack.getFirst().getContents());
-                        stack.removeFirst();
-                        stack.addFirst(token);
+                        postfixResult.addLast(operatorStack.getFirst().getContents());
+                        operatorStack.removeFirst();
+                        operatorStack.addFirst(token);
                     }
                     else{
-                        if (stack.getFirst().getContents()== '(') {
-                            stack.addFirst(token);
+                        if (operatorStack.getFirst().getContents()== '(') {
+                            operatorStack.addFirst(token);
                         }
-                        else if (getType(stack.getFirst().getContents()).equals("operatorPrecedence0")) {
-                            postfixResult.addLast(stack.getFirst().getContents());
-                            stack.removeFirst();
-                            stack.addFirst(token);
+                        else if (getType(operatorStack.getFirst().getContents()).equals("operatorPrecedence0")) {
+                            postfixResult.addLast(operatorStack.getFirst().getContents());
+                            operatorStack.removeFirst();
+                            operatorStack.addFirst(token);
                         }
                         else{
-                        postfixResult.addLast(stack.getFirst().getContents());
-                        stack.removeFirst();
-                        stack.addFirst(token);
+                        postfixResult.addLast(operatorStack.getFirst().getContents());
+                        operatorStack.removeFirst();
+                        operatorStack.addFirst(token);
                         }
                     }
                     break;
                     
                 case "operatorPrecedence1" : 
-                    if (getType(stack.getFirst().getContents()).equals("operatorPrecedence0")) {
-                        stack.addFirst(token);
+                    if (operatorStack.size()==0) {
+                        operatorStack.addFirst(token);
                     }
-                    else if (getType(stack.getFirst().getContents()).equals("pStart")||getType(stack.getFirst().getContents()).equals("pStop")) {
-                        stack.addFirst(token);
+                    else if (getType(operatorStack.getFirst().getContents()).equals("operatorPrecedence0")) {
+                        operatorStack.addFirst(token);
+                    }
+                    else if (getType(operatorStack.getFirst().getContents()).equals("pStart")||getType(operatorStack.getFirst().getContents()).equals("pStop")) {
+                        operatorStack.addFirst(token);
                     }
                     else
                         {
-                        postfixResult.addLast(stack.getFirst().getContents());
-                        stack.removeFirst();
-                        stack.addFirst(token);
+                        postfixResult.addLast(operatorStack.getFirst().getContents());
+                        operatorStack.removeFirst();
+                        operatorStack.addFirst(token);
                         }
                     break;
                 
                 case "pStart" :
-                    stack.addFirst(token);
+                    operatorStack.addFirst(token);
                     break;
                 
                 case "pStop" :
-                    while(!getType(stack.getFirst().getContents()).equals("pStart")){
-                        postfixResult.addLast(stack.getFirst().getContents());
-                        stack.removeFirst();
+                    while(!getType(operatorStack.getFirst().getContents()).equals("pStart")){
+                        postfixResult.addLast(operatorStack.getFirst().getContents());
+                        operatorStack.removeFirst();
                     }
-                    stack.removeFirst();
+                    operatorStack.removeFirst();
                     break;
             }
         }
-        while(stack.size()!=0) {
-                postfixResult.addLast(stack.getFirst().getContents());
-                stack.removeFirst();
+        while(operatorStack.size()!=0) {
+                postfixResult.addLast(operatorStack.getFirst().getContents());
+                operatorStack.removeFirst();
             }
         System.out.println("Postfix Result: ");
         postfixResult.printArrayInLine();
