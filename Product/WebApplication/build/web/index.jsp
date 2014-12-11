@@ -55,7 +55,7 @@
         
             #Signup{
                 position: absolute;
-                top: 42%;
+                top: 38%;
                 font-size: 30pt;
                 color: #F00;
                 left:30%;
@@ -73,12 +73,7 @@
             #wrapper{
                 background: black;
             }
-            #Username, #Password, #login{
-
-                left: 65%;
-                top:10%;
-                position: relative;
-            }
+            
             #section{
                 color: white;
                 padding-left: 10px;
@@ -86,7 +81,7 @@
             }
             #login{
                 position: absolute;
-                top: 43%;
+                top: 38%;
                 left:45%;
                 
               
@@ -111,18 +106,14 @@
                         <div class="navigation">
                             <ul>
                                 <a id="menu1" href="index.jsp">Home</a>
-                                <a id="menu3" href="http://www.dsb.dk/trafikinformation/">Info</a>
                                 <a id="Signup" href="SignupProcess.jsp">Sign up</a>
                                 <a id="login" href="loginForm.jsp"> <font size="6">Log in</font> </a>
  
-                                  
-
+                               
                                 </form>
                             </ul>
 
                         </div>
-
-
 
                         <div class="left-section">
                             <h1>

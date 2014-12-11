@@ -8,6 +8,6 @@
     </head>
     <body>
         <h1><strong>ERROR!!!</strong></h1>
-        <a href='index.jsp'>Click here to go back.</a>
+        <a href="loginForm.jsp">Click here to go back.</a>
     </body>
 </html>

@@ -55,8 +55,7 @@
 
             }
 
-      
-            .top_banner{
+                  .top_banner{
                 background-color: white
             }
             #logo{
@@ -93,11 +92,7 @@
                         <div class="navigation">
                             <ul>
                                 <a id="menu1" href="index.jsp">Home</a>
-                                <a id="menu3" href="http://www.dsb.dk/trafikinformation/">Info</a>
-                                
-
-
-
+                                                     
                                 </form>
                             </ul>
 
@@ -231,10 +226,14 @@
                                 <button onclick="location.href='index.jsp';"id="float-left submit-button"> Please go home page and log in</button>
                             <SCRIPT LANGUAGE ="JavaScript">
                                 <!--
-                                     function displayResults() {                                                   
+                                   function displayResults() {   
+                                 
+                                         
+                                         
                                     if (document.myForm.hidden.value == 1) {
                                         alert("Account has been Successfully Created!");
                                     }
+                                    
                                 }
 
                                 //  -->

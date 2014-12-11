@@ -45,7 +45,7 @@
                 color: white;
                 padding: 10px 10px;
                 text-decoration: none;
-                
+
             }
 
             #menu3{
@@ -60,11 +60,20 @@
                 padding: 10px 10px;
                 text-decoration: none;
             }
+            #menu5{
+                background-color: black;
+                color: white;
+                padding: 10px 10px;
+                text-decoration: none;
+            }
             #menu1:hover{
 
             }
 
+            #menu2:hover{
+                background-color: blue;
 
+            }
 
             #menu3:hover{
                 background-color: blue;
@@ -74,16 +83,12 @@
                 background-color: blue;
 
             }
-            #Signup{
-                position: absolute;
-                top: 42%;
-                font-size: 30pt;
-                color: #F00;
-                left:30%;
+            #menu5:hover{
+                background-color: blue;
+
             }
-            Sign up:hover{
-                background-color: rosybrown;
-            }
+
+
             .top_banner{
                 background-color: white
             }
@@ -108,10 +113,12 @@
                 background-color: #357AE8;
                 background-image: -moz-linear-gradient(center top , #4D90FE, #357AE8);
 
-                #buttonLogout{
-                    right: 0%;
+                #menu6{
+                    position: absolute;
+                    right: 20%;
                     top:10%;
                 }
+
 
 
 
@@ -130,41 +137,43 @@
                         <div class="navigation">
                             <ul>
 
-                                <a id="menu1" href="index.jsp">Home</a>
+                                <a id="menu1" href="searchAccount.jsp">Home</a>
                                 <a id="menu2" href="pricetable.jsp">Price</a>
-                                <a id="menu3" href="http://www.dsb.dk/trafikinformation/">Info</a>
-                                <a id="menu4" href="">Profile</a>  
-                                            <form method="post"> <button id="buttonLogout" value="Logout" onclick="javascript:window.close();">
-                                            </form>
+                                <a id="menu3" href="Map.jsp">Map</a>
+                                <a id="menu4" href="profile.jsp">Profile</a>  
+                                <a id="menu5" href="manage.jsp">Manage</a>  
+                            </ul>
+
+                        </div>
+
+                        <form action="Logout.jsp" method="post">
+                            <input id="menu6" type="submit" value="Log out" style="width:80px;height: 28px">
+                        </form>
+
+                        <div class="left-section">
+                            <h1>
+                                <strong>Welcome  </strong> <%
+                                                        String user = session.getAttribute("firstname").toString();
+                                                        out.println(user);
+                                                            %>
+                            </h1>
+                            
+
+                            <hr></hr>
+                            <p>
+                                Welcome to our Transsystem. We will serve you our best
+                                quality of service to you.
+                            </p>
+                            <h2>Contact</h2>
+                            <hr></hr>
+                            <p>Customer Centre</p>
+                            <p>If you have any questions, don't hesitate to call us at +45 91702207.</p>
+
+                            <p> Send us a message at daisc93@gmail.com</p>
+
+                        </div>
 
 
-                                            </form>
-                                            </ul>
-
-                                            </div>
-
-
-
-                                            <div class="left-section">
-                                                <h1>
-                                                    Welcome
-                                                </h1>
-
-                                                <hr></hr>
-                                                <p>
-                                                    Welcome to our Transsystem. We will serve you our best
-                                                    quality of service to you.
-                                                </p>
-                                                <h2>Contact</h2>
-                                                <hr></hr>
-                                                <p>Customer Centre</p>
-                                                <p>If you have any questions, don't hesitate to call us at +45 91702207.</p>
-
-                                                <p> Send us a message at daisc93@gmail.com</p>
-
-                                            </div>
-
-
-                                            </div>
-                                            </body>
-                                            </html>
+                    </div>
+            </body>
+        </html>

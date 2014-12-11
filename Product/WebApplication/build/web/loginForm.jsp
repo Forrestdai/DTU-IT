@@ -103,7 +103,7 @@
                         <div class="navigation">
                             <ul>
                                 <a id="menu1" href="index.jsp">Home</a>
-                                <a id="menu3" href="http://www.dsb.dk/trafikinformation/">Info</a>
+                                
                                 </form>
                             </ul>
 
@@ -111,7 +111,7 @@
 
                         <title>Please Insert Your Log in Details here</title>
                         </head>
-                        <body onLoad="displayResults()">
+                        <body >
                             <h1>Please Insert Your Log in Details here</h1>
                             <form name="myForm" action="LoginCheck.jsp" method="POST">
                                 <table border="0">

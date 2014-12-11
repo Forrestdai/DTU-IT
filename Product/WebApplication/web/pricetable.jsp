@@ -45,6 +45,12 @@
                 padding: 10px 10px;
                 text-decoration: none;
             }
+            #menu2{
+                background-color: black;
+                color: white;
+                padding: 10px 10px;
+                text-decoration: none;
+            }
             #menu3{
                 background-color: black;
                 color: white;
@@ -57,17 +63,30 @@
                 padding: 10px 10px;
                 text-decoration: none;
             }
+            #menu6{
+                background-color: black;
+                color: white;
+                padding: 10px 10px;
+                text-decoration: none;
+            }
             #menu1:hover{
 
             }
 
+#menu2:hover{
+                background-color: blue;
 
+            }
 
             #menu3:hover{
                 background-color: blue;
 
             }
             #menu4:hover{
+                background-color: blue;
+
+            }
+             #menu6:hover{
                 background-color: blue;
 
             }
@@ -146,9 +165,11 @@
 
                         <div class="navigation">
                             <ul>
-                                <a id="menu1" href="index.jsp">Home</a>
-                                <a id="menu3" href="http://www.dsb.dk/trafikinformation/">Info</a>
-                                <a id="menu4" href="profile.jsp">Profile</a>
+                                <a id="menu1" href="searchAccount.jsp">Home</a>
+                                <a id="menu2" href="pricetable.jsp">Price</a>
+                                <a id="menu3" href="Map.jsp">Map</a>
+                                <a id="menu4" href="profile.jsp">Profile</a>  
+                                <a id="menu6" href="manage.jsp">Manage</a>  
 
                                 </input>
 

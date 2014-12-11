@@ -9,9 +9,10 @@
             body {background-color: #ffefe0}
             img {
                 position: absolute;
-                top: 35%;
-                right: 0px;
+                left: 10%;
+                    bottom:6%;
             }
+            
             .navigation{
                 margin-bottom: 0px;
                 background:activecaption;
@@ -95,6 +96,7 @@
             #logo{
                 position: relative;
                 background: black;
+                left: 0%;
             }
             #wrapper{
                 background: black;
@@ -118,6 +120,8 @@
                     right: 20%;
                     top:10%;
                 }
+                
+                
 
 
 
@@ -131,7 +135,8 @@
 
 
                 <img id="logo" src="transsystem.png" alt=""/>
-                <img src="bus.train.jpg" alt="bustrain View" style="width:500px;height:400px">
+               
+                 <img src="map.jpg" alt="Map_copenhagen" style="width:600px;height:400px">   
                     <div id="contents">
 
                         <div class="navigation">
@@ -149,29 +154,9 @@
                         <form action="Logout.jsp" method="post">
                             <input id="menu6" type="submit" value="Log out" style="width:80px;height: 28px">
                         </form>
-
-                        <div class="left-section">
-                            <h1>
-                                <strong>Welcome  </strong> <%
-                                                        String user = session.getAttribute("firstname").toString();
-                                                        out.println(user);
-                                                            %>
-                            </h1>
-                            
-
-                            <hr></hr>
-                            <p>
-                                Welcome to our Transsystem. We will serve you our best
-                                quality of service to you.
-                            </p>
-                            <h2>Contact</h2>
-                            <hr></hr>
-                            <p>Customer Centre</p>
-                            <p>If you have any questions, don't hesitate to call us at +45 91702207.</p>
-
-                            <p> Send us a message at daisc93@gmail.com</p>
-
-                        </div>
+                        
+                       
+                
 
 
                     </div>

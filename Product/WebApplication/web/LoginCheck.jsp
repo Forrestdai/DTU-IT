@@ -1,7 +1,6 @@
 <%@ page language ="java" import="java.sql.*" %>
 <%@ page import ="javax.sql.*" %>
 
-
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
@@ -19,12 +18,7 @@
                 margin-bottom: 0px;
                 background:activecaption;
             }
-            .navigation ul{
-                padding: 8px 0px;
-                background-color: black;
-                height: 27px;
-
-            }
+            
             #h2{
                 background-color: red;
                 bottom: 20%;
@@ -33,10 +27,7 @@
 
             p {text-align: left;
             }
-            #contents{
-                background-color: #BB94A9;
-                color: black;
-            }          
+            
             #menu1{
                 background-color: #BB94A9;
                 color: white;
@@ -44,19 +35,10 @@
                 text-decoration: none;
             }
 
-            #menu3{
-                background-color: black;
-                color: white;
-                padding: 10px 10px;
-                text-decoration: none;
-            }
+           
             #menu1:hover{
             }
-            #menu3:hover{
-                background-color: blue;
-
-            }
-
+          
             .top_banner{
                 background-color: white
             }
@@ -88,17 +70,14 @@
             </style>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>Transportation System</title>
-        
-        <body>
+           <body>
             <div id="wrapper">
      <img id="logo" src="transsystem.png" alt=""/>
                 <img src="bus.train.jpg" alt="bustrain View" style="width:500px;height:400px">
-                    <div id="contents">
+                    
 
                         <div class="navigation">
                             <ul>
-                                <a id="menu1" href="index.jsp">Home</a>
-                                <a id="menu3" href="http://www.dsb.dk/trafikinformation/">Info</a>
        
    <%!
          public class Actor{
@@ -118,8 +97,8 @@
                                                                      + "FROM customerdbs "
                                                                      + "WHERE firstname =?"
                                                                      + "AND password =?");
-                                          
-                                                                                                        
+                                         
+                                                                                                       
                    }catch(Exception e){
                    e.printStackTrace();
                    }
@@ -149,32 +128,20 @@
                  if(request.getParameter("pass") != null){
                      Password = request.getParameter("pass");
                  }
-             
-                 Actor actor = new Actor();
+                Actor actor = new Actor();
                 ResultSet actors =actor.getActors(firstName, Password);
-                                   
+                
+                if(actors.next())
+             {
+            session.setAttribute("firstname",firstName);
+            response.sendRedirect("profile.jsp");      
+         }
+     else{  
+     out.println("<a href=loginForm.jsp ><strong>Invalid details,Please try it Again!</strong></a>");
+     }                                
                      %>
-                     <table border="1" id="table">
-                        <tbody>
-                             <tr>
-                                 <td><strong>First Name</strong></td>
-                                 <td><strong>Last name</strong></td>
-                                 <td><strong>Email</strong></td>
-                                 <td><strong>Password</strong></td>
-                                 <td><strong>Balance</strong></td>
-                             </tr>
-                             <% while (actors.next()){%>
-                             <tr>
-                                
-                                <td><%= actors.getString("firstname")%></td>
-                                <td><%= actors.getString("lastname")%></td>
-                                <td><%= actors.getString("email")%></td>
-                                <td><%= actors.getString("password")%></td>
-                                <td><%= actors.getString("amount")%></td>
-                             </tr>
-                             <% } %>
-                         </tbody>
-                     </table>   
+                
+                    
             
     </body>
 </html>
