@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/efficiency/SortingTester.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/Execute/RunTests.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/common/interfaces/Scheduler.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/test/mylinkedlist/MyLinkedListTest.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/Helpers/ArrayProp.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/test/suite/SortingTestsSuite.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/Assignment6/Assignment6.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/MyArrayList.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/CollectionType.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/efficiency/MyJavaLinkedList.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/MyJavaLinkedListChar.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/Execute/ProcessSortingTest.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/MyCollection.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/efficiency/CollectionEfficiencyTest.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/MyJavaLinkedList.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/nodes/BetweenNode.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/efficiency/CollectionTestResults.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/test/Sorting/SortingTest.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/Sorting/BuiltInQuickSort.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/Sorting/InsertionSort.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/nodes/SentinelNode.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/nodes/Node.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/Sorting/InsertionSortFSM.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/Sorting/SelectionSort.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/MyLinkedList.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/test/Execute/TesterTest.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/threading/PersistentExecutorPool.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/Sorting/Sortable.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/MyArrayListChar.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/Helpers/arrayProperties.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/nodes/BetweenNodeChar.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/nodes/SentinelNodeChar.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/common/interfaces/ProcessorRequest.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/efficiency/SortingEfficiencyTest.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/MyCollectionChar.java</file>
+            <file>file:/C:/Users/Aimo/Documents/NetBeansProjects/SortingArraysProject/src/collection/nodes/NodeChar.java</file>
+        </group>
+    </open-files>
+</project-private>
