@@ -81,7 +81,7 @@ public class DatabaseHandlerTest
         assertEquals("none", user.passWord);
     }
 
-    @Test(timeout = 5500)
+    @Test(timeout = 6500)
     public void testUpdateUser() throws SQLException, NotFound, InterruptedException
     {
         DatabaseHandler database = new DatabaseHandler();
@@ -95,7 +95,7 @@ public class DatabaseHandlerTest
         assertEquals(-5.0, user.balance, 0.001);
     }
 
-    @Test(timeout = 5500)
+    @Test(timeout = 6500)
     public void testChargeUser() throws SQLException, NotFound, InterruptedException
     {
         DatabaseHandler database = new DatabaseHandler();
